@@ -3,7 +3,7 @@ package com.example.plazoleta.ms_plazoleta.domain.usecases;
 
 import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.IRestaurantPersistencePort;
-import com.example.plazoleta.ms_plazoleta.infrastructure.client.UserFeignClient;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.UserValidationPort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,20 +15,20 @@ import static org.mockito.Mockito.*;
 class RestaurantUseCaseTest {
 
     private IRestaurantPersistencePort restaurantPersistencePort;
-    private UserFeignClient userFeignClient;
+    private UserValidationPort userValidationPort;
     private RestaurantUseCase restaurantUseCase;
 
     @BeforeEach
     void setUp() {
         restaurantPersistencePort = mock(IRestaurantPersistencePort.class);
-        userFeignClient = mock(UserFeignClient.class);
-        restaurantUseCase = new RestaurantUseCase(restaurantPersistencePort, userFeignClient);
+        userValidationPort = mock(UserValidationPort.class);
+        restaurantUseCase = new RestaurantUseCase(restaurantPersistencePort, userValidationPort);
     }
 
     @Test
     void createRestaurant_Success() {
         Restaurant restaurant = new Restaurant(1L, "Rest", "12345678", "calle 77#21Asur-05", "+3103479455", "http://foto.png", 1L);
-        when(userFeignClient.getRoleByUser(1L)).thenReturn("OWNER");
+        when(userValidationPort.getRoleByUser(1L)).thenReturn("OWNER");
         when(restaurantPersistencePort.findByNit("123")).thenReturn(Optional.empty());
         when(restaurantPersistencePort.findByName("Rest")).thenReturn(Optional.empty());
         when(restaurantPersistencePort.saveRestaurant(restaurant)).thenReturn(restaurant);
@@ -42,7 +42,7 @@ class RestaurantUseCaseTest {
     @Test
     void createRestaurant_InvalidRole() {
         Restaurant restaurant = new Restaurant(1L, "Rest", "12345678", "calle 77#21Asur-05", "+3103479455", "http://foto.png", 1L);
-        when(userFeignClient.getRoleByUser(1L)).thenReturn("ADMIN");
+        when(userValidationPort.getRoleByUser(1L)).thenReturn("ADMIN");
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> restaurantUseCase.createRestaurant(restaurant));
         assertEquals("El id no corresponde a un usuario propietario", exception.getMessage());
@@ -51,7 +51,7 @@ class RestaurantUseCaseTest {
     @Test
     void createRestaurant_NitExists() {
         Restaurant restaurant = new Restaurant(1L, "Rest", "12345678", "calle 77#21Asur-05", "+3103479455", "http://foto.png", 1L);
-        when(userFeignClient.getRoleByUser(1L)).thenReturn("OWNER");
+        when(userValidationPort.getRoleByUser(1L)).thenReturn("OWNER");
         when(restaurantPersistencePort.findByNit("12345678")).thenReturn(Optional.of(restaurant));
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> restaurantUseCase.createRestaurant(restaurant));
@@ -61,7 +61,7 @@ class RestaurantUseCaseTest {
     @Test
     void createRestaurant_NameExists() {
         Restaurant restaurant = new Restaurant(1L, "Rest", "12345678", "calle 77#21Asur-05", "+3103479455", "http://foto.png", 1L);
-        when(userFeignClient.getRoleByUser(1L)).thenReturn("OWNER");
+        when(userValidationPort.getRoleByUser(1L)).thenReturn("OWNER");
         when(restaurantPersistencePort.findByNit("123")).thenReturn(Optional.empty());
         when(restaurantPersistencePort.findByName("Rest")).thenReturn(Optional.of(restaurant));
 

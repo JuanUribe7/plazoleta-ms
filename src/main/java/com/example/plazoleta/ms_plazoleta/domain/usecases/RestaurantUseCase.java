@@ -3,19 +3,21 @@ package com.example.plazoleta.ms_plazoleta.domain.usecases;
 import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.IRestaurantServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.IRestaurantPersistencePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.UserValidationPort;
 import com.example.plazoleta.ms_plazoleta.domain.utils.validation.restaurant.RestaurantValidator;
-import com.example.plazoleta.ms_plazoleta.infrastructure.client.UserFeignClient;
 
 import java.util.Optional;
 
 public class RestaurantUseCase implements IRestaurantServicePort {
 
     private final IRestaurantPersistencePort restaurantPersistencePort;
-    private final UserFeignClient userFeignClient;
+    private final UserValidationPort userValidationPort;
 
-    public RestaurantUseCase(IRestaurantPersistencePort restaurantPersistencePort, UserFeignClient userClient) {
+
+    public RestaurantUseCase(IRestaurantPersistencePort restaurantPersistencePort,
+                             UserValidationPort userValidationPort) {
         this.restaurantPersistencePort = restaurantPersistencePort;
-        this.userFeignClient = userClient;
+        this.userValidationPort = userValidationPort;
 
     }
 
@@ -23,7 +25,7 @@ public class RestaurantUseCase implements IRestaurantServicePort {
     public Restaurant createRestaurant(Restaurant restaurant) {
 
         RestaurantValidator.validate(restaurant);
-        String rol = userFeignClient.getRoleByUser(restaurant.getOwnerId());
+        String rol = userValidationPort.getRoleByUser(restaurant.getOwnerId());
         if (!rol.equalsIgnoreCase("OWNER")) {
             throw new IllegalArgumentException("El id no corresponde a un usuario propietario");
         }
