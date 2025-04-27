@@ -8,5 +8,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface UserFeignClient {
 
     @GetMapping("/user/{id}/rol")
-    String obtenerRolPorUsuario(@PathVariable Long id);
+    String getRoleByUser(@PathVariable Long id);
 }

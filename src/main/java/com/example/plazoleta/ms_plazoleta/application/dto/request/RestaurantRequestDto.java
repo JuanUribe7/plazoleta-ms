@@ -1,8 +1,10 @@
 package com.example.plazoleta.ms_plazoleta.application.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class RestaurantRequestDto {
 
-
+        @NotBlank
         private String name;
         private String nit;
         private String address;

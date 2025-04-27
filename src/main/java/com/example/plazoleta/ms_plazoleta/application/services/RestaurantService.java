@@ -5,5 +5,6 @@ import com.example.plazoleta.ms_plazoleta.application.dto.response.RestaurantRes
 
 public interface RestaurantService {
 
-    RestaurantResponseDto saveRestaurant(RestaurantRequestDto restaurant);
+    RestaurantResponseDto createRestaurant(RestaurantRequestDto restaurant);
+    boolean validateOwner(Long restaurantId, Long ownerId);
 }

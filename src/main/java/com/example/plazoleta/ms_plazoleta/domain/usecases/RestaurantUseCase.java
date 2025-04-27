@@ -3,32 +3,42 @@ package com.example.plazoleta.ms_plazoleta.domain.usecases;
 import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.IRestaurantServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.IRestaurantPersistencePort;
-import com.example.plazoleta.ms_plazoleta.domain.utils.validation.Validator;
+import com.example.plazoleta.ms_plazoleta.domain.utils.validation.restaurant.RestaurantValidator;
 import com.example.plazoleta.ms_plazoleta.infrastructure.client.UserFeignClient;
 
-import java.util.regex.Pattern;
+import java.util.Optional;
 
 public class RestaurantUseCase implements IRestaurantServicePort {
-    private static final Pattern PHONE_PATTERN = Pattern.compile("^\\+?\\d{1,13}$");
 
     private final IRestaurantPersistencePort restaurantPersistencePort;
-    private final UserFeignClient usuarioFeignClient;
+    private final UserFeignClient userFeignClient;
 
     public RestaurantUseCase(IRestaurantPersistencePort restaurantPersistencePort, UserFeignClient userClient) {
         this.restaurantPersistencePort = restaurantPersistencePort;
-        this.usuarioFeignClient = userClient;
+        this.userFeignClient = userClient;
 
     }
 
     @Override
-    public Restaurant saveRestaurant(Restaurant restaurant) {
+    public Restaurant createRestaurant(Restaurant restaurant) {
 
-        Validator.validate(restaurant, restaurantPersistencePort);
-        String rol = usuarioFeignClient.obtenerRolPorUsuario(restaurant.getOwnerId());
+        RestaurantValidator.validate(restaurant);
+        String rol = userFeignClient.getRoleByUser(restaurant.getOwnerId());
         if (!rol.equalsIgnoreCase("OWNER")) {
-            throw new IllegalArgumentException("El idPropietario no corresponde a un usuario propietario");
+            throw new IllegalArgumentException("El id no corresponde a un usuario propietario");
+        }
+        if (restaurantPersistencePort.findByNit(restaurant.getNit()).isPresent()) {
+            throw new IllegalArgumentException("El NIT del restaurante ya está registrado.");
+        }
+        if (restaurantPersistencePort.findByName(restaurant.getName()).isPresent()) {
+            throw new IllegalArgumentException("El nombre del restaurante ya está registrado.");
         }
         return restaurantPersistencePort.saveRestaurant(restaurant);
+    }
+
+    @Override
+    public Optional<Restaurant> findById(Long id) {
+        return restaurantPersistencePort.findById(id);
     }
 
     }

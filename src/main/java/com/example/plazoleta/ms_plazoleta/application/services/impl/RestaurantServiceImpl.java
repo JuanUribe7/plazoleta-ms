@@ -26,10 +26,17 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public RestaurantResponseDto saveRestaurant(RestaurantRequestDto dto) {
+    public RestaurantResponseDto createRestaurant(RestaurantRequestDto dto) {
         Restaurant restaurant=mapper.toModel(dto);
-        Restaurant response=restaurantServicePort.saveRestaurant(restaurant);
+        Restaurant response=restaurantServicePort.createRestaurant(restaurant);
         return mapper.toResponseDto(response);
+    }
+
+    @Override
+    public boolean validateOwner(Long restaurantId, Long ownerId) {
+        Restaurant restaurante = restaurantServicePort.findById(restaurantId)
+                .orElseThrow(() -> new IllegalArgumentException("Restaurante no existe"));
+        return restaurante.getOwnerId().equals(ownerId);
     }
 
 

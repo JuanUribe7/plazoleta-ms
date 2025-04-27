@@ -23,18 +23,30 @@ public class RestaurantJpaAdapter implements IRestaurantPersistencePort {
 
     @Override
     public Restaurant saveRestaurant(Restaurant restaurant) {
-        if (restaurantRepository.findByNit(restaurant.getNit()).isPresent()) {
-            throw new IllegalArgumentException("El NIT del restaurante ya está registrado.");
-        }
-        if (restaurantRepository.findByPhone(restaurant.getPhone()).isPresent()) {
-            throw new IllegalArgumentException("El teléfono del restaurante ya está registrado.");
-        }
         return mapper.toModel(restaurantRepository.save(mapper.toEntity(restaurant)));
     }
 
     @Override
     public Optional<Restaurant> findByNit(String nit) {
-        return Optional.empty();
+
+        return restaurantRepository
+                .findByNit(nit)
+                .map(mapper::toModel);
+    }
+    @Override
+    public Optional<Restaurant> findByName(String name) {
+
+        return restaurantRepository
+                .findByName(name)
+                .map(mapper::toModel);
+    }
+
+
+    @Override
+    public Optional<Restaurant> findById(Long id) {
+        return restaurantRepository
+                .findById(id)
+                .map(mapper::toModel);
     }
 
 

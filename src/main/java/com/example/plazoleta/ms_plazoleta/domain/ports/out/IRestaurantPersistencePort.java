@@ -9,4 +9,6 @@ public interface IRestaurantPersistencePort
     Restaurant saveRestaurant(Restaurant user);
     Optional<Restaurant> findByNit(String nit);
     Optional<Restaurant> findByUrlLogo(String logo);
+    Optional<Restaurant> findById(Long id);
+    Optional<Restaurant> findByName(String name);
 }

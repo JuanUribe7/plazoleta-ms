@@ -6,12 +6,13 @@ import com.example.plazoleta.ms_plazoleta.domain.ports.out.IRestaurantPersistenc
 import com.example.plazoleta.ms_plazoleta.infrastructure.client.UserFeignClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class RestaurantUseCaseTest {
+class RestaurantUseCaseTest {
 
     private IRestaurantPersistencePort restaurantPersistencePort;
     private UserFeignClient userFeignClient;
@@ -25,30 +26,66 @@ public class RestaurantUseCaseTest {
     }
 
     @Test
-    void saveRestaurant_ShouldReturnSavedRestaurant() {
-        Restaurant restaurant = new Restaurant(1L, "Tasty Food", "12345678", "Main St 123", "+573001112233", "http://logo.com/img.png", 2L);
-        when(userFeignClient.obtenerRolPorUsuario(2L)).thenReturn("OWNER");
-        when(restaurantPersistencePort.saveRestaurant(any(Restaurant.class))).thenReturn(restaurant);
+    void createRestaurant_Success() {
+        Restaurant restaurant = new Restaurant(1L, "Rest", "12345678", "calle 77#21Asur-05", "+3103479455", "http://foto.png", 1L);
+        when(userFeignClient.getRoleByUser(1L)).thenReturn("OWNER");
+        when(restaurantPersistencePort.findByNit("123")).thenReturn(Optional.empty());
+        when(restaurantPersistencePort.findByName("Rest")).thenReturn(Optional.empty());
+        when(restaurantPersistencePort.saveRestaurant(restaurant)).thenReturn(restaurant);
 
-        Restaurant saved = restaurantUseCase.saveRestaurant(restaurant);
+        Restaurant result = restaurantUseCase.createRestaurant(restaurant);
 
-        assertNotNull(saved);
-        assertEquals("Tasty Food", saved.getName());
-        verify(userFeignClient).obtenerRolPorUsuario(2L);
+        assertNotNull(result);
         verify(restaurantPersistencePort).saveRestaurant(restaurant);
     }
 
     @Test
-    void saveRestaurant_InvalidOwnerRole_ShouldThrowException() {
-        Restaurant restaurant = new Restaurant(1L, "Tasty Food", "12345678", "Main St 123", "+573001112233", "http://logo.com/img.png", 3L);
-        when(userFeignClient.obtenerRolPorUsuario(3L)).thenReturn("ADMIN");
+    void createRestaurant_InvalidRole() {
+        Restaurant restaurant = new Restaurant(1L, "Rest", "12345678", "calle 77#21Asur-05", "+3103479455", "http://foto.png", 1L);
+        when(userFeignClient.getRoleByUser(1L)).thenReturn("ADMIN");
 
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            restaurantUseCase.saveRestaurant(restaurant);
-        });
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> restaurantUseCase.createRestaurant(restaurant));
+        assertEquals("El id no corresponde a un usuario propietario", exception.getMessage());
+    }
 
-        assertEquals("El idPropietario no corresponde a un usuario propietario", thrown.getMessage());
-        verify(userFeignClient).obtenerRolPorUsuario(3L);
-        verify(restaurantPersistencePort, never()).saveRestaurant(any(Restaurant.class));
+    @Test
+    void createRestaurant_NitExists() {
+        Restaurant restaurant = new Restaurant(1L, "Rest", "12345678", "calle 77#21Asur-05", "+3103479455", "http://foto.png", 1L);
+        when(userFeignClient.getRoleByUser(1L)).thenReturn("OWNER");
+        when(restaurantPersistencePort.findByNit("12345678")).thenReturn(Optional.of(restaurant));
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> restaurantUseCase.createRestaurant(restaurant));
+        assertEquals("El NIT del restaurante ya está registrado.", exception.getMessage());
+    }
+
+    @Test
+    void createRestaurant_NameExists() {
+        Restaurant restaurant = new Restaurant(1L, "Rest", "12345678", "calle 77#21Asur-05", "+3103479455", "http://foto.png", 1L);
+        when(userFeignClient.getRoleByUser(1L)).thenReturn("OWNER");
+        when(restaurantPersistencePort.findByNit("123")).thenReturn(Optional.empty());
+        when(restaurantPersistencePort.findByName("Rest")).thenReturn(Optional.of(restaurant));
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> restaurantUseCase.createRestaurant(restaurant));
+        assertEquals("El nombre del restaurante ya está registrado.", exception.getMessage());
+    }
+
+    @Test
+    void findById_RestaurantExists() {
+        Restaurant restaurant = new Restaurant(1L, "Rest", "12345678", "calle 77#21Asur-05", "+3103479455", "http://foto.png", 1L);
+        when(restaurantPersistencePort.findById(1L)).thenReturn(Optional.of(restaurant));
+
+        Optional<Restaurant> result = restaurantUseCase.findById(1L);
+
+        assertTrue(result.isPresent());
+        assertEquals(restaurant, result.get());
+    }
+
+    @Test
+    void findById_RestaurantNotExists() {
+        when(restaurantPersistencePort.findById(1L)).thenReturn(Optional.empty());
+
+        Optional<Restaurant> result = restaurantUseCase.findById(1L);
+
+        assertFalse(result.isPresent());
     }
 }

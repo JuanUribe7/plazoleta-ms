@@ -21,7 +21,7 @@ public class FeignMockConfig {
 
 
         UserFeignClient mock = mock(UserFeignClient.class);
-        when(mock.obtenerRolPorUsuario(1L)).thenReturn("OWNER");
+        when(mock.getRoleByUser(1L)).thenReturn("OWNER");
         return mock;
     }
 }
