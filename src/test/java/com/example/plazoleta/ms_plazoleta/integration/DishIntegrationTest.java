@@ -2,6 +2,7 @@ package com.example.plazoleta.ms_plazoleta.integration;
 
 import com.example.plazoleta.ms_plazoleta.infrastructure.entities.RestaurantEntity;
 import com.example.plazoleta.ms_plazoleta.infrastructure.repositories.RestaurantRepository;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +10,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -52,7 +53,7 @@ public class DishIntegrationTest {
                 }
                 """;
 
-        mockMvc.perform(post("/restaurant/" + restaurantId + "/dish")
+        mockMvc.perform(post("/restaurants/" + restaurantId + "/dishes")
                         .header("ownerId", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(dishJson))

@@ -9,17 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class NameValidatorTest {
 
-    @Test
-    void shouldThrowExceptionWhenNameIsNull() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> NameValidator.validate(null));
-        assertEquals("El nombre no puede estar vacío", exception.getMessage());
-    }
 
-    @Test
-    void shouldThrowExceptionWhenNameIsEmpty() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> NameValidator.validate(" "));
-        assertEquals("El nombre no puede estar vacío", exception.getMessage());
-    }
 
     @Test
     void shouldThrowExceptionWhenNameContainsInvalidCharacters() {

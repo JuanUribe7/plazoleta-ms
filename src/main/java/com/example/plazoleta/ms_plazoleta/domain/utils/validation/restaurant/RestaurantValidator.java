@@ -17,6 +17,6 @@ public class RestaurantValidator {
         NameValidator.validate(restaurant.getName());
         PhoneValidator.validate(restaurant.getPhone());
         LogoValidator.validate(restaurant.getUrlLogo());
-
+        NameValidator.validate(restaurant.getName());
     }
 }

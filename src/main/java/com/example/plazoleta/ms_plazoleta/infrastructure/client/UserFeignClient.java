@@ -1,5 +1,6 @@
 package com.example.plazoleta.ms_plazoleta.infrastructure.client;
 
+
 import com.example.plazoleta.ms_plazoleta.infrastructure.configuration.FeignConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

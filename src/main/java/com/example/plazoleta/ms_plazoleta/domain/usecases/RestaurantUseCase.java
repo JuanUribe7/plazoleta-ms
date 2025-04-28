@@ -8,6 +8,8 @@ import com.example.plazoleta.ms_plazoleta.domain.utils.validation.restaurant.Res
 
 import java.util.Optional;
 
+import java.util.Optional;
+
 public class RestaurantUseCase implements IRestaurantServicePort {
 
     private final IRestaurantPersistencePort restaurantPersistencePort;
@@ -43,5 +45,4 @@ public class RestaurantUseCase implements IRestaurantServicePort {
         return restaurantPersistencePort.findById(id);
     }
 
-    }
-
+}

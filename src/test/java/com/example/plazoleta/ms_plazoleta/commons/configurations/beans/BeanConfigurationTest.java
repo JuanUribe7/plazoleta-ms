@@ -3,7 +3,7 @@ package com.example.plazoleta.ms_plazoleta.commons.configurations.beans;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.IDishPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.IRestaurantPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.UserValidationPort;
-import com.example.plazoleta.ms_plazoleta.domain.usecases.DishUseCase;
+import com.example.plazoleta.ms_plazoleta.domain.usecases.CreateDishUseCase;
 import com.example.plazoleta.ms_plazoleta.domain.usecases.RestaurantUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,8 +36,8 @@ class BeanConfigurationTest {
 
     @Test
     void dishServicePortShouldReturnDishUseCase() {
-        var result = beanConfiguration.dishServicePort(dishPersistencePort, restaurantPersistencePort);
+        var result = beanConfiguration.createDishServicePort(dishPersistencePort, restaurantPersistencePort);
         assertNotNull(result);
-        assertTrue(result instanceof DishUseCase);
+        assertTrue(result instanceof CreateDishUseCase);
     }
 }

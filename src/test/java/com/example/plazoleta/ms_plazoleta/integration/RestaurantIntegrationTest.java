@@ -1,6 +1,8 @@
 package com.example.plazoleta.ms_plazoleta.integration;
 
+
 import com.example.plazoleta.ms_plazoleta.application.dto.request.RestaurantRequestDto;
+import com.example.plazoleta.ms_plazoleta.infrastructure.client.UserFeignClient;
 import com.example.plazoleta.ms_plazoleta.infrastructure.repositories.RestaurantRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,11 +14,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.example.plazoleta.ms_plazoleta.infrastructure.client.UserFeignClient;
-
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -52,7 +53,7 @@ class RestaurantIntegrationTest {
         when(userFeignClient.getRoleByUser(1L)).thenReturn("OWNER");
 
         // Ejecutar solicitud POST
-        mockMvc.perform(post("/restaurant")
+        mockMvc.perform(post("/restaurants")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(requestDto)))
                 .andExpect(status().isOk())
