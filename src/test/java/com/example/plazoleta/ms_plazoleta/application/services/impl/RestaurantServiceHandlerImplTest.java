@@ -13,17 +13,17 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class RestaurantServiceImplTest {
+class RestaurantServiceHandlerImplTest {
 
     private IRestaurantServicePort restaurantServicePort;
     private RestaurantDtoMapper mapper;
-    private RestaurantServiceImpl service;
+    private RestaurantServiceHandlerImpl service;
 
     @BeforeEach
     void setUp() {
         restaurantServicePort = mock(IRestaurantServicePort.class);
         mapper = mock(RestaurantDtoMapper.class);
-        service = new RestaurantServiceImpl(restaurantServicePort, mapper);
+        service = new RestaurantServiceHandlerImpl(restaurantServicePort, mapper);
     }
 
     @Test

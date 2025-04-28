@@ -6,70 +6,70 @@ import com.example.plazoleta.ms_plazoleta.infrastructure.mappers.DishEntityMappe
 import com.example.plazoleta.ms_plazoleta.infrastructure.repositories.DishRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class DishJpaAdapterTest {
+    @Mock private DishRepository repo;
+    @Mock private DishEntityMapper mapper;
+    @InjectMocks private DishJpaAdapter adapter;
+    private Dish model;
+    private DishEntity entity;
 
-    private DishRepository dishRepository;
-    private DishEntityMapper mapper;
-    private DishJpaAdapter adapter;
-
-    @BeforeEach
-    void setUp() {
-        dishRepository = mock(DishRepository.class);
-        mapper = mock(DishEntityMapper.class);
-        adapter = new DishJpaAdapter(dishRepository, mapper);
+    @BeforeEach void init() {
+        model = new Dish();
+        model.setId(1L);
+        model.setName("Name");
+        entity = mock(DishEntity.class);
     }
 
-    @Test
-    void testSaveDish() {
-        Dish dish = new Dish();
-        DishEntity entity = new DishEntity();
-        Dish savedDish = new Dish();
-
-        when(mapper.toEntity(dish)).thenReturn(entity);
-        when(dishRepository.save(entity)).thenReturn(entity);
-        when(mapper.toModel(entity)).thenReturn(savedDish);
-
-        Dish result = adapter.saveDish(dish);
-
-        assertEquals(savedDish, result);
-        verify(mapper).toEntity(dish);
-        verify(dishRepository).save(entity);
-        verify(mapper).toModel(entity);
+    @Test void saveDish_returnsMappedModel() {
+        when(mapper.toEntity(model)).thenReturn(entity);
+        when(repo.save(entity)).thenReturn(entity);
+        when(mapper.toModel(entity)).thenReturn(model);
+        assertSame(model, adapter.saveDish(model));
     }
 
-    @Test
-    void testFindByName_Found() {
-        String name = "Pizza";
-        DishEntity entity = new DishEntity();
-        Dish dish = new Dish();
-
-        when(dishRepository.findByName(name)).thenReturn(Optional.of(entity));
-        when(mapper.toModel(entity)).thenReturn(dish);
-
-        Optional<Dish> result = adapter.findByName(name);
-
-        assertTrue(result.isPresent());
-        assertEquals(dish, result.get());
-        verify(dishRepository).findByName(name);
-        verify(mapper).toModel(entity);
+    @Test void updateDish_returnsMappedModel() {
+        when(mapper.toEntity(model)).thenReturn(entity);
+        when(repo.save(entity)).thenReturn(entity);
+        when(mapper.toModel(entity)).thenReturn(model);
+        assertSame(model, adapter.updateDish(model));
     }
 
-    @Test
-    void testFindByName_NotFound() {
-        String name = "Sushi";
+    @Test void findByName_present() {
+        when(repo.findByName("Name")).thenReturn(Optional.of(entity));
+        when(mapper.toModel(entity)).thenReturn(model);
+        Optional<Dish> res = adapter.findByName("Name");
+        assertTrue(res.isPresent());
+        assertSame(model, res.get());
+    }
 
-        when(dishRepository.findByName(name)).thenReturn(Optional.empty());
+    @Test void findByName_empty() {
+        when(repo.findByName("X")).thenReturn(Optional.empty());
+        assertTrue(adapter.findByName("X").isEmpty());
+    }
 
-        Optional<Dish> result = adapter.findByName(name);
+    @Test void findById_present() {
+        when(repo.findById(1L)).thenReturn(Optional.of(entity));
+        when(mapper.toModel(entity)).thenReturn(model);
+        Optional<Dish> res = adapter.findById(1L);
+        assertTrue(res.isPresent());
+        assertSame(model, res.get());
+    }
 
-        assertFalse(result.isPresent());
-        verify(dishRepository).findByName(name);
-        verify(mapper, never()).toModel(any());
+    @Test void findById_empty() {
+        when(repo.findById(2L)).thenReturn(Optional.empty());
+        assertTrue(adapter.findById(2L).isEmpty());
     }
 }

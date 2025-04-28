@@ -9,9 +9,7 @@ public class NameValidator  {
 
     public static void validate(String name) {
 
-        if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("El nombre no puede estar vacío");
-        }
+
 
         if (!name.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$")) {
             throw new IllegalArgumentException("El nombre solo puede contener letras y espacios");

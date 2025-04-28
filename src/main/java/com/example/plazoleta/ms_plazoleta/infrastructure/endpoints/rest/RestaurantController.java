@@ -1,42 +1,37 @@
 package com.example.plazoleta.ms_plazoleta.infrastructure.endpoints.rest;
 
-import com.example.plazoleta.ms_plazoleta.application.dto.request.DishRequestDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.request.RestaurantRequestDto;
-import com.example.plazoleta.ms_plazoleta.application.dto.response.DishResponseDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.response.RestaurantResponseDto;
-import com.example.plazoleta.ms_plazoleta.application.services.DishService;
-import com.example.plazoleta.ms_plazoleta.application.services.RestaurantService;
+import com.example.plazoleta.ms_plazoleta.application.services.RestaurantServiceHandler;
+import com.example.plazoleta.ms_plazoleta.infrastructure.security.JwtUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/restaurant")
+@RequestMapping("/restaurants")
 public class RestaurantController {
 
-    private final RestaurantService restaurantService;
-    private final DishService dishService;
+    private final RestaurantServiceHandler restaurantServiceHandler;
+    private final JwtUtil jwtUtil;
 
-
-    public RestaurantController(
-            RestaurantService restaurantService,
-            DishService dishService
-    ) {
-        this.restaurantService = restaurantService;
-        this.dishService = dishService;
-
+    public RestaurantController(RestaurantServiceHandler restaurantServiceHandler, JwtUtil jwtUtil) {
+        this.restaurantServiceHandler = restaurantServiceHandler;
+        this.jwtUtil = jwtUtil;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<RestaurantResponseDto> createRestaurant(
-            @RequestBody RestaurantRequestDto dto
+            @RequestBody RestaurantRequestDto dto,
+            HttpServletRequest request
     ) {
-        return  ResponseEntity.ok(restaurantService.createRestaurant(dto));
+        String token = request.getHeader("Authorization").substring(7);
+        jwtUtil.extractUserId(token);
+        return ResponseEntity.ok(restaurantServiceHandler.createRestaurant(dto));
     }
-
-    @PostMapping("/{restaurantId}/dish")
-    public ResponseEntity<DishResponseDto> createDish(@PathVariable Long restaurantId, @RequestBody DishRequestDto dto, @RequestHeader Long ownerId) {
-        dto.setRestaurantId(restaurantId);
-        return ResponseEntity.ok(dishService.createDish( restaurantId,dto, ownerId));
-    }
-
 }

@@ -12,11 +12,12 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update  # o "create"
+      ddl-auto: update
     show-sql: true
-    defer-datasource-initialization: true  # <- ESTA es la clave para que espere a que Hibernate cree las tablas
+    defer-datasource-initialization: true
 
-spring.sql.init.mode: always  # <- Esto asegura que spring ejecute data.sql
 
-userservice:
-  url: http://localhost:8088/usuarios
+
+
+jwt:
+  secret-key: UltraClaveSuperSecretaIndescifrable32

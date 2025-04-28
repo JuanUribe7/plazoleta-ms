@@ -10,9 +10,7 @@ public class CustomErrorDecoder implements ErrorDecoder {
 
     @Override
     public Exception decode(String methodKey, Response response) {
-        System.out.println("🔥 Entrando a CustomErrorDecoder para: " + methodKey + ", status: " + response.status());
         if (response.status() == 404) {
-            System.out.println("🔥 Feign capturó 404");
             return new OwnerNotFoundException("El propietario no fue encontrado.");
         } else if (response.status() == 500) {
             return new RuntimeException("No existe un usuario con ese id.");

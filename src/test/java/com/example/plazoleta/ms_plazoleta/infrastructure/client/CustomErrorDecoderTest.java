@@ -49,6 +49,6 @@ class CustomErrorDecoderTest {
 
         Exception exception = errorDecoder.decode("testMethod", response);
         assertNotNull(exception);
-        assertTrue(exception instanceof RuntimeException); // Por defecto, usa Default ErrorDecoder
+        assertTrue(exception instanceof RuntimeException);
     }
 }

@@ -41,7 +41,6 @@ public class RestaurantEntity {
         this.ownerId = ownerId;
     }
 
-    // Getters & Setters
 
 
     public Long getId() {

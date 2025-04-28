@@ -1,7 +1,11 @@
 package com.example.plazoleta.ms_plazoleta.application.dto.request;
 
 
+import jakarta.validation.constraints.NotBlank;
+
 public class DishRequestDto {
+
+    @NotBlank
     private String name;
     private Integer price;
 
@@ -10,6 +14,9 @@ public class DishRequestDto {
     private String category;
     private Long ownerId;
     private Long restaurantId;
+
+    public DishRequestDto() {
+    }
 
     public DishRequestDto(String name, Integer price, String description, String imageUrl, String category, Long restaurantId, Long ownerId) {
         this.name = name;
