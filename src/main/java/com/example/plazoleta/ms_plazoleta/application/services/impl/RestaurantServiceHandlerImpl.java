@@ -39,5 +39,9 @@ public class RestaurantServiceHandlerImpl implements RestaurantServiceHandler {
         return restaurante.getOwnerId().equals(ownerId);
     }
 
+    @Override
+    public boolean isOwnerOfRestaurant(Long restaurantId, Long ownerId) {
+        return restaurantServicePort.isOwnerOfRestaurant(restaurantId, ownerId);
+    }
 
 }

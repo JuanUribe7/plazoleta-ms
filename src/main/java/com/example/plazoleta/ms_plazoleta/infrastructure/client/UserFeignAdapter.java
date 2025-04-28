@@ -1,10 +1,10 @@
 package com.example.plazoleta.ms_plazoleta.infrastructure.client;
 
-import com.example.plazoleta.ms_plazoleta.domain.ports.out.UserValidationPort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.IUserValidationPort;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserFeignAdapter implements UserValidationPort {
+public class UserFeignAdapter implements IUserValidationPort {
 
     private final UserFeignClient userFeignClient;
 
@@ -15,5 +15,10 @@ public class UserFeignAdapter implements UserValidationPort {
     @Override
     public String getRoleByUser(Long userId) {
         return userFeignClient.getRoleByUser(userId);
+    }
+
+    @Override
+    public void updateOwnerRestaurantId(Long ownerId, Long restaurantId) {
+        userFeignClient.updateOwnerRestaurant(ownerId, restaurantId);
     }
 }

@@ -7,4 +7,5 @@ public interface RestaurantServiceHandler {
 
     RestaurantResponseDto createRestaurant(RestaurantRequestDto restaurant);
     boolean validateOwner(Long restaurantId, Long ownerId);
+    boolean isOwnerOfRestaurant(Long restaurantId, Long ownerId);
 }

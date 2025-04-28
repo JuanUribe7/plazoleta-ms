@@ -2,7 +2,7 @@ package com.example.plazoleta.ms_plazoleta.commons.configurations.beans;
 
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.IDishPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.IRestaurantPersistencePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.out.UserValidationPort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.IUserValidationPort;
 import com.example.plazoleta.ms_plazoleta.domain.usecases.CreateDishUseCase;
 import com.example.plazoleta.ms_plazoleta.domain.usecases.RestaurantUseCase;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,19 +17,19 @@ class BeanConfigurationTest {
     private BeanConfiguration beanConfiguration;
     private IRestaurantPersistencePort restaurantPersistencePort;
     private IDishPersistencePort dishPersistencePort;
-    private UserValidationPort userValidationPort;
+    private IUserValidationPort IUserValidationPort;
 
     @BeforeEach
     void setUp() {
         beanConfiguration = new BeanConfiguration();
         restaurantPersistencePort = mock(IRestaurantPersistencePort.class);
         dishPersistencePort = mock(IDishPersistencePort.class);
-        userValidationPort = mock(UserValidationPort.class);
+        IUserValidationPort = mock(IUserValidationPort.class);
     }
 
     @Test
     void restaurantServicePortShouldReturnRestaurantUseCase() {
-        var result = beanConfiguration.restaurantServicePort(restaurantPersistencePort, userValidationPort); ;
+        var result = beanConfiguration.restaurantServicePort(restaurantPersistencePort, IUserValidationPort); ;
         assertNotNull(result);
         assertTrue(result instanceof RestaurantUseCase);
     }

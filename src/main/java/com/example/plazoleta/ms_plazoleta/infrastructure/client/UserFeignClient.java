@@ -4,9 +4,15 @@ import com.example.plazoleta.ms_plazoleta.infrastructure.configuration.FeignConf
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-@FeignClient(name = "usuarios-service", url = "http://localhost:8086", configuration = FeignConfig.class)
+import org.springframework.web.bind.annotation.PutMapping;
+
+
+@FeignClient(name = "usuarios-service", url = "http://localhost:8081", configuration = FeignConfig.class)
 public interface UserFeignClient {
 
-    @GetMapping("/user/{id}/rol")
+    @GetMapping("/users/{id}/rol")
     String getRoleByUser(@PathVariable Long id);
+
+    @PutMapping("/users/{ownerId}/restaurant/{restaurantId}")
+    void updateOwnerRestaurant(@PathVariable Long ownerId, @PathVariable Long restaurantId);
 }

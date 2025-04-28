@@ -10,10 +10,8 @@ public class CustomErrorDecoder implements ErrorDecoder {
 
     @Override
     public Exception decode(String methodKey, Response response) {
-        if (response.status() == 404) {
+        if (methodKey.contains("getRoleByUser") && response.status() == 404) {
             return new OwnerNotFoundException("El propietario no fue encontrado.");
-        } else if (response.status() == 500) {
-            return new RuntimeException("No existe un usuario con ese id.");
         }
         return defaultDecoder.decode(methodKey, response);
     }

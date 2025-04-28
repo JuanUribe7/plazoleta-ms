@@ -7,4 +7,6 @@ import java.util.Optional;
 public interface IRestaurantServicePort {
     Restaurant createRestaurant(Restaurant user);
     Optional<Restaurant> findById(Long id);
+    boolean isOwnerOfRestaurant(Long restaurantId, Long ownerId);
+
 }
