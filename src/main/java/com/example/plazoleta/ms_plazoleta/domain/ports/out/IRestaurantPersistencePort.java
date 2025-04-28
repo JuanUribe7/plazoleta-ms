@@ -1,6 +1,8 @@
 package com.example.plazoleta.ms_plazoleta.domain.ports.out;
 
 import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
@@ -11,4 +13,5 @@ public interface IRestaurantPersistencePort
     Optional<Restaurant> findByUrlLogo(String logo);
     Optional<Restaurant> findById(Long id);
     Optional<Restaurant> findByName(String name);
+    Page<Restaurant> findAllPagedSortedByName(Pageable pageable);
 }

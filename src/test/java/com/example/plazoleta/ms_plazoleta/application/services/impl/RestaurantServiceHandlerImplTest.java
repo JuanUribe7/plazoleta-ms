@@ -3,6 +3,7 @@ package com.example.plazoleta.ms_plazoleta.application.services.impl;
 import com.example.plazoleta.ms_plazoleta.application.dto.request.RestaurantRequestDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.response.RestaurantResponseDto;
 import com.example.plazoleta.ms_plazoleta.application.mappers.RestaurantDtoMapper;
+import com.example.plazoleta.ms_plazoleta.application.mappers.RestaurantSimpleDtoMapper;
 import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.IRestaurantServicePort;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,13 +18,14 @@ class RestaurantServiceHandlerImplTest {
 
     private IRestaurantServicePort restaurantServicePort;
     private RestaurantDtoMapper mapper;
+    private RestaurantSimpleDtoMapper simpleMapper;
     private RestaurantServiceHandlerImpl service;
 
     @BeforeEach
     void setUp() {
         restaurantServicePort = mock(IRestaurantServicePort.class);
         mapper = mock(RestaurantDtoMapper.class);
-        service = new RestaurantServiceHandlerImpl(restaurantServicePort, mapper);
+        service = new RestaurantServiceHandlerImpl(restaurantServicePort, mapper, simpleMapper);
     }
 
     @Test

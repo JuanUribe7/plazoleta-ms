@@ -6,6 +6,8 @@ import com.example.plazoleta.ms_plazoleta.infrastructure.mappers.RestaurantEntit
 import com.example.plazoleta.ms_plazoleta.infrastructure.repositories.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
@@ -33,6 +35,13 @@ public class RestaurantJpaAdapter implements IRestaurantPersistencePort {
                 .findByNit(nit)
                 .map(mapper::toModel);
     }
+
+    @Override
+    public Page<Restaurant> findAllPagedSortedByName(Pageable pageable) {
+        return restaurantRepository.findAllByOrderByNameAsc(pageable)
+                .map(mapper::toModel);
+    }
+
     @Override
     public Optional<Restaurant> findByName(String name) {
 

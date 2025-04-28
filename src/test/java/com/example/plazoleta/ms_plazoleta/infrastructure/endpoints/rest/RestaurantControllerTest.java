@@ -2,7 +2,9 @@
 package com.example.plazoleta.ms_plazoleta.infrastructure.endpoints.rest;
 
 import com.example.plazoleta.ms_plazoleta.application.dto.request.RestaurantRequestDto;
+import com.example.plazoleta.ms_plazoleta.application.dto.response.PagedRestaurantResponseDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.response.RestaurantResponseDto;
+import com.example.plazoleta.ms_plazoleta.application.dto.response.RestaurantSimpleResponseDto;
 import com.example.plazoleta.ms_plazoleta.application.services.RestaurantServiceHandler;
 import com.example.plazoleta.ms_plazoleta.infrastructure.security.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,11 +14,21 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -59,6 +71,33 @@ class RestaurantControllerTest {
                         .header("Authorization", "Bearer valid.token"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("New Restaurant"));
+    }
+
+
+    @Test
+    void listRestaurants_ShouldReturnPagedResponse() {
+        // Arrange
+        List<RestaurantSimpleResponseDto> content = Arrays.asList(
+                new RestaurantSimpleResponseDto(),
+                new RestaurantSimpleResponseDto()
+        );
+        Page<RestaurantSimpleResponseDto> page = new PageImpl<>(
+                content,
+                PageRequest.of(1, 2),
+                5
+        );
+        when(restaurantServiceHandler.getAllRestaurantsPaged(1, 2)).thenReturn(page);
+
+        // Act
+        ResponseEntity<PagedRestaurantResponseDto> response = restaurantController.listRestaurants(1, 2);
+        PagedRestaurantResponseDto body = response.getBody();
+
+        // Assert
+        assertNotNull(body);
+        assertEquals(content, body.getRestaurants());
+        assertEquals(page.getTotalPages(), body.getPagination().getTotalPages());
+        assertEquals(page.getTotalElements(), body.getPagination().getTotalElements());
+        verify(restaurantServiceHandler).getAllRestaurantsPaged(1, 2);
     }
 
     @Test

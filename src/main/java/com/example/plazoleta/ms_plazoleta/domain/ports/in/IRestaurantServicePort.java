@@ -1,12 +1,13 @@
 package com.example.plazoleta.ms_plazoleta.domain.ports.in;
 
 import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
-
+import org.springframework.data.domain.Page;
 import java.util.Optional;
 
 public interface IRestaurantServicePort {
     Restaurant createRestaurant(Restaurant user);
     Optional<Restaurant> findById(Long id);
     boolean isOwnerOfRestaurant(Long restaurantId, Long ownerId);
+    Page<Restaurant> getAllRestaurantsPaged(int page, int size);
 
 }

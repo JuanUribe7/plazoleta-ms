@@ -6,6 +6,10 @@ import com.example.plazoleta.ms_plazoleta.domain.ports.out.IRestaurantPersistenc
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.IUserValidationPort;
 import com.example.plazoleta.ms_plazoleta.domain.utils.validation.restaurant.RestaurantValidator;
 import com.example.plazoleta.ms_plazoleta.infrastructure.exceptions.OwnerNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.Optional;
 
@@ -47,6 +51,11 @@ public class RestaurantUseCase implements IRestaurantServicePort {
         userValidationPort.updateOwnerRestaurantId(restaurant.getOwnerId(), savedRestaurant.getId());
 
         return savedRestaurant;
+    }
+    @Override
+    public Page<Restaurant> getAllRestaurantsPaged(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
+        return restaurantPersistencePort.findAllPagedSortedByName(pageable);
     }
 
     @Override
