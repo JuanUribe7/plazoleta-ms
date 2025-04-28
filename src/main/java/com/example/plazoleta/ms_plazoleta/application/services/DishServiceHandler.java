@@ -8,4 +8,5 @@ import com.example.plazoleta.ms_plazoleta.application.dto.response.UpdateDishRes
 public interface DishServiceHandler {
         DishResponseDto createDish(DishRequestDto dto);
         UpdateDishResponseDto updateDish(UpdateDishRequestDto dto, Long dishId);
+        void changeDishStatus(Long dishId, Long restaurantId, Long ownerId, boolean active);
 }

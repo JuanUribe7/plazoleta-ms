@@ -43,5 +43,10 @@ public class DishServiceHandlerImpl implements DishServiceHandler {
         return mapper.updToResponseDto(savedDish);
     }
 
+    public void changeDishStatus(Long dishId, Long restaurantId, Long ownerId, boolean active) {
+        updateDishServicePort.changeDishStatus(dishId, restaurantId, ownerId, active);
+    }
+
+
 
 }

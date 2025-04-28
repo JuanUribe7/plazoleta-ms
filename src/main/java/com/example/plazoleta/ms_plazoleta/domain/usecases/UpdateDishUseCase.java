@@ -24,6 +24,24 @@ public class UpdateDishUseCase implements IUpdateDishServicePort {
 
         return dishPersistencePort.updateDish(dish);
     }
+
+    public void changeDishStatus(Long dishId, Long restaurantId, Long ownerId, boolean active) {
+        Dish dish = dishPersistencePort.findById(dishId)
+                .orElseThrow(() -> new IllegalArgumentException("Plato no encontrado"));
+        Restaurant restaurant = restaurantPersistencePort.findById(restaurantId)
+                .orElseThrow(() -> new IllegalArgumentException("Restaurante no encontrado"));
+        if (!restaurant.getOwnerId().equals(ownerId)) {
+            throw new IllegalArgumentException("No eres propietario de este restaurante.");
+        }
+        if (!dish.getRestaurantId().equals(restaurantId)) {
+            throw new IllegalArgumentException("Este plato no pertenece a tu restaurante.");
+        }
+        dish.setActive(active);
+        dishPersistencePort.updateDish(dish);
+    }
+
+
+
     public void validate(Dish dish, Long dishId) {
 
         Dish dishFounded = dishPersistencePort.findById(dishId)
@@ -41,5 +59,7 @@ public class UpdateDishUseCase implements IUpdateDishServicePort {
         DishUpdateValidator.validateDish(dish);
 
     }
+
+
 
 }

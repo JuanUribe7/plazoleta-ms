@@ -39,6 +39,20 @@ public class DishController {
     }
 
     @PreAuthorize("hasRole('OWNER')")
+    @PatchMapping("/{dishId}/status")
+    public ResponseEntity<Void> changeDishStatus(
+            @PathVariable Long restaurantId,
+            @PathVariable Long dishId,
+            @RequestParam boolean active,
+            HttpServletRequest request) {
+        String token = request.getHeader("Authorization").substring(7);
+        Long ownerId = jwtUtil.extractUserId(token);
+        dishServiceHandler.changeDishStatus(dishId, restaurantId, ownerId, active);
+        return ResponseEntity.noContent().build();
+    }
+
+
+    @PreAuthorize("hasRole('OWNER')")
     @PatchMapping("/{dishId}")
     public ResponseEntity<UpdateDishResponseDto> updateDish(
             @PathVariable Long restaurantId,

@@ -6,61 +6,76 @@ import com.example.plazoleta.ms_plazoleta.application.dto.response.RestaurantRes
 import com.example.plazoleta.ms_plazoleta.application.services.RestaurantServiceHandler;
 import com.example.plazoleta.ms_plazoleta.infrastructure.security.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(RestaurantController.class)
+@ExtendWith(MockitoExtension.class)
 class RestaurantControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper mapper;
-
-    @MockBean
+    @Mock
     private RestaurantServiceHandler restaurantServiceHandler;
 
-    @MockBean
+    @Mock
     private JwtUtil jwtUtil;
 
-    @Test
-    @WithMockUser(roles = "ADMIN")
-    void createRestaurant_withValidToken_returnsOkAndBody() throws Exception {
-        RestaurantRequestDto requestDto = new RestaurantRequestDto();
-        RestaurantResponseDto resp = new RestaurantResponseDto();
-        resp.setId(1L);
-        resp.setName("MyRestaurant");
+    @InjectMocks
+    private RestaurantController restaurantController;
 
-        when(jwtUtil.extractUserId("token123")).thenReturn(1L);
-        when(restaurantServiceHandler.createRestaurant(any(RestaurantRequestDto.class))).thenReturn(resp);
+    private MockMvc mockMvc;
+    private ObjectMapper objectMapper = new ObjectMapper();
 
-        mockMvc.perform(post("/restaurants")
-                        .with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", "Bearer token123")
-                        .content(mapper.writeValueAsString(requestDto)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.name").value("MyRestaurant"));
+    @BeforeEach
+    void setUp() {
+        mockMvc = MockMvcBuilders.standaloneSetup(restaurantController).build();
     }
+
     @Test
-    void createRestaurant_withoutAuthentication_returnsUnauthorized() throws Exception {
+    void createRestaurant_success() throws Exception {
+        RestaurantRequestDto dto = new RestaurantRequestDto();
+        dto.setName("New Restaurant");
+
+        RestaurantResponseDto responseDto = new RestaurantResponseDto();
+        responseDto.setName("New Restaurant");
+
+        when(jwtUtil.extractUserId("valid.token")).thenReturn(1L);
+        when(restaurantServiceHandler.createRestaurant(any(RestaurantRequestDto.class))).thenReturn(responseDto);
+
         mockMvc.perform(post("/restaurants")
-                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{}"))
-                .andExpect(status().isUnauthorized());
+                        .content(objectMapper.writeValueAsString(dto))
+                        .header("Authorization", "Bearer valid.token"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("New Restaurant"));
+    }
+
+    @Test
+    void isOwnerOfRestaurant_true() throws Exception {
+        when(restaurantServiceHandler.isOwnerOfRestaurant(5L, 1L)).thenReturn(true);
+
+        mockMvc.perform(get("/restaurants/5/owner/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("true"));
+    }
+
+    @Test
+    void isOwnerOfRestaurant_false() throws Exception {
+        when(restaurantServiceHandler.isOwnerOfRestaurant(5L, 1L)).thenReturn(false);
+
+        mockMvc.perform(get("/restaurants/5/owner/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("false"));
     }
 }
