@@ -1,22 +1,21 @@
 package com.example.plazoleta.ms_plazoleta.domain.utils.validation.dish;
 
-public class DescriptionValidator {
+import com.example.plazoleta.ms_plazoleta.commons.constants.ValidationMessages;
 
+public class DescriptionValidator {
     private DescriptionValidator() {
-        throw new UnsupportedOperationException("Clase utilitaria, no debe instanciarse.");
+        throw new UnsupportedOperationException(ValidationMessages.UTILITY_CLASS);
     }
 
     public static void validate(String description) {
         if (description == null || description.trim().isEmpty()) {
-            throw new IllegalArgumentException("La descripción no puede estar vacía");
+            throw new IllegalArgumentException(ValidationMessages.DESCRIPTION_EMPTY);
         }
-
         if (!description.matches("^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ.,\\s]+$")) {
-            throw new IllegalArgumentException("La descripción solo puede contener letras, números, espacios, puntos y comas");
+            throw new IllegalArgumentException(ValidationMessages.DESCRIPTION_ALLOWED_CHARS);
         }
-
         if (description.length() < 10 || description.length() > 200) {
-            throw new IllegalArgumentException("La descripción debe tener entre 10 y 200 caracteres");
+            throw new IllegalArgumentException(ValidationMessages.DESCRIPTION_LENGTH);
         }
     }
 }

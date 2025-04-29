@@ -1,43 +1,41 @@
 package com.example.plazoleta.ms_plazoleta.domain.utils.validation.dish;
 
+import com.example.plazoleta.ms_plazoleta.commons.constants.ValidationMessages;
 import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
 import com.example.plazoleta.ms_plazoleta.domain.utils.validation.restaurant.NameValidator;
 import com.example.plazoleta.ms_plazoleta.infrastructure.exceptions.IllegalLogoException;
 
+
 public class DishValidator {
-
-
     private DishValidator() {
-        throw new UnsupportedOperationException("Clase utilitaria, no debe instanciarse.");
+        throw new UnsupportedOperationException(ValidationMessages.UTILITY_CLASS);
     }
 
     public static void validateDish(Dish dish) {
-
         NameValidator.validate(dish.getName());
 
-        if (dish.getImageUrl() == null || dish.getImageUrl().trim().isEmpty()) {
-            throw new IllegalLogoException("La URL del logo no puede estar vacía");
+        // validar imagen
+        String url = dish.getImageUrl();
+        if (url == null || url.trim().isEmpty()) {
+            throw new IllegalLogoException(ValidationMessages.IMAGE_URL_EMPTY);
         }
-        if (dish.getImageUrl().contains("localhost") || dish.getImageUrl().contains("127.0.0.1")) {
-            throw new IllegalArgumentException("La URL del logo no puede ser local");
+        if (url.contains("localhost") || url.contains("127.0.0.1")) {
+            throw new IllegalArgumentException(ValidationMessages.IMAGE_URL_LOCAL);
         }
-        if (!dish.getImageUrl().matches("^(http|https)://.*$")) {
-            throw new IllegalArgumentException("La URL del logo debe ser válida y comenzar con http o https");
+        if (!url.matches("^(http|https)://.*$")) {
+            throw new IllegalArgumentException(ValidationMessages.IMAGE_URL_VALID);
         }
-        if (!dish.getImageUrl().matches(".*\\.(png|jpg|jpeg|svg)$")) {
-            throw new IllegalArgumentException("La URL del logo debe terminar en .png, .jpg, .jpeg o .svg");
+        if (!url.matches(".*\\.(png|jpg|jpeg|svg)$")) {
+            throw new IllegalArgumentException(ValidationMessages.IMAGE_URL_IMAGE_EXT);
         }
 
+        // categorí­a y descripción
         CategoryValidator.validate(dish.getCategory());
-
-
         DescriptionValidator.validate(dish.getDescription());
 
-
-        // Validación de precio
-        System.out.println("Validando precio: " + dish.getPrice());
+        // precio
         if (dish.getPrice() <= 0) {
-            throw new IllegalArgumentException("Precio debe ser mayor a 0");
+            throw new IllegalArgumentException(ValidationMessages.PRICE_POSITIVE);
         }
     }
 }

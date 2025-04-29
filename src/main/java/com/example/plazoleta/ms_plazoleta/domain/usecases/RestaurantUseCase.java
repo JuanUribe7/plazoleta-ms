@@ -1,11 +1,12 @@
 package com.example.plazoleta.ms_plazoleta.domain.usecases;
 
+
 import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.IRestaurantServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.IRestaurantPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.IUserValidationPort;
+import com.example.plazoleta.ms_plazoleta.domain.utils.validation.DomainValidator;
 import com.example.plazoleta.ms_plazoleta.domain.utils.validation.restaurant.RestaurantValidator;
-import com.example.plazoleta.ms_plazoleta.infrastructure.exceptions.OwnerNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,57 +16,60 @@ import java.util.Optional;
 
 public class RestaurantUseCase implements IRestaurantServicePort {
 
-    private final IRestaurantPersistencePort restaurantPersistencePort;
-    private final IUserValidationPort userValidationPort;
+    private final IRestaurantPersistencePort restaurantPort;
+    private final IUserValidationPort       userValidationPort;
+    private final DomainValidator validator;
 
-    public RestaurantUseCase(IRestaurantPersistencePort restaurantPersistencePort,
-                             IUserValidationPort userValidationPort) {
-        this.restaurantPersistencePort = restaurantPersistencePort;
+    public RestaurantUseCase(
+            IRestaurantPersistencePort restaurantPort,
+            IUserValidationPort userValidationPort
+    ) {
+        this.restaurantPort     = restaurantPort;
         this.userValidationPort = userValidationPort;
+        this.validator          = new DomainValidator(restaurantPort, null, userValidationPort);
     }
 
     @Override
     public Restaurant createRestaurant(Restaurant restaurant) {
+        // 1) Validar campos del DTO
         RestaurantValidator.validate(restaurant);
 
-        String rol;
-        try {
-            rol = userValidationPort.getRoleByUser(restaurant.getOwnerId());
-        } catch (OwnerNotFoundException e) {
-            throw new IllegalArgumentException("No existe un usuario con ese id.");
-        }
+        // 2) Comprobar que el usuario exista y sea OWNER
+        validator.validateUserIsOwner(restaurant.getOwnerId());
 
-        if (!rol.equalsIgnoreCase("OWNER")) {
-            throw new IllegalArgumentException("El id no corresponde a un usuario propietario.");
-        }
+        // 3) NIT y nombre únicos
+        validator.validateNewRestaurant(
+                restaurant.getNit(),
+                restaurant.getName()
+        );
 
-        if (restaurantPersistencePort.findByNit(restaurant.getNit()).isPresent()) {
-            throw new IllegalArgumentException("El NIT del restaurante ya está registrado.");
-        }
+        // 4) Persistir
+        Restaurant saved = restaurantPort.saveRestaurant(restaurant);
 
-        if (restaurantPersistencePort.findByName(restaurant.getName()).isPresent()) {
-            throw new IllegalArgumentException("El nombre del restaurante ya está registrado.");
-        }
+        // 5) Asociar restaurante al usuario
+        userValidationPort.updateOwnerRestaurantId(
+                restaurant.getOwnerId(),
+                saved.getId()
+        );
 
-        Restaurant savedRestaurant = restaurantPersistencePort.saveRestaurant(restaurant);
-        userValidationPort.updateOwnerRestaurantId(restaurant.getOwnerId(), savedRestaurant.getId());
-
-        return savedRestaurant;
+        return saved;
     }
+
     @Override
     public Page<Restaurant> getAllRestaurantsPaged(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
-        return restaurantPersistencePort.findAllPagedSortedByName(pageable);
+        return restaurantPort.findAllPagedSortedByName(pageable);
     }
 
     @Override
     public boolean isOwnerOfRestaurant(Long restaurantId, Long ownerId) {
-        Optional<Restaurant> restaurant = restaurantPersistencePort.findById(restaurantId);
-        return restaurant.isPresent() && restaurant.get().getOwnerId().equals(ownerId);
+        return restaurantPort.findById(restaurantId)
+                .map(r -> r.getOwnerId().equals(ownerId))
+                .orElse(false);
     }
 
     @Override
     public Optional<Restaurant> findById(Long id) {
-        return restaurantPersistencePort.findById(id);
+        return restaurantPort.findById(id);
     }
 }

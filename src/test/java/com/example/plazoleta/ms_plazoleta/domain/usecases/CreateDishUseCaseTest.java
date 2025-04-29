@@ -4,6 +4,7 @@ import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
 import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.IDishPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.IRestaurantPersistencePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.IUserValidationPort;
 import com.example.plazoleta.ms_plazoleta.domain.utils.validation.dish.DishValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,18 +15,26 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+
 class CreateDishUseCaseTest {
 
-    private IDishPersistencePort dishPersistencePort;
-    private IRestaurantPersistencePort restaurantPersistencePort;
-    private CreateDishUseCase useCase;
-    private Dish dish;
+    private IDishPersistencePort          dishPersistencePort;
+    private IRestaurantPersistencePort    restaurantPersistencePort;
+    private IUserValidationPort userValidationPort;    // <-- nuevo mock
+    private CreateDishUseCase             useCase;
+    private Dish                          dish;
 
     @BeforeEach
     void setUp() {
-        dishPersistencePort = mock(IDishPersistencePort.class);
+        dishPersistencePort       = mock(IDishPersistencePort.class);
         restaurantPersistencePort = mock(IRestaurantPersistencePort.class);
-        useCase = new CreateDishUseCase(dishPersistencePort, restaurantPersistencePort);
+        userValidationPort        = mock(IUserValidationPort.class);  // <-- inicializado
+        useCase = new CreateDishUseCase(
+                dishPersistencePort,
+                restaurantPersistencePort,
+                userValidationPort
+        ); // <-- pasa el userValidationPort también
+
         dish = new Dish();
         dish.setName("TempDish");
         dish.setDescription("Valid description");
@@ -39,7 +48,8 @@ class CreateDishUseCaseTest {
     @Test
     void createDish_success() {
         try (MockedStatic<DishValidator> dv = mockStatic(DishValidator.class)) {
-            dv.when(() -> DishValidator.validateDish(dish)).thenAnswer(i -> null);
+            dv.when(() -> DishValidator.validateDish(dish))
+                    .thenAnswer(i -> null);
 
             Restaurant r = new Restaurant();
             r.setId(1L);
@@ -50,7 +60,6 @@ class CreateDishUseCaseTest {
 
             Dish result = useCase.createDish(dish);
 
-            // Usamos getActive() en vez de isActive()
             assertTrue(result.getActive());
             verify(dishPersistencePort).saveDish(dish);
         }

@@ -1,65 +1,52 @@
 package com.example.plazoleta.ms_plazoleta.domain.usecases;
 
 import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
-import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.IUpdateDishServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.IDishPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.IRestaurantPersistencePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.IUserValidationPort;
+import com.example.plazoleta.ms_plazoleta.domain.utils.validation.DomainValidator;
 import com.example.plazoleta.ms_plazoleta.domain.utils.validation.dish.DishUpdateValidator;
 
 public class UpdateDishUseCase implements IUpdateDishServicePort {
 
-    private final IDishPersistencePort dishPersistencePort;
-    private final IRestaurantPersistencePort restaurantPersistencePort;
+    private final IDishPersistencePort       dishPort;
+    private final DomainValidator validator;
 
-    public UpdateDishUseCase(IDishPersistencePort dishPersistencePort, IRestaurantPersistencePort restaurantPersistencePort) {
-        this.dishPersistencePort = dishPersistencePort;
-        this.restaurantPersistencePort = restaurantPersistencePort;
+    public UpdateDishUseCase(
+            IDishPersistencePort dishPort,
+            IRestaurantPersistencePort restaurantPort,
+            IUserValidationPort userValidationPort
+    ) {
+        this.dishPort  = dishPort;
+        this.validator = new DomainValidator(restaurantPort, dishPort, userValidationPort);
     }
 
     @Override
     public Dish updateDish(Dish dish, Long dishId) {
-        dish.setId(dishId);
-        validate(dish, dishId);
-
-        return dishPersistencePort.updateDish(dish);
-    }
-
-    public void changeDishStatus(Long dishId, Long restaurantId, Long ownerId, boolean active) {
-        Dish dish = dishPersistencePort.findById(dishId)
-                .orElseThrow(() -> new IllegalArgumentException("Plato no encontrado"));
-        Restaurant restaurant = restaurantPersistencePort.findById(restaurantId)
-                .orElseThrow(() -> new IllegalArgumentException("Restaurante no encontrado"));
-        if (!restaurant.getOwnerId().equals(ownerId)) {
-            throw new IllegalArgumentException("No eres propietario de este restaurante.");
-        }
-        if (!dish.getRestaurantId().equals(restaurantId)) {
-            throw new IllegalArgumentException("Este plato no pertenece a tu restaurante.");
-        }
-        dish.setActive(active);
-        dishPersistencePort.updateDish(dish);
-    }
-
-
-
-    public void validate(Dish dish, Long dishId) {
-
-        Dish dishFounded = dishPersistencePort.findById(dishId)
-                .orElseThrow(() -> new IllegalArgumentException("Plato no encontrado"));
-
-
-        dish.setName(dishFounded.getName());
-
-        Restaurant restaurant = restaurantPersistencePort.findById(dish.getRestaurantId())
-                .orElseThrow(() -> new IllegalArgumentException("Restaurante no encontrado"));
-
-        if (!restaurant.getOwnerId().equals(dish.getOwnerId())) {
-            throw new IllegalArgumentException("No eres el propietario de este restaurante.");
-        }
+        // 1) Plato existe y pertenece a tu restaurante
+        validator.validateDishOwnership(
+                dishId,
+                dish.getRestaurantId(),
+                dish.getOwnerId()
+        );
+        // 2) Validar campos del DTO de actualización
         DishUpdateValidator.validateDish(dish);
 
+        // 3) Asignar ID y persistir
+        dish.setId(dishId);
+        return dishPort.updateDish(dish);
     }
 
+    public void changeDishStatus(Long dishId,
+                                 Long restaurantId,
+                                 Long ownerId,
+                                 boolean active) {
+        // Misma validación de existencia y propiedad
+        validator.validateDishOwnership(dishId, restaurantId, ownerId);
 
-
+        Dish d = dishPort.findById(dishId).get();
+        d.setActive(active);
+        dishPort.updateDish(d);
+    }
 }

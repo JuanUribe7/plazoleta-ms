@@ -1,12 +1,13 @@
 package com.example.plazoleta.ms_plazoleta.domain.utils.validation.restaurant;
 
+import com.example.plazoleta.ms_plazoleta.commons.constants.ValidationMessages;
 import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
 
 
 public class RestaurantValidator {
 
     private RestaurantValidator() {
-        throw new UnsupportedOperationException("Clase utilitaria, no debe instanciarse.");
+        throw new UnsupportedOperationException(ValidationMessages.UTILITY_CLASS);
     }
 
 

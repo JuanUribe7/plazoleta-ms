@@ -1,22 +1,21 @@
 package com.example.plazoleta.ms_plazoleta.domain.utils.validation.dish;
 
-public class CategoryValidator {
+import com.example.plazoleta.ms_plazoleta.commons.constants.ValidationMessages;
 
+public class CategoryValidator {
     private CategoryValidator() {
-        throw new UnsupportedOperationException("Clase utilitaria, no debe instanciarse.");
+        throw new UnsupportedOperationException(ValidationMessages.UTILITY_CLASS);
     }
 
     public static void validate(String category) {
         if (category == null || category.trim().isEmpty()) {
-            throw new IllegalArgumentException("La categoría no puede estar vacía");
+            throw new IllegalArgumentException(ValidationMessages.CATEGORY_EMPTY);
         }
-
         if (!category.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$")) {
-            throw new IllegalArgumentException("La categoría solo puede contener letras y espacios");
+            throw new IllegalArgumentException(ValidationMessages.CATEGORY_ONLY_LETTERS);
         }
-
         if (category.length() < 3 || category.length() > 30) {
-            throw new IllegalArgumentException("La categoría debe tener entre 3 y 30 caracteres");
+            throw new IllegalArgumentException(ValidationMessages.CATEGORY_LENGTH);
         }
     }
 }

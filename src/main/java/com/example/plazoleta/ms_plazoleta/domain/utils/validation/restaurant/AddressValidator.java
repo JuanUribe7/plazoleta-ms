@@ -1,25 +1,25 @@
 package com.example.plazoleta.ms_plazoleta.domain.utils.validation.restaurant;
 
+
+import com.example.plazoleta.ms_plazoleta.commons.constants.ValidationMessages;
+
 public class AddressValidator {
     private AddressValidator() {
-        throw new UnsupportedOperationException("Clase utilitaria, no debe instanciarse.");
+        throw new UnsupportedOperationException(ValidationMessages.UTILITY_CLASS);
     }
 
     public static void validate(String address) {
         if (address == null || address.trim().isEmpty()) {
-            throw new IllegalArgumentException("La dirección no puede estar vacía ni ser solo espacios");
+            throw new IllegalArgumentException(ValidationMessages.ADDRESS_EMPTY);
         }
-
         if (!address.matches("^[a-zA-Z0-9\\s\\-.,#]+$")) {
-            throw new IllegalArgumentException("La dirección solo puede contener letras, números, espacios, guiones, puntos, comas y numeral");
+            throw new IllegalArgumentException(ValidationMessages.ADDRESS_ALLOWED_CHARS);
         }
-
         if (address.length() < 5 || address.length() > 100) {
-            throw new IllegalArgumentException("La dirección debe tener entre 5 y 100 caracteres");
+            throw new IllegalArgumentException(ValidationMessages.ADDRESS_LENGTH);
         }
-
         if (address.matches("^[0-9]+$")) {
-            throw new IllegalArgumentException("La dirección no puede contener solo números");
+            throw new IllegalArgumentException(ValidationMessages.ADDRESS_NO_ONLY_NUM);
         }
     }
 }

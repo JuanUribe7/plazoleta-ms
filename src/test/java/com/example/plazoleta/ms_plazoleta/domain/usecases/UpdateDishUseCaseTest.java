@@ -4,6 +4,7 @@ import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
 import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.IDishPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.IRestaurantPersistencePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.IUserValidationPort;
 import com.example.plazoleta.ms_plazoleta.domain.utils.validation.dish.DishUpdateValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,16 +24,19 @@ import static org.mockito.Mockito.*;
 class UpdateDishUseCaseTest {
 
     @Mock
-    private IDishPersistencePort dishPersistencePort;
+    private IDishPersistencePort          dishPersistencePort;
 
     @Mock
-    private IRestaurantPersistencePort restaurantPersistencePort;
+    private IRestaurantPersistencePort    restaurantPersistencePort;
+
+    @Mock
+    private IUserValidationPort userValidationPort;   // <-- nuevo mock
 
     @InjectMocks
-    private UpdateDishUseCase updateDishUseCase;
+    private UpdateDishUseCase             updateDishUseCase;
 
-    private Dish dish;
-    private Restaurant restaurant;
+    private Dish                          dish;
+    private Restaurant                    restaurant;
 
     @BeforeEach
     void setUp() {
@@ -56,7 +60,8 @@ class UpdateDishUseCaseTest {
         when(dishPersistencePort.updateDish(dish)).thenReturn(dish);
 
         try (MockedStatic<DishUpdateValidator> mockedValidator = mockStatic(DishUpdateValidator.class)) {
-            mockedValidator.when(() -> DishUpdateValidator.validateDish(dish)).thenAnswer(invocation -> null);
+            mockedValidator.when(() -> DishUpdateValidator.validateDish(dish))
+                    .thenAnswer(invocation -> null);
 
             Dish result = updateDishUseCase.updateDish(dish, 1L);
 
@@ -87,9 +92,11 @@ class UpdateDishUseCaseTest {
     void changeDishStatus_dishNotFound_throwsException() {
         when(dishPersistencePort.findById(1L)).thenReturn(Optional.empty());
 
-        Exception e = assertThrows(IllegalArgumentException.class, () ->
-                updateDishUseCase.changeDishStatus(1L, 10L, 100L, true));
-        assertEquals("Plato no encontrado", e.getMessage());
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> updateDishUseCase.changeDishStatus(1L, 10L, 100L, true)
+        );
+        assertEquals("Plato no encontrado", ex.getMessage());
     }
 
     @Test
@@ -101,9 +108,11 @@ class UpdateDishUseCaseTest {
         when(dishPersistencePort.findById(1L)).thenReturn(Optional.of(foundDish));
         when(restaurantPersistencePort.findById(10L)).thenReturn(Optional.empty());
 
-        Exception e = assertThrows(IllegalArgumentException.class, () ->
-                updateDishUseCase.changeDishStatus(1L, 10L, 100L, true));
-        assertEquals("Restaurante no encontrado", e.getMessage());
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> updateDishUseCase.changeDishStatus(1L, 10L, 100L, true)
+        );
+        assertEquals("Restaurante no encontrado", ex.getMessage());
     }
 
     @Test
@@ -119,9 +128,11 @@ class UpdateDishUseCaseTest {
         when(dishPersistencePort.findById(1L)).thenReturn(Optional.of(foundDish));
         when(restaurantPersistencePort.findById(10L)).thenReturn(Optional.of(otherOwnerRestaurant));
 
-        Exception e = assertThrows(IllegalArgumentException.class, () ->
-                updateDishUseCase.changeDishStatus(1L, 10L, 100L, true));
-        assertEquals("No eres propietario de este restaurante.", e.getMessage());
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> updateDishUseCase.changeDishStatus(1L, 10L, 100L, true)
+        );
+        assertEquals("No eres propietario de este restaurante.", ex.getMessage());
     }
 
     @Test
@@ -133,47 +144,10 @@ class UpdateDishUseCaseTest {
         when(dishPersistencePort.findById(1L)).thenReturn(Optional.of(foundDish));
         when(restaurantPersistencePort.findById(10L)).thenReturn(Optional.of(restaurant));
 
-        Exception e = assertThrows(IllegalArgumentException.class, () ->
-                updateDishUseCase.changeDishStatus(1L, 10L, 100L, true));
-        assertEquals("Este plato no pertenece a tu restaurante.", e.getMessage());
-    }
-
-    @Test
-    void validate_dishNotFound_throwsException() {
-        when(dishPersistencePort.findById(1L)).thenReturn(Optional.empty());
-
-        Exception e = assertThrows(IllegalArgumentException.class, () ->
-                updateDishUseCase.validate(dish, 1L));
-        assertEquals("Plato no encontrado", e.getMessage());
-    }
-
-    @Test
-    void validate_restaurantNotFound_throwsException() {
-        Dish foundDish = new Dish();
-        foundDish.setName("ExistingDish");
-
-        when(dishPersistencePort.findById(1L)).thenReturn(Optional.of(foundDish));
-        when(restaurantPersistencePort.findById(10L)).thenReturn(Optional.empty());
-
-        Exception e = assertThrows(IllegalArgumentException.class, () ->
-                updateDishUseCase.validate(dish, 1L));
-        assertEquals("Restaurante no encontrado", e.getMessage());
-    }
-
-    @Test
-    void validate_notOwner_throwsException() {
-        Dish foundDish = new Dish();
-        foundDish.setName("ExistingDish");
-
-        Restaurant otherOwnerRestaurant = new Restaurant();
-        otherOwnerRestaurant.setId(10L);
-        otherOwnerRestaurant.setOwnerId(200L);
-
-        when(dishPersistencePort.findById(1L)).thenReturn(Optional.of(foundDish));
-        when(restaurantPersistencePort.findById(10L)).thenReturn(Optional.of(otherOwnerRestaurant));
-
-        Exception e = assertThrows(IllegalArgumentException.class, () ->
-                updateDishUseCase.validate(dish, 1L));
-        assertEquals("No eres el propietario de este restaurante.", e.getMessage());
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> updateDishUseCase.changeDishStatus(1L, 10L, 100L, true)
+        );
+        assertEquals("Este plato no pertenece a tu restaurante.", ex.getMessage());
     }
 }

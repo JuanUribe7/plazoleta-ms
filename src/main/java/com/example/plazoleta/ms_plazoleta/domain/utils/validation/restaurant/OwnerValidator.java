@@ -1,20 +1,19 @@
 package com.example.plazoleta.ms_plazoleta.domain.utils.validation.restaurant;
 
+
+import com.example.plazoleta.ms_plazoleta.commons.constants.ValidationMessages;
+
 public class OwnerValidator {
     private OwnerValidator() {
-        throw new UnsupportedOperationException("Clase utilitaria, no debe instanciarse.");
+        throw new UnsupportedOperationException(ValidationMessages.UTILITY_CLASS);
     }
 
     public static void validate(Long ownerId) {
         if (ownerId == null) {
-            throw new IllegalArgumentException("El ID del propietario no puede ser nulo");
+            throw new IllegalArgumentException(ValidationMessages.OWNER_ID_NULL);
         }
         if (ownerId <= 0) {
-            throw new IllegalArgumentException("El ID del propietario debe ser un número positivo");
+            throw new IllegalArgumentException(ValidationMessages.OWNER_ID_POSITIVE);
         }
-
-
-
     }
-
-   }
+}

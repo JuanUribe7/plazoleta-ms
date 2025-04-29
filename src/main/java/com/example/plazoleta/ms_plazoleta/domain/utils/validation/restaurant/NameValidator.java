@@ -1,35 +1,25 @@
 package com.example.plazoleta.ms_plazoleta.domain.utils.validation.restaurant;
 
 
-public class NameValidator  {
-    private NameValidator() {
-        throw new UnsupportedOperationException("Clase utilitaria, no debe instanciarse.");
-    }
+import com.example.plazoleta.ms_plazoleta.commons.constants.ValidationMessages;
 
+public class NameValidator {
+    private NameValidator() {
+        throw new UnsupportedOperationException(ValidationMessages.UTILITY_CLASS);
+    }
 
     public static void validate(String name) {
-
-
-
         if (!name.matches("^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$")) {
-            throw new IllegalArgumentException("El nombre solo puede contener letras y espacios");
+            throw new IllegalArgumentException(ValidationMessages.NAME_ONLY_LETTERS);
         }
-
-
         if (name.contains("  ")) {
-            throw new IllegalArgumentException("El nombre no puede tener espacios dobles");
+            throw new IllegalArgumentException(ValidationMessages.NAME_NO_DOUBLE_SPACES);
         }
-
-
         if (name.startsWith(" ") || name.endsWith(" ")) {
-            throw new IllegalArgumentException("El nombre no puede comenzar ni terminar con espacio");
+            throw new IllegalArgumentException(ValidationMessages.NAME_NO_TRIM_SPACES);
         }
-
-
         if (name.length() < 2) {
-            throw new IllegalArgumentException("El nombre debe tener al menos 2 caracteres");
+            throw new IllegalArgumentException(ValidationMessages.NAME_MIN_LENGTH);
         }
-
     }
-
-    }
+}

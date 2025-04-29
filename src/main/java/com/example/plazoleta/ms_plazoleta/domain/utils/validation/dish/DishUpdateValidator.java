@@ -1,31 +1,29 @@
 package com.example.plazoleta.ms_plazoleta.domain.utils.validation.dish;
 
+
+import com.example.plazoleta.ms_plazoleta.commons.constants.ValidationMessages;
 import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
 
 public class DishUpdateValidator {
-
     private DishUpdateValidator() {
-        throw new UnsupportedOperationException("Clase utilitaria, no debe instanciarse.");
+        throw new UnsupportedOperationException(ValidationMessages.UTILITY_CLASS);
     }
 
     public static void validateDish(Dish dish) {
-
-
-
+        // validar descripción
         if (dish.getDescription() == null || dish.getDescription().trim().isEmpty()) {
-            throw new IllegalArgumentException("La descripción no puede estar vacía");
+            throw new IllegalArgumentException(ValidationMessages.DESCRIPTION_EMPTY);
         }
         if (!dish.getDescription().matches("^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ.,\\s]+$")) {
-            throw new IllegalArgumentException("La descripción solo puede contener letras, números, espacios, puntos y comas");
+            throw new IllegalArgumentException(ValidationMessages.DESCRIPTION_ALLOWED_CHARS);
         }
         if (dish.getDescription().length() < 10 || dish.getDescription().length() > 200) {
-            throw new IllegalArgumentException("La descripción debe tener entre 10 y 200 caracteres");
+            throw new IllegalArgumentException(ValidationMessages.DESCRIPTION_LENGTH);
         }
 
         // Validación de precio
-        System.out.println("Validando precio: " + dish.getPrice());
         if (dish.getPrice() <= 0) {
-            throw new IllegalArgumentException("Precio debe ser mayor a 0");
+            throw new IllegalArgumentException(ValidationMessages.PRICE_POSITIVE);
         }
     }
 }
