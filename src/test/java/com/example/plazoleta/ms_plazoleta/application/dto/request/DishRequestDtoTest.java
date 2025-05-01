@@ -8,13 +8,13 @@ class DishRequestDtoTest {
 
     @Test
     void testConstructorAndGetters() {
-        DishRequestDto dto = new DishRequestDto("Dish", 1000, "Description", "http://image.com", "Category", 1L, 2L);
+        DishRequestDto dto = new DishRequestDto("Dish", 1000, "Description", "http://image.com", "CategoryType", 1L, 2L);
 
         assertEquals("Dish", dto.getName());
         assertEquals(1000, dto.getPrice());
         assertEquals("Description", dto.getDescription());
         assertEquals("http://image.com", dto.getImageUrl());
-        assertEquals("Category", dto.getCategory());
+        assertEquals("CategoryType", dto.getCategory());
         assertEquals(1L, dto.getRestaurantId());
         assertEquals(2L, dto.getOwnerId());
     }
@@ -27,7 +27,7 @@ class DishRequestDtoTest {
         dto.setPrice(2000);
         dto.setDescription("New Description");
         dto.setImageUrl("http://newimage.com");
-        dto.setCategory("New Category");
+        dto.setCategory("New CategoryType");
         dto.setRestaurantId(3L);
         dto.setOwnerId(4L);
 
@@ -35,7 +35,7 @@ class DishRequestDtoTest {
         assertEquals(2000, dto.getPrice());
         assertEquals("New Description", dto.getDescription());
         assertEquals("http://newimage.com", dto.getImageUrl());
-        assertEquals("New Category", dto.getCategory());
+        assertEquals("New CategoryType", dto.getCategory());
         assertEquals(3L, dto.getRestaurantId());
         assertEquals(4L, dto.getOwnerId());
     }

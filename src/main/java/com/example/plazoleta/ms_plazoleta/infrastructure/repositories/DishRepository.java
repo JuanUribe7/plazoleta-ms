@@ -10,4 +10,6 @@ public interface DishRepository extends JpaRepository<DishEntity, Long> {
 
     Optional<DishEntity> findByName(String name);
     Optional<DishEntity> findById(Long id);
+    Optional<DishEntity> findByNameAndRestaurantId(String name, Long restaurantId);
+
 }

@@ -1,10 +1,10 @@
 package com.example.plazoleta.ms_plazoleta.commons.configurations.beans;
 
-import com.example.plazoleta.ms_plazoleta.domain.ports.out.IDishPersistencePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.out.IRestaurantPersistencePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.out.IUserValidationPort;
-import com.example.plazoleta.ms_plazoleta.domain.usecases.CreateDishUseCase;
-import com.example.plazoleta.ms_plazoleta.domain.usecases.RestaurantUseCase;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.DishPersistencePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.RestaurantPersistencePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.UserValidationPort;
+import com.example.plazoleta.ms_plazoleta.domain.usecases.create.CreateRestaurantUseCase;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,23 +15,23 @@ import static org.mockito.Mockito.mock;
 class BeanConfigurationTest {
 
     private BeanConfiguration beanConfiguration;
-    private IRestaurantPersistencePort restaurantPersistencePort;
-    private IDishPersistencePort dishPersistencePort;
-    private IUserValidationPort IUserValidationPort;
+    private RestaurantPersistencePort restaurantPersistencePort;
+    private DishPersistencePort dishPersistencePort;
+    private UserValidationPort UserValidationPort;
 
     @BeforeEach
     void setUp() {
         beanConfiguration = new BeanConfiguration();
-        restaurantPersistencePort = mock(IRestaurantPersistencePort.class);
-        dishPersistencePort = mock(IDishPersistencePort.class);
-        IUserValidationPort = mock(IUserValidationPort.class);
+        restaurantPersistencePort = mock(RestaurantPersistencePort.class);
+        dishPersistencePort = mock(DishPersistencePort.class);
+        UserValidationPort = mock(UserValidationPort.class);
     }
 
     @Test
     void restaurantServicePortShouldReturnRestaurantUseCase() {
-        var result = beanConfiguration.restaurantServicePort(restaurantPersistencePort, IUserValidationPort); ;
+        var result = beanConfiguration.restaurantServicePort(restaurantPersistencePort, UserValidationPort); ;
         assertNotNull(result);
-        assertTrue(result instanceof RestaurantUseCase);
+        assertTrue(result instanceof CreateRestaurantUseCase);
     }
 
     @Test

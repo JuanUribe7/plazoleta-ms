@@ -1,24 +1,26 @@
 package com.example.plazoleta.ms_plazoleta.domain.utils.validation.restaurant;
 
+import com.example.plazoleta.ms_plazoleta.commons.constants.ErrorFieldsMessages;
+import com.example.plazoleta.ms_plazoleta.commons.constants.ExceptionMessages;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.RestaurantPersistencePort;
 
 public class NitValidator {
     private NitValidator() {
-        throw new UnsupportedOperationException("Clase utilitaria, no debe instanciarse.");
+        throw new UnsupportedOperationException(ExceptionMessages.UTILITY_CLASS_INSTANTIATION);
     }
 
-    public static void validate(String nit) {
-
-
+    public static void validate(String nit, RestaurantPersistencePort port) {
         if (nit == null || nit.trim().isEmpty()) {
-            throw new IllegalArgumentException("El NIT no puede estar vacío");
+            throw new IllegalArgumentException(
+                    String.format(ErrorFieldsMessages.FIELD_REQUIRED, "NIT"));
         }
 
-        if (!nit.matches("^[0-9]{8,15}$")) {
-            throw new IllegalArgumentException("El NIT debe contener solo dígitos entre 8 y 15 caracteres");
+        if (!nit.matches("^\\d{9,12}$")) {
+            throw new IllegalArgumentException(ErrorFieldsMessages.NIT_INVALID_FORMAT);
         }
 
-        if (nit.startsWith("0")) {
-            throw new IllegalArgumentException("El NIT no puede comenzar con cero");
+        if (port.findByNit(nit).isPresent()) {
+            throw new IllegalArgumentException(ExceptionMessages.NIT_ALREADY_EXISTS);
         }
     }
 }

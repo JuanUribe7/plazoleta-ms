@@ -1,10 +1,12 @@
 package com.example.plazoleta.ms_plazoleta.infrastructure.client;
 
-import com.example.plazoleta.ms_plazoleta.domain.ports.out.IUserValidationPort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.UserValidationPort;
+import com.example.plazoleta.ms_plazoleta.commons.constants.ExceptionMessages;
+import feign.FeignException;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserFeignAdapter implements IUserValidationPort {
+public class UserFeignAdapter implements UserValidationPort {
 
     private final UserFeignClient userFeignClient;
 
@@ -12,13 +14,17 @@ public class UserFeignAdapter implements IUserValidationPort {
         this.userFeignClient = userFeignClient;
     }
 
-    @Override
-    public String getRoleByUser(Long userId) {
-        return userFeignClient.getRoleByUser(userId);
-    }
 
     @Override
-    public void updateOwnerRestaurantId(Long ownerId, Long restaurantId) {
-        userFeignClient.updateOwnerRestaurant(ownerId, restaurantId);
+    public void validateOwnerExists(Long ownerId) {
+        try {
+            boolean exists = userFeignClient.existsAndIsOwner(ownerId);
+            if (!exists) {
+                throw new IllegalArgumentException(ExceptionMessages.USER_NOT_OWNER);
+            }
+        } catch (FeignException.NotFound e) {
+            throw new IllegalArgumentException(ExceptionMessages.USER_NOT_FOUND);
+        }
     }
+
 }

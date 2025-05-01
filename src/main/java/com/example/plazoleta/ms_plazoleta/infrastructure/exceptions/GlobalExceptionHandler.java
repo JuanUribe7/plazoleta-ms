@@ -1,7 +1,9 @@
 package com.example.plazoleta.ms_plazoleta.infrastructure.exceptions;
 
+import com.example.plazoleta.ms_plazoleta.commons.constants.ErrorFieldsMessages;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -22,7 +24,6 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(OwnerNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleOwnerNotFound(OwnerNotFoundException ex) {
-        System.out.println("⚠️ Capturado OwnerNotFoundException: " + ex.getMessage());
         return buildBadRequest(ex.getMessage());
     }
 
@@ -40,10 +41,22 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleGeneric(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno: " + ex.getMessage());
     }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<Map<String, String>> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
+        return buildBadRequest(ErrorFieldsMessages.DISH_CATEGORY_INVALID);
+    }
+
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<Map<String, String>> handleNotFound(NotFoundException ex) {
         return buildResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(IllegalCategoryException.class)
+    public ResponseEntity<Map<String, String>> handleIllegalCategory(IllegalCategoryException ex) {
+        return buildBadRequest(ex.getMessage());
+    }
+
 
     // Métodos auxiliares para evitar duplicación
     private ResponseEntity<Map<String, String>> buildBadRequest(String message) {

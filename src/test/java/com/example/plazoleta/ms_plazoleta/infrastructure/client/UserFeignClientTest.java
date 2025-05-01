@@ -1,6 +1,6 @@
 package com.example.plazoleta.ms_plazoleta.infrastructure.client;
 
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.IRestaurantServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.CreateRestaurantServicePort;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ class UserFeignClientMockTest {
     private UserFeignClient userFeignClient;
 
     @Autowired
-    private IRestaurantServicePort restaurantServicePort;
+    private CreateRestaurantServicePort createRestaurantServicePort;
 
     @Test
     void testFeignClientMock() {

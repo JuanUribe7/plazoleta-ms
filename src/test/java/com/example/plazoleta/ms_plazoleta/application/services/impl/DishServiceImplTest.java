@@ -4,21 +4,21 @@ import com.example.plazoleta.ms_plazoleta.application.dto.request.DishRequestDto
 import com.example.plazoleta.ms_plazoleta.application.dto.response.DishResponseDto;
 import com.example.plazoleta.ms_plazoleta.application.mappers.DishDtoMapper;
 import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.ICreateDishServicePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.IUpdateDishServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.CreateDishServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.UpdateDishServicePort;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
-class DishServiceHandlerImplTest {
+class DishServiceImplTest {
 
     @Test
     void createDish_shouldConvertAndPersistDishCorrectly() {
         DishDtoMapper mapper = mock(DishDtoMapper.class);
-        ICreateDishServicePort createDishServicePort = mock(ICreateDishServicePort.class);
-        IUpdateDishServicePort updateDishServicePort = mock(IUpdateDishServicePort.class);
+        CreateDishServicePort createDishServicePort = mock(CreateDishServicePort.class);
+        UpdateDishServicePort updateDishServicePort = mock(UpdateDishServicePort.class);
 
         DishRequestDto dto = new DishRequestDto("Dish Name", 15000, "Description", "http://image.url", "Main", 1L, 5L);
         Dish dish = new Dish(1L, "Dish Name", 15000, "Description", "http://image.url", "Main", 1L, 5L, true);
@@ -29,7 +29,7 @@ class DishServiceHandlerImplTest {
         when(createDishServicePort.createDish(dish)).thenReturn(savedDish);
         when(mapper.toResponseDto(savedDish)).thenReturn(responseDto);
 
-        DishServiceHandlerImpl service = new DishServiceHandlerImpl(createDishServicePort, mapper,updateDishServicePort );
+        DishServiceImpl service = new DishServiceImpl(createDishServicePort, mapper,updateDishServicePort );
         DishResponseDto result = service.createDish( dto);
 
         assertNotNull(result);

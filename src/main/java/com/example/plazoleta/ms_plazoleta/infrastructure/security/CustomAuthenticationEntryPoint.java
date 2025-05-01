@@ -1,5 +1,6 @@
 package com.example.plazoleta.ms_plazoleta.infrastructure.security;
 
+import com.example.plazoleta.ms_plazoleta.commons.constants.ExceptionMessages;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.AuthenticationException;
@@ -15,6 +16,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
                          AuthenticationException authException) throws IOException {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json");
-        response.getWriter().write("{\"error\": \"No autorizado. Proporcione un token válido.\"}");
+        response.getWriter().write(ExceptionMessages.UNAUTHORIZED_ACCESS);
     }
 }

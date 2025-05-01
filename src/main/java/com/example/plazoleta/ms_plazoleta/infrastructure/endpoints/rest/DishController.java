@@ -1,12 +1,13 @@
+
 package com.example.plazoleta.ms_plazoleta.infrastructure.endpoints.rest;
 
 import com.example.plazoleta.ms_plazoleta.application.dto.request.DishRequestDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.request.UpdateDishRequestDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.response.DishResponseDto;
-import com.example.plazoleta.ms_plazoleta.application.dto.response.UpdateDishResponseDto;
-import com.example.plazoleta.ms_plazoleta.application.services.DishServiceHandler;
+import com.example.plazoleta.ms_plazoleta.application.services.DishService;
 import com.example.plazoleta.ms_plazoleta.infrastructure.security.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -15,16 +16,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/restaurants/{restaurantId}/dishes")
 public class DishController {
 
-    private final DishServiceHandler dishServiceHandler;
+    private final DishService dishService;
     private final JwtUtil jwtUtil;
 
-    public DishController(DishServiceHandler dishServiceHandler, JwtUtil jwtUtil) {
-        this.dishServiceHandler = dishServiceHandler;
+    public DishController(DishService dishService, JwtUtil jwtUtil) {
+        this.dishService = dishService;
         this.jwtUtil = jwtUtil;
     }
 
-    @PreAuthorize("hasRole('OWNER')")
     @PostMapping
+    @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<DishResponseDto> createDish(
             @PathVariable Long restaurantId,
             @RequestBody DishRequestDto dto,
@@ -32,10 +33,9 @@ public class DishController {
     ) {
         String token = request.getHeader("Authorization").substring(7);
         Long ownerId = jwtUtil.extractUserId(token);
-        dto.setRestaurantId(restaurantId);
-        dto.setOwnerId(ownerId);
 
-        return ResponseEntity.ok(dishServiceHandler.createDish(dto));
+        DishResponseDto response = dishService.createDish(dto, restaurantId, ownerId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PreAuthorize("hasRole('OWNER')")
@@ -47,14 +47,14 @@ public class DishController {
             HttpServletRequest request) {
         String token = request.getHeader("Authorization").substring(7);
         Long ownerId = jwtUtil.extractUserId(token);
-        dishServiceHandler.changeDishStatus(dishId, restaurantId, ownerId, active);
+        dishService.changeDishStatus(dishId, restaurantId, ownerId, active);
         return ResponseEntity.noContent().build();
     }
 
 
     @PreAuthorize("hasRole('OWNER')")
     @PatchMapping("/{dishId}")
-    public ResponseEntity<UpdateDishResponseDto> updateDish(
+    public ResponseEntity<DishResponseDto> updateDish(
             @PathVariable Long restaurantId,
             @PathVariable Long dishId,
             @RequestBody UpdateDishRequestDto dto,
@@ -64,7 +64,8 @@ public class DishController {
         Long ownerId = jwtUtil.extractUserId(token);
 
         dto.setRestaurantId(restaurantId);
-        dto.setOwnerId(ownerId);
-        return ResponseEntity.ok(dishServiceHandler.updateDish(dto, dishId));
+        dto.setDishId(dishId);
+        return ResponseEntity.ok(dishService.updateDish(dto, ownerId));
     }
 }
+

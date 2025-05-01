@@ -5,7 +5,7 @@ import com.example.plazoleta.ms_plazoleta.application.dto.response.RestaurantRes
 import com.example.plazoleta.ms_plazoleta.application.mappers.RestaurantDtoMapper;
 import com.example.plazoleta.ms_plazoleta.application.mappers.RestaurantSimpleDtoMapper;
 import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.IRestaurantServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.CreateRestaurantServicePort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,18 +14,18 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class RestaurantServiceHandlerImplTest {
+class RestaurantServiceImplTest {
 
-    private IRestaurantServicePort restaurantServicePort;
+    private CreateRestaurantServicePort createRestaurantServicePort;
     private RestaurantDtoMapper mapper;
     private RestaurantSimpleDtoMapper simpleMapper;
-    private RestaurantServiceHandlerImpl service;
+    private RestaurantServiceImpl service;
 
     @BeforeEach
     void setUp() {
-        restaurantServicePort = mock(IRestaurantServicePort.class);
+        createRestaurantServicePort = mock(CreateRestaurantServicePort.class);
         mapper = mock(RestaurantDtoMapper.class);
-        service = new RestaurantServiceHandlerImpl(restaurantServicePort, mapper, simpleMapper);
+        service = new RestaurantServiceImpl(createRestaurantServicePort, mapper, simpleMapper);
     }
 
     @Test
@@ -36,14 +36,14 @@ class RestaurantServiceHandlerImplTest {
         RestaurantResponseDto responseDto = new RestaurantResponseDto(1L, "Test", "Address", "url");
 
         when(mapper.toModel(dto)).thenReturn(model);
-        when(restaurantServicePort.createRestaurant(model)).thenReturn(saved);
+        when(createRestaurantServicePort.createRestaurant(model)).thenReturn(saved);
         when(mapper.toResponseDto(saved)).thenReturn(responseDto);
 
         RestaurantResponseDto result = service.createRestaurant(dto);
 
         assertEquals(responseDto, result);
         verify(mapper).toModel(dto);
-        verify(restaurantServicePort).createRestaurant(model);
+        verify(createRestaurantServicePort).createRestaurant(model);
         verify(mapper).toResponseDto(saved);
     }
 
@@ -51,7 +51,7 @@ class RestaurantServiceHandlerImplTest {
     void validateOwner_true() {
         Restaurant restaurant = new Restaurant();
         restaurant.setOwnerId(1L);
-        when(restaurantServicePort.findById(1L)).thenReturn(Optional.of(restaurant));
+        when(createRestaurantServicePort.findById(1L)).thenReturn(Optional.of(restaurant));
 
         boolean result = service.validateOwner(1L, 1L);
 
@@ -62,7 +62,7 @@ class RestaurantServiceHandlerImplTest {
     void validateOwner_false() {
         Restaurant restaurant = new Restaurant();
         restaurant.setOwnerId(2L);
-        when(restaurantServicePort.findById(1L)).thenReturn(Optional.of(restaurant));
+        when(createRestaurantServicePort.findById(1L)).thenReturn(Optional.of(restaurant));
 
         boolean result = service.validateOwner(1L, 1L);
 
@@ -71,7 +71,7 @@ class RestaurantServiceHandlerImplTest {
 
     @Test
     void validateOwner_restaurantNotFound() {
-        when(restaurantServicePort.findById(1L)).thenReturn(Optional.empty());
+        when(createRestaurantServicePort.findById(1L)).thenReturn(Optional.empty());
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> service.validateOwner(1L, 1L));
 

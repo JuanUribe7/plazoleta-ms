@@ -1,33 +1,32 @@
 package com.example.plazoleta.ms_plazoleta.domain.utils.validation.restaurant;
 
 
+import com.example.plazoleta.ms_plazoleta.commons.constants.ErrorFieldsMessages;
+import com.example.plazoleta.ms_plazoleta.commons.constants.ExceptionMessages;
 import com.example.plazoleta.ms_plazoleta.infrastructure.exceptions.IllegalLogoException;
 
 public class LogoValidator {
 
     private LogoValidator() {
-        throw new UnsupportedOperationException("Clase utilitaria, no debe instanciarse.");
+        throw new UnsupportedOperationException(ExceptionMessages.UTILITY_CLASS_INSTANTIATION);
     }
 
     public static void validate(String url) {
-
-
         if (url == null || url.trim().isEmpty()) {
-            throw new IllegalLogoException("La URL del logo no puede estar vacía");
+            throw new IllegalLogoException(
+                    String.format(ErrorFieldsMessages.FIELD_REQUIRED, "Logo URL"));
         }
 
         if (url.contains("localhost") || url.contains("127.0.0.1")) {
-            throw new IllegalArgumentException("La URL del logo no puede ser local");
+            throw new IllegalArgumentException(ErrorFieldsMessages.LOGO_LOCAL_URL);
         }
 
         if (!url.matches("^(http|https)://[\\w\\-]+(\\.[\\w\\-]+)+[/#?]?.*$")) {
-            throw new IllegalArgumentException("La URL del logo debe ser válida y comenzar con http o https");
+            throw new IllegalArgumentException(ErrorFieldsMessages.LOGO_INVALID_FORMAT);
         }
 
-
-
         if (!url.matches(".*\\.(png|jpg|jpeg|svg)$")) {
-            throw new IllegalArgumentException("La URL del logo debe terminar en .png, .jpg, .jpeg o .svg");
+            throw new IllegalArgumentException(ErrorFieldsMessages.LOGO_INVALID_EXTENSION);
         }
     }
 }

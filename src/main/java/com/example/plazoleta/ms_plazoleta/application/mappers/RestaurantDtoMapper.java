@@ -5,14 +5,31 @@ import com.example.plazoleta.ms_plazoleta.application.dto.request.RestaurantRequ
 import com.example.plazoleta.ms_plazoleta.application.dto.response.RestaurantResponseDto;
 import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import java.util.ArrayList;
 
-@Mapper(componentModel = "spring")
-public interface RestaurantDtoMapper {
-    @Mapping(target="id", ignore = true)
-    Restaurant toModel(RestaurantRequestDto restaurantRequestDto);
+public class RestaurantDtoMapper {
 
-    RestaurantResponseDto toResponseDto(Restaurant restaurant);
+    private RestaurantDtoMapper() {}
+
+    public static Restaurant toModel(RestaurantRequestDto dto) {
+        return new Restaurant(
+                null,
+                dto.getName(),
+                dto.getNit(),
+                dto.getAddress(),
+                dto.getPhone(),
+                dto.getUrlLogo(),
+                dto.getOwnerId(),
+                new ArrayList<>() // sin empleados al crear
+        );
     }
 
+    public static RestaurantResponseDto toResponseDto(Restaurant model) {
+        return new RestaurantResponseDto(
+                model.getId(),
+                model.getName(),
+                model.getAddress(),
+                model.getUrlLogo()
+        );
+    }
+}

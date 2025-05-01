@@ -7,7 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CategoryValidatorTest {
+class CategoryTypeValidatorTest {
 
     @Test
     void shouldThrowExceptionWhenCategoryIsNull() {

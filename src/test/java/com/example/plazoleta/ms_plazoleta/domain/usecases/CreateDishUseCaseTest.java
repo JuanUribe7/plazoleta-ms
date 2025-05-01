@@ -2,8 +2,9 @@ package com.example.plazoleta.ms_plazoleta.domain.usecases;
 
 import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
 import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
-import com.example.plazoleta.ms_plazoleta.domain.ports.out.IDishPersistencePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.out.IRestaurantPersistencePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.DishPersistencePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.RestaurantPersistencePort;
+import com.example.plazoleta.ms_plazoleta.domain.usecases.create.CreateDishUseCase;
 import com.example.plazoleta.ms_plazoleta.domain.utils.validation.dish.DishValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,15 +17,15 @@ import static org.mockito.Mockito.*;
 
 class CreateDishUseCaseTest {
 
-    private IDishPersistencePort dishPersistencePort;
-    private IRestaurantPersistencePort restaurantPersistencePort;
+    private DishPersistencePort dishPersistencePort;
+    private RestaurantPersistencePort restaurantPersistencePort;
     private CreateDishUseCase useCase;
     private Dish dish;
 
     @BeforeEach
     void setUp() {
-        dishPersistencePort = mock(IDishPersistencePort.class);
-        restaurantPersistencePort = mock(IRestaurantPersistencePort.class);
+        dishPersistencePort = mock(DishPersistencePort.class);
+        restaurantPersistencePort = mock(RestaurantPersistencePort.class);
         useCase = new CreateDishUseCase(dishPersistencePort, restaurantPersistencePort);
         dish = new Dish();
         dish.setName("TempDish");

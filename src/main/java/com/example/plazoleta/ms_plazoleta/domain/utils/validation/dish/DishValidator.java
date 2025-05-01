@@ -1,43 +1,38 @@
 package com.example.plazoleta.ms_plazoleta.domain.utils.validation.dish;
 
+import com.example.plazoleta.ms_plazoleta.commons.constants.ErrorFieldsMessages;
+import com.example.plazoleta.ms_plazoleta.commons.constants.ExceptionMessages;
 import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.DishPersistencePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.RestaurantPersistencePort;
+import com.example.plazoleta.ms_plazoleta.domain.utils.helpers.DishAuthorizationValidator;
+import com.example.plazoleta.ms_plazoleta.domain.utils.validation.restaurant.LogoValidator;
 import com.example.plazoleta.ms_plazoleta.domain.utils.validation.restaurant.NameValidator;
-import com.example.plazoleta.ms_plazoleta.infrastructure.exceptions.IllegalLogoException;
 
 public class DishValidator {
 
+    private DishValidator() {}
 
-    private DishValidator() {
-        throw new UnsupportedOperationException("Clase utilitaria, no debe instanciarse.");
+    public static void validateFields(Dish dish) {
+        NameValidator.validate(dish.getName());
+        DescriptionValidator.validate(dish.getDescription());
+        LogoValidator.validate(dish.getImageUrl());
+
+        if (dish.getPrice() <= 0) {
+            throw new IllegalArgumentException(ErrorFieldsMessages.DISH_PRICE_INVALID);
+        }
     }
 
-    public static void validateDish(Dish dish) {
+    public static void validateDishCreation(Dish dish, Long ownerId,
+                                RestaurantPersistencePort restaurantPort,
+                                DishPersistencePort dishPort) {
+        DishAuthorizationValidator.validateOwnership(dish.getRestaurantId(), ownerId, restaurantPort);
 
-        NameValidator.validate(dish.getName());
+        dishPort.findByNameAndRestaurantId(dish.getName(), dish.getRestaurantId())
+                .ifPresent(d -> {
+                    throw new IllegalArgumentException(ExceptionMessages.DISH_ALREADY_EXISTS);
+                });
 
-        if (dish.getImageUrl() == null || dish.getImageUrl().trim().isEmpty()) {
-            throw new IllegalLogoException("La URL del logo no puede estar vacía");
-        }
-        if (dish.getImageUrl().contains("localhost") || dish.getImageUrl().contains("127.0.0.1")) {
-            throw new IllegalArgumentException("La URL del logo no puede ser local");
-        }
-        if (!dish.getImageUrl().matches("^(http|https)://.*$")) {
-            throw new IllegalArgumentException("La URL del logo debe ser válida y comenzar con http o https");
-        }
-        if (!dish.getImageUrl().matches(".*\\.(png|jpg|jpeg|svg)$")) {
-            throw new IllegalArgumentException("La URL del logo debe terminar en .png, .jpg, .jpeg o .svg");
-        }
-
-        CategoryValidator.validate(dish.getCategory());
-
-
-        DescriptionValidator.validate(dish.getDescription());
-
-
-        // Validación de precio
-        System.out.println("Validando precio: " + dish.getPrice());
-        if (dish.getPrice() <= 0) {
-            throw new IllegalArgumentException("Precio debe ser mayor a 0");
-        }
+        validateFields(dish);
     }
 }

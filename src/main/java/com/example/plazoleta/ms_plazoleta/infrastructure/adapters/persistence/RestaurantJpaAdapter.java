@@ -1,31 +1,36 @@
 package com.example.plazoleta.ms_plazoleta.infrastructure.adapters.persistence;
 
+import com.example.plazoleta.ms_plazoleta.domain.model.PagedResult;
+import com.example.plazoleta.ms_plazoleta.domain.model.Pagination;
 import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
-import com.example.plazoleta.ms_plazoleta.domain.ports.out.IRestaurantPersistencePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.RestaurantPersistencePort;
+import com.example.plazoleta.ms_plazoleta.infrastructure.entities.RestaurantEntity;
 import com.example.plazoleta.ms_plazoleta.infrastructure.mappers.RestaurantEntityMapper;
 import com.example.plazoleta.ms_plazoleta.infrastructure.repositories.RestaurantRepository;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class RestaurantJpaAdapter implements IRestaurantPersistencePort {
+public class RestaurantJpaAdapter implements RestaurantPersistencePort {
 
     private final RestaurantRepository restaurantRepository;
-    private final RestaurantEntityMapper mapper;
 
-    public RestaurantJpaAdapter(RestaurantRepository restaurantRepository, @Qualifier("restaurantEntityMapperImpl") RestaurantEntityMapper mapper) {
+
+    public RestaurantJpaAdapter(RestaurantRepository restaurantRepository) {
         this.restaurantRepository = restaurantRepository;
-        this.mapper = mapper;
+  ;
     }
 
 
     @Override
     public Restaurant saveRestaurant(Restaurant restaurant) {
-        return mapper.toModel(restaurantRepository.save(mapper.toEntity(restaurant)));
+        return RestaurantEntityMapper.toModel(restaurantRepository.save(RestaurantEntityMapper.toEntity(restaurant)));
     }
 
     @Override
@@ -33,13 +38,29 @@ public class RestaurantJpaAdapter implements IRestaurantPersistencePort {
 
         return restaurantRepository
                 .findByNit(nit)
-                .map(mapper::toModel);
+                .map(RestaurantEntityMapper::toModel);
     }
 
     @Override
-    public Page<Restaurant> findAllPagedSortedByName(Pageable pageable) {
-        return restaurantRepository.findAllByOrderByNameAsc(pageable)
-                .map(mapper::toModel);
+    public PagedResult<Restaurant> findAllOrderedByName(Pagination pagination) {
+        Pageable pageable = PageRequest.of(pagination.getPage(), pagination.getSize(), Sort.by("name").ascending());
+        Page<RestaurantEntity> page = restaurantRepository.findAll(pageable);
+
+        List<Restaurant> content = page.getContent().stream()
+                .map(RestaurantEntityMapper::toModel)
+                .toList();
+
+        return new PagedResult<>(
+                content,
+                page.getTotalPages(),
+                page.getTotalElements(),
+                page.getSize(),
+                page.getNumber(),
+                page.isFirst(),
+                page.isLast(),
+                page.hasNext(),
+                page.hasPrevious()
+        );
     }
 
     @Override
@@ -47,7 +68,7 @@ public class RestaurantJpaAdapter implements IRestaurantPersistencePort {
 
         return restaurantRepository
                 .findByName(name)
-                .map(mapper::toModel);
+                .map(RestaurantEntityMapper::toModel);
     }
 
 
@@ -55,7 +76,7 @@ public class RestaurantJpaAdapter implements IRestaurantPersistencePort {
     public Optional<Restaurant> findById(Long id) {
         return restaurantRepository
                 .findById(id)
-                .map(mapper::toModel);
+                .map(RestaurantEntityMapper::toModel);
     }
 
 
@@ -63,6 +84,6 @@ public class RestaurantJpaAdapter implements IRestaurantPersistencePort {
     public Optional<Restaurant> findByUrlLogo(String logo) {
         return restaurantRepository
                 .findByUrlLogo(logo)
-                .map(mapper::toModel);
+                .map(RestaurantEntityMapper::toModel);
     }
 }

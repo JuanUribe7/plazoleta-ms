@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 @FeignClient(name = "usuarios-service", url = "http://localhost:8081", configuration = FeignConfig.class)
 public interface UserFeignClient {
 
-    @GetMapping("/users/{id}/rol")
-    String getRoleByUser(@PathVariable Long id);
+    @GetMapping("/users/{id}/exists")
+    boolean existsAndIsOwner(@PathVariable Long id);
+
 
     @PutMapping("/users/{ownerId}/restaurant/{restaurantId}")
     void updateOwnerRestaurant(@PathVariable Long ownerId, @PathVariable Long restaurantId);

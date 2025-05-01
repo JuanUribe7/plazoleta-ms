@@ -5,7 +5,7 @@ import com.example.plazoleta.ms_plazoleta.application.dto.request.DishRequestDto
 import com.example.plazoleta.ms_plazoleta.application.dto.request.UpdateDishRequestDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.response.DishResponseDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.response.UpdateDishResponseDto;
-import com.example.plazoleta.ms_plazoleta.application.services.DishServiceHandler;
+import com.example.plazoleta.ms_plazoleta.application.services.DishService;
 import com.example.plazoleta.ms_plazoleta.infrastructure.security.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class DishControllerTest {
 
     @Mock
-    private DishServiceHandler dishServiceHandler;
+    private DishService dishService;
 
     @Mock
     private JwtUtil jwtUtil;
@@ -56,7 +56,7 @@ class DishControllerTest {
         responseDto.setName("Dish Name");
 
         when(jwtUtil.extractUserId("valid.token")).thenReturn(1L);
-        when(dishServiceHandler.createDish(any(DishRequestDto.class))).thenReturn(responseDto);
+        when(dishService.createDish(any(DishRequestDto.class))).thenReturn(responseDto);
 
         mockMvc.perform(post("/restaurants/5/dishes")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -75,7 +75,7 @@ class DishControllerTest {
                         .header("Authorization", "Bearer valid.token"))
                 .andExpect(status().isNoContent());
 
-        verify(dishServiceHandler).changeDishStatus(10L, 5L, 1L, true);
+        verify(dishService).changeDishStatus(10L, 5L, 1L, true);
     }
 
     @Test
@@ -87,7 +87,7 @@ class DishControllerTest {
         responseDto.setName("Updated Dish");
 
         when(jwtUtil.extractUserId("valid.token")).thenReturn(1L);
-        when(dishServiceHandler.updateDish(any(UpdateDishRequestDto.class), eq(10L))).thenReturn(responseDto);
+        when(dishService.updateDish(any(UpdateDishRequestDto.class), eq(10L))).thenReturn(responseDto);
 
         mockMvc.perform(patch("/restaurants/5/dishes/10")
                         .contentType(MediaType.APPLICATION_JSON)

@@ -5,7 +5,7 @@ import com.example.plazoleta.ms_plazoleta.application.dto.request.RestaurantRequ
 import com.example.plazoleta.ms_plazoleta.application.dto.response.PagedRestaurantResponseDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.response.RestaurantResponseDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.response.RestaurantSimpleResponseDto;
-import com.example.plazoleta.ms_plazoleta.application.services.RestaurantServiceHandler;
+import com.example.plazoleta.ms_plazoleta.application.services.RestaurantService;
 import com.example.plazoleta.ms_plazoleta.infrastructure.security.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class RestaurantControllerTest {
 
     @Mock
-    private RestaurantServiceHandler restaurantServiceHandler;
+    private RestaurantService restaurantService;
 
     @Mock
     private JwtUtil jwtUtil;
@@ -63,7 +63,7 @@ class RestaurantControllerTest {
         responseDto.setName("New Restaurant");
 
         when(jwtUtil.extractUserId("valid.token")).thenReturn(1L);
-        when(restaurantServiceHandler.createRestaurant(any(RestaurantRequestDto.class))).thenReturn(responseDto);
+        when(restaurantService.createRestaurant(any(RestaurantRequestDto.class))).thenReturn(responseDto);
 
         mockMvc.perform(post("/restaurants")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -86,7 +86,7 @@ class RestaurantControllerTest {
                 PageRequest.of(1, 2),
                 5
         );
-        when(restaurantServiceHandler.getAllRestaurantsPaged(1, 2)).thenReturn(page);
+        when(restaurantService.getAllRestaurantsPaged(1, 2)).thenReturn(page);
 
         // Act
         ResponseEntity<PagedRestaurantResponseDto> response = restaurantController.listRestaurants(1, 2);
@@ -97,12 +97,12 @@ class RestaurantControllerTest {
         assertEquals(content, body.getRestaurants());
         assertEquals(page.getTotalPages(), body.getPagination().getTotalPages());
         assertEquals(page.getTotalElements(), body.getPagination().getTotalElements());
-        verify(restaurantServiceHandler).getAllRestaurantsPaged(1, 2);
+        verify(restaurantService).getAllRestaurantsPaged(1, 2);
     }
 
     @Test
     void isOwnerOfRestaurant_true() throws Exception {
-        when(restaurantServiceHandler.isOwnerOfRestaurant(5L, 1L)).thenReturn(true);
+        when(restaurantService.isOwnerOfRestaurant(5L, 1L)).thenReturn(true);
 
         mockMvc.perform(get("/restaurants/5/owner/1"))
                 .andExpect(status().isOk())
@@ -111,7 +111,7 @@ class RestaurantControllerTest {
 
     @Test
     void isOwnerOfRestaurant_false() throws Exception {
-        when(restaurantServiceHandler.isOwnerOfRestaurant(5L, 1L)).thenReturn(false);
+        when(restaurantService.isOwnerOfRestaurant(5L, 1L)).thenReturn(false);
 
         mockMvc.perform(get("/restaurants/5/owner/1"))
                 .andExpect(status().isOk())
