@@ -1,6 +1,6 @@
 package com.example.plazoleta.ms_plazoleta.infrastructure.configuration;
 
-import com.example.plazoleta.ms_plazoleta.infrastructure.client.CustomErrorDecoder;
+import com.example.plazoleta.ms_plazoleta.infrastructure.adapters.feign.CustomErrorDecoder;
 import feign.RequestInterceptor;
 import feign.codec.ErrorDecoder;
 import org.springframework.context.annotation.Bean;

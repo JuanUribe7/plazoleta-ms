@@ -1,7 +1,6 @@
 package com.example.plazoleta.ms_plazoleta.infrastructure.security;
 
 
-import com.example.plazoleta.ms_plazoleta.commons.constants.SecurityErrorMessages;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -44,7 +43,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             } catch (Exception e) {
-                System.out.println(SecurityErrorMessages.TOKEN_INVALID_LOG + e.getMessage());
+                System.out.println("Token inválido o error al procesar: " + e.getMessage());
             }
         }
 
