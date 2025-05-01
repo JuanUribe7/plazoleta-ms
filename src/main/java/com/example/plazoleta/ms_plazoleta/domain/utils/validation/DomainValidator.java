@@ -1,7 +1,6 @@
 package com.example.plazoleta.ms_plazoleta.domain.utils.validation;
 
 import com.example.plazoleta.ms_plazoleta.commons.constants.ExceptionMessages;
-import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
 import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.IDishPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.IRestaurantPersistencePort;

@@ -6,7 +6,6 @@ import com.example.plazoleta.ms_plazoleta.application.dto.response.DishResponseD
 import com.example.plazoleta.ms_plazoleta.application.dto.response.UpdateDishResponseDto;
 import com.example.plazoleta.ms_plazoleta.application.mappers.DishDtoMapper;
 import com.example.plazoleta.ms_plazoleta.application.services.DishServiceHandler;
-import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.ICreateDishServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.IUpdateDishServicePort;
 import org.springframework.beans.factory.annotation.Qualifier;

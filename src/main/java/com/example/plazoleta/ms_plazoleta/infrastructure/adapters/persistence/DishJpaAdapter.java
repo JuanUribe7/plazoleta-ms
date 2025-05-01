@@ -1,6 +1,5 @@
 package com.example.plazoleta.ms_plazoleta.infrastructure.adapters.persistence;
 
-import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.IDishPersistencePort;
 import com.example.plazoleta.ms_plazoleta.infrastructure.mappers.DishEntityMapper;
 import com.example.plazoleta.ms_plazoleta.infrastructure.repositories.DishRepository;
