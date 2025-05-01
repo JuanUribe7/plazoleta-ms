@@ -1,17 +1,17 @@
 package com.example.plazoleta.ms_plazoleta.application.services.impl;
 
 import com.example.plazoleta.ms_plazoleta.application.dto.request.RestaurantRequestDto;
-import com.example.plazoleta.ms_plazoleta.application.dto.response.PagedRestaurantResponseDto;
-import com.example.plazoleta.ms_plazoleta.application.dto.response.RestaurantResponseDto;
-import com.example.plazoleta.ms_plazoleta.application.mappers.PagedRestaurantDtoMapper;
-import com.example.plazoleta.ms_plazoleta.application.mappers.RestaurantDtoMapper;
+import com.example.plazoleta.ms_plazoleta.application.dto.response.restaurant.PagedRestaurantResponseDto;
+import com.example.plazoleta.ms_plazoleta.application.dto.response.restaurant.RestaurantResponseDto;
+import com.example.plazoleta.ms_plazoleta.application.mappers.restaurant.PagedRestaurantDtoMapper;
+import com.example.plazoleta.ms_plazoleta.application.mappers.restaurant.RestaurantDtoMapper;
 import com.example.plazoleta.ms_plazoleta.application.services.RestaurantService;
 import com.example.plazoleta.ms_plazoleta.domain.model.PagedResult;
 import com.example.plazoleta.ms_plazoleta.domain.model.Pagination;
 import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.CreateRestaurantServicePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.ListRestaurantsServicePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.assign.AssignEmployeeServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.Restaurant.CreateRestaurantServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.Restaurant.AssignEmployeeServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.Restaurant.ListRestaurantsServicePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

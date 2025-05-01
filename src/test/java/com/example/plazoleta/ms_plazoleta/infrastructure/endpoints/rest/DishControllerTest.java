@@ -3,8 +3,8 @@ package com.example.plazoleta.ms_plazoleta.infrastructure.endpoints.rest;
 
 import com.example.plazoleta.ms_plazoleta.application.dto.request.DishRequestDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.request.UpdateDishRequestDto;
-import com.example.plazoleta.ms_plazoleta.application.dto.response.DishResponseDto;
-import com.example.plazoleta.ms_plazoleta.application.dto.response.UpdateDishResponseDto;
+import com.example.plazoleta.ms_plazoleta.application.dto.response.dish.DishResponseDto;
+import com.example.plazoleta.ms_plazoleta.application.dto.response.dish.UpdateDishResponseDto;
 import com.example.plazoleta.ms_plazoleta.application.services.DishService;
 import com.example.plazoleta.ms_plazoleta.infrastructure.security.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;

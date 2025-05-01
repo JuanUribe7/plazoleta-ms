@@ -1,11 +1,11 @@
 package com.example.plazoleta.ms_plazoleta.application.services.impl;
 
 import com.example.plazoleta.ms_plazoleta.application.dto.request.RestaurantRequestDto;
-import com.example.plazoleta.ms_plazoleta.application.dto.response.RestaurantResponseDto;
-import com.example.plazoleta.ms_plazoleta.application.mappers.RestaurantDtoMapper;
-import com.example.plazoleta.ms_plazoleta.application.mappers.RestaurantSimpleDtoMapper;
+import com.example.plazoleta.ms_plazoleta.application.dto.response.restaurant.RestaurantResponseDto;
+import com.example.plazoleta.ms_plazoleta.application.mappers.restaurant.RestaurantDtoMapper;
+import com.example.plazoleta.ms_plazoleta.application.mappers.restaurant.RestaurantSimpleDtoMapper;
 import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.CreateRestaurantServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.Restaurant.CreateRestaurantServicePort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

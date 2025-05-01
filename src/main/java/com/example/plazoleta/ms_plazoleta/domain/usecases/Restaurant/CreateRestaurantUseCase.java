@@ -1,0 +1,24 @@
+package com.example.plazoleta.ms_plazoleta.domain.usecases.Restaurant;
+
+import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.Restaurant.CreateRestaurantServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.RestaurantPersistencePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.Feign.UserValidationPort;
+
+public class CreateRestaurantUseCase implements CreateRestaurantServicePort {
+
+    private final RestaurantPersistencePort restaurantPort;
+    private final UserValidationPort userValidationPort;
+
+    public CreateRestaurantUseCase(RestaurantPersistencePort restaurantPort,
+                                   UserValidationPort userValidationPort) {
+        this.restaurantPort = restaurantPort;
+        this.userValidationPort = userValidationPort;
+    }
+
+    public Restaurant execute(Restaurant restaurant) {
+        return restaurant.create(restaurantPort, userValidationPort);
+    }
+
+
+}

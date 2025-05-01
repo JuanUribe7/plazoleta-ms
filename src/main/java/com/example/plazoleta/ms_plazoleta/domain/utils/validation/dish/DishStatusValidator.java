@@ -1,7 +1,7 @@
 package com.example.plazoleta.ms_plazoleta.domain.utils.validation.dish;
 
 import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
-import com.example.plazoleta.ms_plazoleta.domain.ports.out.RestaurantPersistencePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.RestaurantPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.utils.helpers.DishAuthorizationValidator;
 
     public class DishStatusValidator {

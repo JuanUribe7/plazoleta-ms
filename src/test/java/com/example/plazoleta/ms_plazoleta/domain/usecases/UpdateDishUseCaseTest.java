@@ -2,8 +2,9 @@ package com.example.plazoleta.ms_plazoleta.domain.usecases;
 
 import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
 import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
-import com.example.plazoleta.ms_plazoleta.domain.ports.out.DishPersistencePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.out.RestaurantPersistencePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.DishPersistencePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.RestaurantPersistencePort;
+import com.example.plazoleta.ms_plazoleta.domain.usecases.Dish.UpdateDishUseCase;
 import com.example.plazoleta.ms_plazoleta.domain.utils.validation.dish.DishUpdateValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,11 +1,11 @@
 package com.example.plazoleta.ms_plazoleta.application.services.impl;
 
 import com.example.plazoleta.ms_plazoleta.application.dto.request.DishRequestDto;
-import com.example.plazoleta.ms_plazoleta.application.dto.response.DishResponseDto;
-import com.example.plazoleta.ms_plazoleta.application.mappers.DishDtoMapper;
+import com.example.plazoleta.ms_plazoleta.application.dto.response.dish.DishResponseDto;
+import com.example.plazoleta.ms_plazoleta.application.mappers.dish.DishDtoMapper;
 import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.CreateDishServicePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.UpdateDishServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.Dish.CreateDishServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.Dish.UpdateDishServicePort;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

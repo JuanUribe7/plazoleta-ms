@@ -1,8 +1,8 @@
 package com.example.plazoleta.ms_plazoleta.domain.model;
 
 import com.example.plazoleta.ms_plazoleta.commons.constants.ErrorFieldsMessages;
-import com.example.plazoleta.ms_plazoleta.domain.ports.out.DishPersistencePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.out.RestaurantPersistencePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.DishPersistencePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.RestaurantPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.utils.validation.dish.DescriptionValidator;
 import com.example.plazoleta.ms_plazoleta.domain.utils.validation.dish.DishStatusValidator;
 import com.example.plazoleta.ms_plazoleta.domain.utils.validation.dish.DishUpdateValidator;

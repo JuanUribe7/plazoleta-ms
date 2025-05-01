@@ -1,8 +1,8 @@
 package com.example.plazoleta.ms_plazoleta.infrastructure.endpoints.rest;
 
 import com.example.plazoleta.ms_plazoleta.application.dto.request.RestaurantRequestDto;
-import com.example.plazoleta.ms_plazoleta.application.dto.response.PagedRestaurantResponseDto;
-import com.example.plazoleta.ms_plazoleta.application.dto.response.RestaurantResponseDto;
+import com.example.plazoleta.ms_plazoleta.application.dto.response.restaurant.PagedRestaurantResponseDto;
+import com.example.plazoleta.ms_plazoleta.application.dto.response.restaurant.RestaurantResponseDto;
 import com.example.plazoleta.ms_plazoleta.application.services.RestaurantService;
 import com.example.plazoleta.ms_plazoleta.infrastructure.security.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,7 +1,8 @@
 package com.example.plazoleta.ms_plazoleta.application.mappers;
 
 import com.example.plazoleta.ms_plazoleta.application.dto.request.RestaurantRequestDto;
-import com.example.plazoleta.ms_plazoleta.application.dto.response.RestaurantResponseDto;
+import com.example.plazoleta.ms_plazoleta.application.dto.response.restaurant.RestaurantResponseDto;
+import com.example.plazoleta.ms_plazoleta.application.mappers.restaurant.RestaurantDtoMapper;
 import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;

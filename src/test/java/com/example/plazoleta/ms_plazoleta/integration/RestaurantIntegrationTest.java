@@ -1,7 +1,7 @@
 package com.example.plazoleta.ms_plazoleta.integration;
 
 import com.example.plazoleta.ms_plazoleta.application.dto.request.RestaurantRequestDto;
-import com.example.plazoleta.ms_plazoleta.infrastructure.client.UserFeignClient;
+import com.example.plazoleta.ms_plazoleta.infrastructure.adapters.feign.UserFeignClient;
 import com.example.plazoleta.ms_plazoleta.infrastructure.repositories.RestaurantRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;

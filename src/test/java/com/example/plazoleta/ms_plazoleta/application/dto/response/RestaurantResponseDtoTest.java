@@ -1,5 +1,6 @@
 package com.example.plazoleta.ms_plazoleta.application.dto.response;
 
+import com.example.plazoleta.ms_plazoleta.application.dto.response.restaurant.RestaurantResponseDto;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

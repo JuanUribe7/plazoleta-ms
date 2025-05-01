@@ -1,7 +1,8 @@
 package com.example.plazoleta.ms_plazoleta.application.mappers;
 
 import com.example.plazoleta.ms_plazoleta.application.dto.request.DishRequestDto;
-import com.example.plazoleta.ms_plazoleta.application.dto.response.DishResponseDto;
+import com.example.plazoleta.ms_plazoleta.application.dto.response.dish.DishResponseDto;
+import com.example.plazoleta.ms_plazoleta.application.mappers.dish.DishDtoMapper;
 import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

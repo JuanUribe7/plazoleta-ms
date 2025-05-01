@@ -1,19 +1,16 @@
 package com.example.plazoleta.ms_plazoleta.infrastructure.adapters.persistence;
 
-import com.example.plazoleta.ms_plazoleta.domain.model.PagedResult;
 import com.example.plazoleta.ms_plazoleta.domain.model.Pagination;
 import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
-import com.example.plazoleta.ms_plazoleta.domain.ports.out.RestaurantPersistencePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.RestaurantPersistencePort;
 import com.example.plazoleta.ms_plazoleta.infrastructure.entities.RestaurantEntity;
 import com.example.plazoleta.ms_plazoleta.infrastructure.mappers.RestaurantEntityMapper;
 import com.example.plazoleta.ms_plazoleta.infrastructure.repositories.RestaurantRepository;
+import com.example.plazoleta.ms_plazoleta.infrastructure.utils.PageableFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -42,25 +39,9 @@ public class RestaurantJpaAdapter implements RestaurantPersistencePort {
     }
 
     @Override
-    public PagedResult<Restaurant> findAllOrderedByName(Pagination pagination) {
-        Pageable pageable = PageRequest.of(pagination.getPage(), pagination.getSize(), Sort.by("name").ascending());
-        Page<RestaurantEntity> page = restaurantRepository.findAll(pageable);
-
-        List<Restaurant> content = page.getContent().stream()
-                .map(RestaurantEntityMapper::toModel)
-                .toList();
-
-        return new PagedResult<>(
-                content,
-                page.getTotalPages(),
-                page.getTotalElements(),
-                page.getSize(),
-                page.getNumber(),
-                page.isFirst(),
-                page.isLast(),
-                page.hasNext(),
-                page.hasPrevious()
-        );
+    public Page<RestaurantEntity> findAllOrderedByName(Pagination pagination) {
+        Pageable pageable = PageableFactory.from(pagination);
+        return restaurantRepository.findAll(pageable); // sin mapear aún
     }
 
     @Override

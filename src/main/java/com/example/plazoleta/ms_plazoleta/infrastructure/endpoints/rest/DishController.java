@@ -3,7 +3,8 @@ package com.example.plazoleta.ms_plazoleta.infrastructure.endpoints.rest;
 
 import com.example.plazoleta.ms_plazoleta.application.dto.request.DishRequestDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.request.UpdateDishRequestDto;
-import com.example.plazoleta.ms_plazoleta.application.dto.response.DishResponseDto;
+import com.example.plazoleta.ms_plazoleta.application.dto.response.dish.DishResponseDto;
+import com.example.plazoleta.ms_plazoleta.application.dto.response.dish.PagedDishResponseDto;
 import com.example.plazoleta.ms_plazoleta.application.services.DishService;
 import com.example.plazoleta.ms_plazoleta.infrastructure.security.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/restaurants/{restaurantId}/dishes")
@@ -51,6 +54,15 @@ public class DishController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping
+    public ResponseEntity<PagedDishResponseDto> listDishes(
+            @PathVariable Long restaurantId,
+            @RequestParam Optional<String> category,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return ResponseEntity.ok(dishService.listDishes(restaurantId, category, page, size));
+    }
 
     @PreAuthorize("hasRole('OWNER')")
     @PatchMapping("/{dishId}")

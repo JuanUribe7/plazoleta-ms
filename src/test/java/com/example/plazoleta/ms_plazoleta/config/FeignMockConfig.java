@@ -1,6 +1,6 @@
 package com.example.plazoleta.ms_plazoleta.config;
 
-import com.example.plazoleta.ms_plazoleta.infrastructure.client.UserFeignClient;
+import com.example.plazoleta.ms_plazoleta.infrastructure.adapters.feign.UserFeignClient;
 import jakarta.annotation.PostConstruct;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;

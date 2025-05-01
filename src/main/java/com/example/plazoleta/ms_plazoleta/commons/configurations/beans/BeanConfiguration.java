@@ -1,19 +1,22 @@
 package com.example.plazoleta.ms_plazoleta.commons.configurations.beans;
 
 
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.CreateDishServicePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.CreateRestaurantServicePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.ListRestaurantsServicePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.UpdateDishServicePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.assign.AssignEmployeeServicePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.out.DishPersistencePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.out.RestaurantPersistencePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.out.UserValidationPort;
-import com.example.plazoleta.ms_plazoleta.domain.usecases.UpdateDishUseCase;
-import com.example.plazoleta.ms_plazoleta.domain.usecases.assign.AssignEmployeeUseCase;
-import com.example.plazoleta.ms_plazoleta.domain.usecases.create.CreateDishUseCase;
-import com.example.plazoleta.ms_plazoleta.domain.usecases.create.CreateRestaurantUseCase;
-import com.example.plazoleta.ms_plazoleta.domain.usecases.list.ListRestaurantsUseCase;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.Dish.CreateDishServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.Dish.ListDishesServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.Dish.UpdateDishServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.Restaurant.AssignEmployeeServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.Restaurant.CreateRestaurantServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.Restaurant.ListRestaurantsServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.Feign.UserValidationPort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.Pagination.RestaurantPaginationPort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.DishPersistencePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.RestaurantPersistencePort;
+import com.example.plazoleta.ms_plazoleta.domain.usecases.Dish.CreateDishUseCase;
+import com.example.plazoleta.ms_plazoleta.domain.usecases.Dish.ListDishesUseCase;
+import com.example.plazoleta.ms_plazoleta.domain.usecases.Dish.UpdateDishUseCase;
+import com.example.plazoleta.ms_plazoleta.domain.usecases.Restaurant.AssignEmployeeToRestaurantUseCase;
+import com.example.plazoleta.ms_plazoleta.domain.usecases.Restaurant.CreateRestaurantUseCase;
+import com.example.plazoleta.ms_plazoleta.domain.usecases.Restaurant.ListRestaurantsUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -38,14 +41,20 @@ public class BeanConfiguration {
         return new UpdateDishUseCase(dishPersistencePort, restaurantPersistencePort);
     }
     @Bean
-    public ListRestaurantsServicePort listRestaurantsServicePort(RestaurantPersistencePort restaurantPersistencePort) {
-        return new ListRestaurantsUseCase(restaurantPersistencePort);
+    public ListRestaurantsServicePort listRestaurantsServicePort(RestaurantPersistencePort restaurantPersistencePort,
+                                                                 RestaurantPaginationPort restaurantPaginationPort) {
+        return new ListRestaurantsUseCase(restaurantPersistencePort, restaurantPaginationPort);
+    }
+
+    @Bean
+    public ListDishesServicePort listDishServicePort(DishPersistencePort dishPersistencePort) {
+        return new ListDishesUseCase(dishPersistencePort);
     }
 
     @Bean
     public AssignEmployeeServicePort assignEmployeeServicePort(RestaurantPersistencePort restaurantPersistencePort
                                                            ) {
-        return new AssignEmployeeUseCase(restaurantPersistencePort);
+        return new AssignEmployeeToRestaurantUseCase(restaurantPersistencePort);
     }
 
 
