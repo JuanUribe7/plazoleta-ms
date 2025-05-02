@@ -15,5 +15,6 @@ public interface RestaurantPersistencePort
     Optional<Restaurant> findById(Long id);
     Optional<Restaurant> findByName(String name);
     Page<RestaurantEntity> findAllOrderedByName(Pagination pagination);
+    Optional<Restaurant> findByEmployeesId(Long employeeId);
 
 }

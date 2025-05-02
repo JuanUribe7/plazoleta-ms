@@ -1,18 +1,17 @@
 package com.example.plazoleta.ms_plazoleta.infrastructure.endpoints.rest;
 
 import com.example.plazoleta.ms_plazoleta.application.dto.request.CreateOrderRequestDto;
+import com.example.plazoleta.ms_plazoleta.application.dto.response.PagedOrderResponseDto;
 import com.example.plazoleta.ms_plazoleta.application.services.impl.OrderServiceImpl;
 import com.example.plazoleta.ms_plazoleta.domain.model.Order;
 import com.example.plazoleta.ms_plazoleta.infrastructure.security.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/restaurants/{restaurantId}/orders")
 public class OrderController {
 
     private final OrderServiceImpl orderService;
@@ -33,5 +32,20 @@ public class OrderController {
 
         Order createdOrder = orderService.createOrder(clientId, dto);
         return ResponseEntity.ok(createdOrder);
+    }
+
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    @GetMapping
+    public ResponseEntity<PagedOrderResponseDto> listOrdersByState(
+            @PathVariable Long restaurantId,
+            @RequestParam String state,
+            @RequestParam int page,
+            @RequestParam int size,
+            HttpServletRequest request
+    ) {
+        String token = request.getHeader("Authorization").substring(7);
+        Long employeeId = jwtUtil.extractUserId(token);
+
+        return ResponseEntity.ok(orderService.listOrdersByState(restaurantId,employeeId, state, page, size));
     }
 }

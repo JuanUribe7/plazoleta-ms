@@ -37,6 +37,12 @@ public class RestaurantJpaAdapter implements RestaurantPersistencePort {
                 .findByNit(nit)
                 .map(RestaurantEntityMapper::toModel);
     }
+    @Override
+    public Optional<Restaurant> findByEmployeesId(Long employeeId) {
+        return restaurantRepository
+                .findByEmployeesIdContains(employeeId)
+                .map(RestaurantEntityMapper::toModel);
+    }
 
     @Override
     public Page<RestaurantEntity> findAllOrderedByName(Pagination pagination) {

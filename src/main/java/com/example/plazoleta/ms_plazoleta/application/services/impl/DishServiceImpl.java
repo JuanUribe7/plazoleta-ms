@@ -49,7 +49,6 @@ public class DishServiceImpl implements DishService {
     public PagedDishResponseDto listDishes(Long restaurantId, int page, int size, String category) {
         Pagination pagination = new Pagination(page, size);
         Optional<CategoryType> categoryOpt = Optional.empty();
-
         if (category != null && !category.trim().isEmpty()) {
             categoryOpt = Optional.of(CategoryValidator.validate(category));
         }
