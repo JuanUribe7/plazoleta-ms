@@ -12,6 +12,7 @@ import com.example.plazoleta.ms_plazoleta.domain.model.Pagination;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.Order.AssignOrderServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.Order.CreateOrderServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.Order.ListOrdersByStateServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.Order.MarkOrderAsReadyServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.utils.validation.order.StatusValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class OrderServiceImpl implements OrderService {
     private final CreateOrderServicePort createOrderServicePort;
     private final ListOrdersByStateServicePort listOrdersByStateServicePort;
     private final AssignOrderServicePort assignOrderServicePort;
+    private final MarkOrderAsReadyServicePort markOrderAsReadyService;
 
 
 
@@ -33,6 +35,7 @@ public class OrderServiceImpl implements OrderService {
         return createOrderServicePort.createOrder(order);
     }
 
+    @Override
     public PagedOrderResponseDto listOrdersByState(
             Long restaurantId,
             Long employeeId,
@@ -54,5 +57,11 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponseDto assignOrder(Long restaurantId, Long orderId, Long employeeId) {
         Order updated = assignOrderServicePort.assignToOrder(restaurantId, orderId, employeeId);
         return OrderDtoMapper.toDto(updated);
+    }
+
+    @Override
+    public OrderResponseDto markOrderAsReady(Long restaurantId, Long orderId, Long employeeId) {
+        Order order = markOrderAsReadyService.markAsReady(restaurantId, orderId, employeeId);
+        return OrderDtoMapper.toDto(order);
     }
 }

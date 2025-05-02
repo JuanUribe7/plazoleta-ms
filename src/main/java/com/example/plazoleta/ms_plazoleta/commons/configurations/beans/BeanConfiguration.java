@@ -4,12 +4,14 @@ package com.example.plazoleta.ms_plazoleta.commons.configurations.beans;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.Order.AssignOrderServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.Order.CreateOrderServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.Order.ListOrdersByStateServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.Order.MarkOrderAsReadyServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.dish.CreateDishServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.dish.ListDishesServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.dish.UpdateDishServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.restaurant.AssignEmployeeServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.restaurant.CreateRestaurantServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.restaurant.ListRestaurantsServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.Feign.MessagingPort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Feign.UserValidationPort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.OrderPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.OrderQueryPort;
@@ -21,6 +23,7 @@ import com.example.plazoleta.ms_plazoleta.domain.ports.out.ValidationDishBelongR
 import com.example.plazoleta.ms_plazoleta.domain.usecases.Order.AssignOrderUseCase;
 import com.example.plazoleta.ms_plazoleta.domain.usecases.Order.CreateOrderUseCase;
 import com.example.plazoleta.ms_plazoleta.domain.usecases.Order.ListOrdersByStateUseCase;
+import com.example.plazoleta.ms_plazoleta.domain.usecases.Order.MarkOrderAsReadyUseCase;
 import com.example.plazoleta.ms_plazoleta.domain.usecases.dish.CreateDishUseCase;
 import com.example.plazoleta.ms_plazoleta.domain.usecases.dish.ListDishesUseCase;
 import com.example.plazoleta.ms_plazoleta.domain.usecases.dish.UpdateDishUseCase;
@@ -84,6 +87,15 @@ public class BeanConfiguration {
     public AssignOrderServicePort assignOrderServicePort(OrderPersistencePort orderPersistencePort,
                                                          RestaurantPersistencePort restaurantPersistencePort) {
         return new AssignOrderUseCase(orderPersistencePort, restaurantPersistencePort);
+    }
+
+    @Bean
+    public MarkOrderAsReadyServicePort markOrderAsReadyServicePort(OrderPersistencePort orderPersistencePort,
+                                                                   RestaurantPersistencePort restaurantPersistencePort,
+                                                                   MessagingPort messagingPort,
+                                                                   UserValidationPort userValidationPort) {
+        return new MarkOrderAsReadyUseCase(orderPersistencePort,
+                restaurantPersistencePort,userValidationPort, messagingPort);
     }
 
 

@@ -17,8 +17,8 @@ spring:
     show-sql: true
     defer-datasource-initialization: true
 
-
-
-
 jwt:
   secret-key: UltraClaveSuperSecretaIndescifrable32
+
+mensajeria:
+  url: http://localhost:8087

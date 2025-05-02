@@ -1,19 +1,12 @@
 package com.example.plazoleta.ms_plazoleta.infrastructure.entities;
 
+
 import com.example.plazoleta.ms_plazoleta.domain.model.OrderStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
-
-@AllArgsConstructor
 @Entity
 @Table(name = "orders")
 public class OrderEntity {
@@ -22,25 +15,46 @@ public class OrderEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "client_id", nullable = false)
     private Long clientId;
-
-    @Column(name = "restaurant_id", nullable = false)
     private Long restaurantId;
-
     private LocalDateTime date;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    @Column(name = "assigned_employee_id")
     private Long assignedEmployeeId;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "order_id") // dueño de la relación
-    private List<OrderDishEntity> dishOrders = new ArrayList<>();
+    @Column(length = 6)
+    private String pin;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderDishEntity> dishOrders;
 
     public OrderEntity() {}
 
+    // Getters y setters
 
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public Long getClientId() { return clientId; }
+    public void setClientId(Long clientId) { this.clientId = clientId; }
+
+    public Long getRestaurantId() { return restaurantId; }
+    public void setRestaurantId(Long restaurantId) { this.restaurantId = restaurantId; }
+
+    public LocalDateTime getDate() { return date; }
+    public void setDate(LocalDateTime date) { this.date = date; }
+
+    public OrderStatus getStatus() { return status; }
+    public void setStatus(OrderStatus status) { this.status = status; }
+
+    public Long getAssignedEmployeeId() { return assignedEmployeeId; }
+    public void setAssignedEmployeeId(Long assignedEmployeeId) { this.assignedEmployeeId = assignedEmployeeId; }
+
+    public String getPin() { return pin; }
+    public void setPin(String pin) { this.pin = pin; }
+
+    public List<OrderDishEntity> getDishOrders() { return dishOrders; }
+    public void setDishOrders(List<OrderDishEntity> dishOrders) { this.dishOrders = dishOrders; }
 }

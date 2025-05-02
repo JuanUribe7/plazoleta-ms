@@ -19,5 +19,6 @@ public class ExceptionMessages {
     public static final String UTILITY_CLASS_INSTANTIATION = "Utility class cannot be instantiated";
     public static final String RESTAURANT_NAME_ALREADY_EXISTS = "A restaurant with this name already exists.";
     public static final String LOGO_ALREADY_EXISTS = "A restaurant with this logo already exists.";
+    public static final String ONLY_IN_PREPARATION_CAN_BE_READY = "Only dishes in preparation can be marked as ready.";
 
 }

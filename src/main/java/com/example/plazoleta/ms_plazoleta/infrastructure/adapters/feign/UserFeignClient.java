@@ -12,4 +12,7 @@ public interface UserFeignClient {
     @GetMapping("/users/{id}/exists")
     boolean existsAndIsOwner(@PathVariable Long id);
 
+    @GetMapping("/users/{id}/phone")
+    String getPhone(@PathVariable Long id);
+
 }

@@ -26,5 +26,11 @@ public class UserFeignAdapter implements UserValidationPort {
             throw new IllegalArgumentException(ExceptionMessages.USER_NOT_FOUND);
         }
     }
+    @Override
+    public String getPhoneByUserId(Long id) {
+        return userFeignClient.getPhone(id);
+    }
+
+
 
 }

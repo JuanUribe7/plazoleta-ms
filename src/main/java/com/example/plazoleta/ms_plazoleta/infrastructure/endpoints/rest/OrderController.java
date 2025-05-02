@@ -38,6 +38,19 @@ public class OrderController {
     }
 
     @PreAuthorize("hasRole('EMPLOYEE')")
+    @PatchMapping("/{orderId}/ready")
+    public ResponseEntity<OrderResponseDto> markOrderAsReady(
+            @PathVariable Long restaurantId,
+            @PathVariable Long orderId,
+            HttpServletRequest request
+    ) {
+        String token = request.getHeader("Authorization").substring(7);
+        Long employeeId = jwtUtil.extractUserId(token);
+
+        return ResponseEntity.ok(orderService.markOrderAsReady(restaurantId, orderId, employeeId));
+    }
+
+    @PreAuthorize("hasRole('EMPLOYEE')")
     @PatchMapping("/{orderId}/assign")
     public ResponseEntity<OrderResponseDto> assignOrder(
             @PathVariable Long restaurantId,
@@ -65,4 +78,7 @@ public class OrderController {
 
         return ResponseEntity.ok(orderService.listOrdersByState(restaurantId,employeeId, state, page, size));
     }
+
+
+
 }
