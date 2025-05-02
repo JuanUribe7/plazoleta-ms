@@ -22,15 +22,17 @@ public class OrderController {
         this.jwtUtil = jwtUtil;
     }
 
+    @PreAuthorize("hasRole('CLIENT')")
     @PostMapping
     public ResponseEntity<Order> createOrder(
+            @PathVariable Long restaurantId,
             @RequestBody CreateOrderRequestDto dto,
             HttpServletRequest request
     ) {
         String token = request.getHeader("Authorization").substring(7);
         Long clientId = jwtUtil.extractUserId(token);
 
-        Order createdOrder = orderService.createOrder(clientId, dto);
+        Order createdOrder = orderService.createOrder(restaurantId,clientId, dto);
         return ResponseEntity.ok(createdOrder);
     }
 

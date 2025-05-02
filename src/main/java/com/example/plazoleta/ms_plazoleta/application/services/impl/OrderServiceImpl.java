@@ -26,8 +26,8 @@ public class OrderServiceImpl {
         this.listOrdersByStateServicePort = listOrdersByStateServicePort;
     }
 
-    public Order createOrder(Long clientId, CreateOrderRequestDto dto) {
-        Order order = OrderDtoMapper.toModel(clientId, dto);
+    public Order createOrder(Long restaurantId,Long clientId, CreateOrderRequestDto dto) {
+        Order order = OrderDtoMapper.toModel(restaurantId ,clientId, dto);
         return createOrderServicePort.createOrder(order);
     }
 

@@ -14,13 +14,13 @@ public class OrderDtoMapper {
 
     private OrderDtoMapper() {}
 
-    public static Order toModel(Long clientId, CreateOrderRequestDto dto) {
+    public static Order toModel(Long restaurantId,Long clientId, CreateOrderRequestDto dto) {
         List<OrderDish> dishes = dto.getDishes()
                 .stream()
                 .map(d -> new OrderDish(d.getDishId(), d.getQuantity()))
                 .toList();
 
-        return Order.create(clientId, dto.getRestaurantId(), dishes);
+        return Order.create(clientId, restaurantId, dishes);
     }
 
     public static OrderResponseDto toDto(Order order) {
