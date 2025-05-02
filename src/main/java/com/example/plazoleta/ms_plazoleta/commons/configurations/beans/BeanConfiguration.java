@@ -1,16 +1,21 @@
 package com.example.plazoleta.ms_plazoleta.commons.configurations.beans;
 
 
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.CreateOrderServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.dish.CreateDishServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.dish.ListDishesServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.dish.UpdateDishServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.restaurant.AssignEmployeeServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.restaurant.CreateRestaurantServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.restaurant.ListRestaurantsServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.DishValidationPort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Feign.UserValidationPort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.OrderPersistencePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.OrderValidationPort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Pagination.RestaurantPaginationPort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.DishPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.RestaurantPersistencePort;
+import com.example.plazoleta.ms_plazoleta.domain.usecases.CreateOrderUseCase;
 import com.example.plazoleta.ms_plazoleta.domain.usecases.dish.CreateDishUseCase;
 import com.example.plazoleta.ms_plazoleta.domain.usecases.dish.ListDishesUseCase;
 import com.example.plazoleta.ms_plazoleta.domain.usecases.dish.UpdateDishUseCase;
@@ -56,6 +61,12 @@ public class BeanConfiguration {
     public AssignEmployeeServicePort assignEmployeeServicePort(RestaurantPersistencePort restaurantPersistencePort
                                                            ) {
         return new AssignEmployeeToRestaurantUseCase(restaurantPersistencePort);
+    }
+
+    @Bean
+    public CreateOrderServicePort createOrderServicePort(OrderPersistencePort orderPersistencePort,
+                                                         OrderValidationPort orderValidationPort, DishValidationPort dishValidationPort) {
+        return new CreateOrderUseCase(orderPersistencePort, orderValidationPort, dishValidationPort);
     }
 
 

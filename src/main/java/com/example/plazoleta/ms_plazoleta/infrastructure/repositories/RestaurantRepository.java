@@ -2,8 +2,6 @@ package com.example.plazoleta.ms_plazoleta.infrastructure.repositories;
 
 import com.example.plazoleta.ms_plazoleta.infrastructure.entities.RestaurantEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
@@ -13,6 +11,6 @@ public interface RestaurantRepository extends JpaRepository<RestaurantEntity, Lo
     Optional<RestaurantEntity> findByName(String name);
     Optional<RestaurantEntity> findByUrlLogo(String logo);
     Optional<RestaurantEntity> findById(Long id);
-    Page<RestaurantEntity> findAllByOrderByNameAsc(Pageable pageable);
+
 
 }

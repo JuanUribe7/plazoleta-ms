@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface DishRepository extends JpaRepository<DishEntity, Long> {
@@ -16,5 +17,6 @@ public interface DishRepository extends JpaRepository<DishEntity, Long> {
     Optional<DishEntity> findByNameAndRestaurantId(String name, Long restaurantId);
     Page<DishEntity> findByRestaurantIdAndCategoryAndIsAvailableTrue(Long restaurantId, CategoryType category, Pageable pageable);
     Page<DishEntity> findByRestaurantIdAndIsAvailableTrue(Long restaurantId, Pageable pageable);
+    long countByIdInAndRestaurantId(List<Long> ids, Long restaurantId);
 }
 
