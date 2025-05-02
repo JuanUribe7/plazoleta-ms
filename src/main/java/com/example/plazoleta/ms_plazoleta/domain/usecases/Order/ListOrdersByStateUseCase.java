@@ -1,10 +1,10 @@
-package com.example.plazoleta.ms_plazoleta.domain.usecases;
+package com.example.plazoleta.ms_plazoleta.domain.usecases.Order;
 
 import com.example.plazoleta.ms_plazoleta.domain.model.Order;
 import com.example.plazoleta.ms_plazoleta.domain.model.OrderStatus;
 import com.example.plazoleta.ms_plazoleta.domain.model.PagedResult;
 import com.example.plazoleta.ms_plazoleta.domain.model.Pagination;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.ListOrdersByStateServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.Order.ListOrdersByStateServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.OrderQueryPort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.RestaurantPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.utils.helpers.EmployeeAuthorizationValidator;

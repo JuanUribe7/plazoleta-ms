@@ -1,15 +1,15 @@
 package com.example.plazoleta.ms_plazoleta.commons.configurations.beans;
 
 
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.CreateOrderServicePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.ListOrdersByStateServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.Order.AssignOrderServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.Order.CreateOrderServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.Order.ListOrdersByStateServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.dish.CreateDishServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.dish.ListDishesServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.dish.UpdateDishServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.restaurant.AssignEmployeeServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.restaurant.CreateRestaurantServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.restaurant.ListRestaurantsServicePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.out.DishValidationPort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Feign.UserValidationPort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.OrderPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.OrderQueryPort;
@@ -17,8 +17,10 @@ import com.example.plazoleta.ms_plazoleta.domain.ports.out.OrderValidationPort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Pagination.RestaurantPaginationPort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.DishPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.RestaurantPersistencePort;
-import com.example.plazoleta.ms_plazoleta.domain.usecases.CreateOrderUseCase;
-import com.example.plazoleta.ms_plazoleta.domain.usecases.ListOrdersByStateUseCase;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.ValidationDishBelongRestaurantPort;
+import com.example.plazoleta.ms_plazoleta.domain.usecases.Order.AssignOrderUseCase;
+import com.example.plazoleta.ms_plazoleta.domain.usecases.Order.CreateOrderUseCase;
+import com.example.plazoleta.ms_plazoleta.domain.usecases.Order.ListOrdersByStateUseCase;
 import com.example.plazoleta.ms_plazoleta.domain.usecases.dish.CreateDishUseCase;
 import com.example.plazoleta.ms_plazoleta.domain.usecases.dish.ListDishesUseCase;
 import com.example.plazoleta.ms_plazoleta.domain.usecases.dish.UpdateDishUseCase;
@@ -68,8 +70,8 @@ public class BeanConfiguration {
 
     @Bean
     public CreateOrderServicePort createOrderServicePort(OrderPersistencePort orderPersistencePort,
-                                                         OrderValidationPort orderValidationPort, DishValidationPort dishValidationPort) {
-        return new CreateOrderUseCase(orderPersistencePort, orderValidationPort, dishValidationPort);
+                                                         OrderValidationPort orderValidationPort, ValidationDishBelongRestaurantPort validationDishBelongRestaurantPort) {
+        return new CreateOrderUseCase(orderPersistencePort, orderValidationPort, validationDishBelongRestaurantPort);
     }
 
     @Bean
@@ -77,6 +79,14 @@ public class BeanConfiguration {
                                                                      RestaurantPersistencePort restaurantPort) {
         return new ListOrdersByStateUseCase(orderQueryPort, restaurantPort);
     }
+
+    @Bean
+    public AssignOrderServicePort assignOrderServicePort(OrderPersistencePort orderPersistencePort,
+                                                         RestaurantPersistencePort restaurantPersistencePort) {
+        return new AssignOrderUseCase(orderPersistencePort, restaurantPersistencePort);
+    }
+
+
 
 
 }

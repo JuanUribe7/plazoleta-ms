@@ -19,6 +19,7 @@ public class OrderEntityMapper {
                 .collect(Collectors.toList());
 
         OrderEntity entity = new OrderEntity();
+        entity.setId(order.getId());
         entity.setClientId(order.getClientId());
         entity.setRestaurantId(order.getRestaurantId());
         entity.setDate(order.getDate());

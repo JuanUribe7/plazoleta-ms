@@ -1,8 +1,9 @@
 package com.example.plazoleta.ms_plazoleta.infrastructure.endpoints.rest;
 
 import com.example.plazoleta.ms_plazoleta.application.dto.request.CreateOrderRequestDto;
+import com.example.plazoleta.ms_plazoleta.application.dto.response.OrderResponseDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.response.PagedOrderResponseDto;
-import com.example.plazoleta.ms_plazoleta.application.services.impl.OrderServiceImpl;
+import com.example.plazoleta.ms_plazoleta.application.services.OrderService;
 import com.example.plazoleta.ms_plazoleta.domain.model.Order;
 import com.example.plazoleta.ms_plazoleta.infrastructure.security.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,10 +15,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/restaurants/{restaurantId}/orders")
 public class OrderController {
 
-    private final OrderServiceImpl orderService;
+    private final OrderService orderService;
     private final JwtUtil jwtUtil;
 
-    public OrderController(OrderServiceImpl orderService, JwtUtil jwtUtil) {
+    public OrderController(OrderService orderService, JwtUtil jwtUtil) {
         this.orderService = orderService;
         this.jwtUtil = jwtUtil;
     }
@@ -35,6 +36,20 @@ public class OrderController {
         Order createdOrder = orderService.createOrder(restaurantId,clientId, dto);
         return ResponseEntity.ok(createdOrder);
     }
+
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PatchMapping("/{orderId}/assign")
+    public ResponseEntity<OrderResponseDto> assignOrder(
+            @PathVariable Long restaurantId,
+            @PathVariable Long orderId,
+            HttpServletRequest request
+    ) {
+        String token = request.getHeader("Authorization").substring(7);
+        Long employeeId = jwtUtil.extractUserId(token);
+
+        return ResponseEntity.ok(orderService.assignOrder(restaurantId, orderId, employeeId));
+    }
+
 
     @PreAuthorize("hasRole('EMPLOYEE')")
     @GetMapping

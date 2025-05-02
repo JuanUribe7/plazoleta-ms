@@ -1,4 +1,4 @@
-package com.example.plazoleta.ms_plazoleta.domain.ports.in;
+package com.example.plazoleta.ms_plazoleta.domain.ports.in.Order;
 
 import com.example.plazoleta.ms_plazoleta.domain.model.Order;
 import com.example.plazoleta.ms_plazoleta.domain.model.OrderStatus;

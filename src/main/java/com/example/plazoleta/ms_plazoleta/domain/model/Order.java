@@ -32,6 +32,23 @@ public class Order {
         this.assignedEmployeeId = assignedEmployeeId;
     }
 
+
+    public Order assignEmployee(Long employeeId, Long orderId) {
+        if (!OrderStatus.PENDING.equals(this.status)) {
+            throw new IllegalStateException("Only orders in PENDING status can be assigned.");
+        }
+
+        return new Order(
+                orderId,
+                this.clientId,
+                this.restaurantId,
+                this.dishes,
+                this.date,
+                OrderStatus.IN_PREPARATION,
+                employeeId
+        );
+    }
+
     public static Order create(Long clientId, Long restaurantId, List<OrderDish> dishes) {
         return new Order(
                 null,

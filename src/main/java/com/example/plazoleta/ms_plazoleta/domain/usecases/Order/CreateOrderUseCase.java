@@ -1,8 +1,8 @@
-package com.example.plazoleta.ms_plazoleta.domain.usecases;
+package com.example.plazoleta.ms_plazoleta.domain.usecases.Order;
 
 import com.example.plazoleta.ms_plazoleta.domain.model.Order;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.CreateOrderServicePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.out.DishValidationPort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.Order.CreateOrderServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.ValidationDishBelongRestaurantPort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.OrderPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.OrderValidationPort;
 
@@ -12,16 +12,16 @@ public class CreateOrderUseCase implements CreateOrderServicePort {
 
     private final OrderPersistencePort orderPort;
     private final OrderValidationPort orderValidationPort;
-    private final DishValidationPort dishValidationPort;
+    private final ValidationDishBelongRestaurantPort validationDishBelongRestaurantPort;
 
     public CreateOrderUseCase(
             OrderPersistencePort orderPort,
             OrderValidationPort orderValidationPort,
-            DishValidationPort dishValidationPort
+            ValidationDishBelongRestaurantPort validationDishBelongRestaurantPort
     ) {
         this.orderPort = orderPort;
         this.orderValidationPort = orderValidationPort;
-        this.dishValidationPort = dishValidationPort;
+        this.validationDishBelongRestaurantPort = validationDishBelongRestaurantPort;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class CreateOrderUseCase implements CreateOrderServicePort {
                 .map(d -> d.getDishId())
                 .toList();
 
-        dishValidationPort.validateDishesBelongToRestaurant(order.getRestaurantId(), dishIds);
+        validationDishBelongRestaurantPort.validateDishesBelongToRestaurant(order.getRestaurantId(), dishIds);
 
         // Guardar el pedido
         return orderPort.saveOrder(order);
