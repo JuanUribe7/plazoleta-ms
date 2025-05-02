@@ -9,9 +9,9 @@ import com.example.plazoleta.ms_plazoleta.application.services.RestaurantService
 import com.example.plazoleta.ms_plazoleta.domain.model.PagedResult;
 import com.example.plazoleta.ms_plazoleta.domain.model.Pagination;
 import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.Restaurant.CreateRestaurantServicePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.Restaurant.AssignEmployeeServicePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.Restaurant.ListRestaurantsServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.restaurant.CreateRestaurantServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.restaurant.AssignEmployeeServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.restaurant.ListRestaurantsServicePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

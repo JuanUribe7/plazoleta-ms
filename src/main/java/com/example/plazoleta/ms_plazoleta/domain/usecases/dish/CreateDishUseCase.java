@@ -1,8 +1,8 @@
 
-package com.example.plazoleta.ms_plazoleta.domain.usecases.Dish;
+package com.example.plazoleta.ms_plazoleta.domain.usecases.dish;
 
 import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.Dish.CreateDishServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.dish.CreateDishServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.DishPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.RestaurantPersistencePort;
 

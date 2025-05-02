@@ -8,22 +8,36 @@ import com.example.plazoleta.ms_plazoleta.domain.model.PagedResult;
 import java.util.List;
 
 public class PagedDishDtoMapper {
-    public static PagedDishResponseDto toDto(PagedResult<Dish> result) {
-        List<DishSimpleResponseDto> dishes = result.getContent().stream()
-                .map(DishSimpleDtoMapper::toDto)
+
+    private PagedDishDtoMapper() {}
+
+    public static DishSimpleResponseDto toResponseDto(Dish dish) {
+        return new DishSimpleResponseDto(
+                dish.getId(),
+                dish.getName(),
+                dish.getPrice(),
+                dish.getDescription(),
+                dish.getImageUrl(),
+                dish.getCategory()
+        );
+    }
+
+    public static PagedDishResponseDto toDto(PagedResult<Dish> page) {
+        List<DishSimpleResponseDto> content = page.getContent()
+                .stream()
+                .map(PagedDishDtoMapper::toResponseDto)
                 .toList();
 
-        var pagination = new PagedDishResponseDto.PaginationInfo(
-                result.getTotalPages(),
-                result.getTotalElements(),
-                result.getPageSize(),
-                result.getCurrentPage(),
-                result.isFirst(),
-                result.isLast(),
-                result.hasNext(),
-                result.hasPrevious()
+        return new PagedDishResponseDto(
+                content,
+                page.getTotalPages(),
+                page.getTotalElements(),
+                page.getPageSize(),
+                page.getCurrentPage(),
+                page.isFirst(),
+                page.isLast(),
+                page.hasNext(),
+                page.hasPrevious()
         );
-
-        return new PagedDishResponseDto(dishes, pagination);
     }
 }

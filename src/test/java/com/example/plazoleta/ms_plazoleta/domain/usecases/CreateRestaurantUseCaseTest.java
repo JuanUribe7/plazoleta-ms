@@ -3,7 +3,7 @@ package com.example.plazoleta.ms_plazoleta.domain.usecases;
 import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.RestaurantPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Feign.UserValidationPort;
-import com.example.plazoleta.ms_plazoleta.domain.usecases.Restaurant.CreateRestaurantUseCase;
+import com.example.plazoleta.ms_plazoleta.domain.usecases.restaurant.CreateRestaurantUseCase;
 import com.example.plazoleta.ms_plazoleta.infrastructure.exceptions.OwnerNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -4,8 +4,8 @@ import com.example.plazoleta.ms_plazoleta.application.dto.request.DishRequestDto
 import com.example.plazoleta.ms_plazoleta.application.dto.response.dish.DishResponseDto;
 import com.example.plazoleta.ms_plazoleta.application.mappers.dish.DishDtoMapper;
 import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.Dish.CreateDishServicePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.Dish.UpdateDishServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.dish.CreateDishServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.dish.UpdateDishServicePort;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

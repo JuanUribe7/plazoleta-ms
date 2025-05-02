@@ -3,7 +3,9 @@ package com.example.plazoleta.ms_plazoleta.application.mappers.dish;
 import com.example.plazoleta.ms_plazoleta.application.dto.request.DishRequestDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.response.dish.DishResponseDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.response.dish.UpdateDishResponseDto;
+import com.example.plazoleta.ms_plazoleta.domain.model.CategoryType;
 import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
+import com.example.plazoleta.ms_plazoleta.domain.utils.validation.dish.CategoryValidator;
 
 
 public class DishDtoMapper {
@@ -11,6 +13,7 @@ public class DishDtoMapper {
     private DishDtoMapper() {}
 
     public static Dish toModel(DishRequestDto dto, Long restaurantId) {
+        CategoryType categoryType = CategoryValidator.validate(dto.getCategory());
         return new Dish(
                 null,
                 dto.getName(),
@@ -19,7 +22,7 @@ public class DishDtoMapper {
                 dto.getImageUrl(),
                 true,
                 restaurantId,
-                dto.getCategory()
+                categoryType
         );
     }
 

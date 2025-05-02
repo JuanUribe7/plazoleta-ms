@@ -5,6 +5,7 @@ import com.example.plazoleta.ms_plazoleta.infrastructure.security.CustomAuthenti
 import com.example.plazoleta.ms_plazoleta.infrastructure.security.JwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
@@ -30,6 +31,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.GET,"/restaurants/{restaurantId}/dishes", "/restaurants").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex

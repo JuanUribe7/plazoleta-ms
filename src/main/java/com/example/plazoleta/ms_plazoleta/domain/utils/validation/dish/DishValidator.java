@@ -17,6 +17,7 @@ public class DishValidator {
         NameValidator.validate(dish.getName());
         DescriptionValidator.validate(dish.getDescription());
         LogoValidator.validate(dish.getImageUrl());
+        CategoryValidator.validate(dish.getCategory().name());
 
         if (dish.getPrice() <= 0) {
             throw new IllegalArgumentException(ErrorFieldsMessages.DISH_PRICE_INVALID);
@@ -33,6 +34,6 @@ public class DishValidator {
                     throw new IllegalArgumentException(ExceptionMessages.DISH_ALREADY_EXISTS);
                 });
 
-        validateFields(dish);
+
     }
 }

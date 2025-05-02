@@ -5,7 +5,7 @@ import com.example.plazoleta.ms_plazoleta.application.dto.response.restaurant.Re
 import com.example.plazoleta.ms_plazoleta.application.mappers.restaurant.RestaurantDtoMapper;
 import com.example.plazoleta.ms_plazoleta.application.mappers.restaurant.RestaurantSimpleDtoMapper;
 import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.Restaurant.CreateRestaurantServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.restaurant.CreateRestaurantServicePort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

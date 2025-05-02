@@ -1,7 +1,6 @@
 package com.example.plazoleta.ms_plazoleta.application.dto.request;
 
 
-import com.example.plazoleta.ms_plazoleta.domain.model.CategoryType;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +16,7 @@ public class DishRequestDto {
     private Integer price;
     private String description;
     private String imageUrl;
-    private CategoryType category;
+    private String category;
     private Long restaurantId;
 
 }

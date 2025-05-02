@@ -12,7 +12,7 @@ public class NitValidator {
     public static void validate(String nit, RestaurantPersistencePort port) {
         if (nit == null || nit.trim().isEmpty()) {
             throw new IllegalArgumentException(
-                    String.format(ErrorFieldsMessages.FIELD_REQUIRED, "NIT"));
+                    String.format(ErrorFieldsMessages.NIT_ALREADY_EXISTS));
         }
 
         if (!nit.matches("^\\d{9,12}$")) {

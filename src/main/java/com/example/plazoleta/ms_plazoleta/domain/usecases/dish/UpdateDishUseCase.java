@@ -1,9 +1,9 @@
-package com.example.plazoleta.ms_plazoleta.domain.usecases.Dish;
+package com.example.plazoleta.ms_plazoleta.domain.usecases.dish;
 
 import com.example.plazoleta.ms_plazoleta.application.dto.request.UpdateDishRequestDto;
 import com.example.plazoleta.ms_plazoleta.commons.constants.ExceptionMessages;
 import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.Dish.UpdateDishServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.dish.UpdateDishServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.DishPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.RestaurantPersistencePort;
 import jakarta.persistence.EntityNotFoundException;

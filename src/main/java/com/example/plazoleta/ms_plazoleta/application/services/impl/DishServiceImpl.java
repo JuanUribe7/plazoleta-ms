@@ -10,11 +10,11 @@ import com.example.plazoleta.ms_plazoleta.application.mappers.dish.PagedDishDtoM
 import com.example.plazoleta.ms_plazoleta.application.services.DishService;
 import com.example.plazoleta.ms_plazoleta.domain.model.CategoryType;
 import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
-import com.example.plazoleta.ms_plazoleta.domain.model.PagedResult;
 import com.example.plazoleta.ms_plazoleta.domain.model.Pagination;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.Dish.CreateDishServicePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.Dish.UpdateDishServicePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.Dish.ListDishesServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.dish.CreateDishServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.dish.ListDishesServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.dish.UpdateDishServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.utils.validation.dish.CategoryValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -46,11 +46,14 @@ public class DishServiceImpl implements DishService {
         updateDishService.changeDishStatus(dishId, restaurantId, ownerId, active);
     }
     @Override
-    public PagedDishResponseDto listDishes(Long restaurantId, Optional<String> category, int page, int size) {
+    public PagedDishResponseDto listDishes(Long restaurantId, int page, int size, String category) {
         Pagination pagination = new Pagination(page, size);
-        Optional<CategoryType> cat = category.map(CategoryType::valueOf);
-        PagedResult<Dish> result = dishList.listByRestaurant(restaurantId, cat, pagination);
-        return PagedDishDtoMapper.toDto(result);
+        Optional<CategoryType> categoryOpt = Optional.empty();
+
+        if (category != null && !category.trim().isEmpty()) {
+            categoryOpt = Optional.of(CategoryValidator.validate(category));
+        }
+        return PagedDishDtoMapper.toDto(dishList.listDishes(restaurantId, pagination, categoryOpt));
     }
 
 

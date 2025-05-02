@@ -5,11 +5,9 @@ import com.example.plazoleta.ms_plazoleta.application.dto.request.UpdateDishRequ
 import com.example.plazoleta.ms_plazoleta.application.dto.response.dish.DishResponseDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.response.dish.PagedDishResponseDto;
 
-import java.util.Optional;
-
 public interface DishService {
         DishResponseDto createDish(DishRequestDto dto, Long restaurantId, Long ownerId);
         DishResponseDto updateDish(UpdateDishRequestDto dto, Long dishId);
         void changeDishStatus(Long dishId, Long restaurantId, Long ownerId, boolean active);
-        PagedDishResponseDto listDishes(Long restaurantId, Optional<String> category, int page, int size);
+        PagedDishResponseDto listDishes(Long restaurantId, int page, int size, String category);
 }

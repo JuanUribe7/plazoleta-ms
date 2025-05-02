@@ -1,6 +1,6 @@
 package com.example.plazoleta.ms_plazoleta.infrastructure.feign;
 
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.Restaurant.CreateRestaurantServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.restaurant.CreateRestaurantServicePort;
 import com.example.plazoleta.ms_plazoleta.infrastructure.adapters.feign.UserFeignClient;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

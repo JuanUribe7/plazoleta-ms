@@ -1,7 +1,7 @@
-package com.example.plazoleta.ms_plazoleta.domain.usecases.Restaurant;
+package com.example.plazoleta.ms_plazoleta.domain.usecases.restaurant;
 
 import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.Restaurant.CreateRestaurantServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.restaurant.CreateRestaurantServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.RestaurantPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Feign.UserValidationPort;
 

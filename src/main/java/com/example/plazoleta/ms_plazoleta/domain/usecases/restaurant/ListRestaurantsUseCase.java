@@ -1,9 +1,9 @@
-package com.example.plazoleta.ms_plazoleta.domain.usecases.Restaurant;
+package com.example.plazoleta.ms_plazoleta.domain.usecases.restaurant;
 
 import com.example.plazoleta.ms_plazoleta.domain.model.PagedResult;
 import com.example.plazoleta.ms_plazoleta.domain.model.Pagination;
 import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.Restaurant.ListRestaurantsServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.restaurant.ListRestaurantsServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Pagination.RestaurantPaginationPort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.RestaurantPersistencePort;
 import com.example.plazoleta.ms_plazoleta.infrastructure.entities.RestaurantEntity;

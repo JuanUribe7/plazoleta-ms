@@ -6,6 +6,7 @@ import com.example.plazoleta.ms_plazoleta.application.dto.request.UpdateDishRequ
 import com.example.plazoleta.ms_plazoleta.application.dto.response.dish.DishResponseDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.response.dish.PagedDishResponseDto;
 import com.example.plazoleta.ms_plazoleta.application.services.DishService;
+import com.example.plazoleta.ms_plazoleta.domain.model.CategoryType;
 import com.example.plazoleta.ms_plazoleta.infrastructure.security.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -57,11 +58,11 @@ public class DishController {
     @GetMapping
     public ResponseEntity<PagedDishResponseDto> listDishes(
             @PathVariable Long restaurantId,
-            @RequestParam Optional<String> category,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam int page,
+            @RequestParam int size,
+            @RequestParam(required = false) String category
     ) {
-        return ResponseEntity.ok(dishService.listDishes(restaurantId, category, page, size));
+        return ResponseEntity.ok(dishService.listDishes(restaurantId, page, size, category));
     }
 
     @PreAuthorize("hasRole('OWNER')")

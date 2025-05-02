@@ -1,5 +1,6 @@
 package com.example.plazoleta.ms_plazoleta.infrastructure.adapters.persistence;
 
+import com.example.plazoleta.ms_plazoleta.commons.constants.ExceptionMessages;
 import com.example.plazoleta.ms_plazoleta.domain.model.CategoryType;
 import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
 import com.example.plazoleta.ms_plazoleta.domain.model.PagedResult;
@@ -8,6 +9,7 @@ import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.DishPersi
 import com.example.plazoleta.ms_plazoleta.infrastructure.entities.DishEntity;
 import com.example.plazoleta.ms_plazoleta.infrastructure.entities.RestaurantEntity;
 import com.example.plazoleta.ms_plazoleta.infrastructure.mappers.DishEntityMapper;
+import com.example.plazoleta.ms_plazoleta.infrastructure.mappers.PagedResultMapper;
 import com.example.plazoleta.ms_plazoleta.infrastructure.repositories.DishRepository;
 import com.example.plazoleta.ms_plazoleta.infrastructure.repositories.RestaurantRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -17,7 +19,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -31,8 +32,7 @@ public class DishJpaAdapter implements DishPersistencePort {
     @Override
     public Dish saveDish(Dish dish) {
         RestaurantEntity restaurant = restaurantRepository.findById(dish.getRestaurantId())
-                .orElseThrow(EntityNotFoundException::new);
-
+                .orElseThrow(() -> new EntityNotFoundException(ExceptionMessages.RESTAURANT_NOT_FOUND));
         DishEntity entity = DishEntityMapper.toEntity(dish, restaurant);
         DishEntity saved = dishRepository.save(entity);
 
@@ -60,29 +60,12 @@ public class DishJpaAdapter implements DishPersistencePort {
     @Override
     public PagedResult<Dish> findByRestaurantWithFilter(Long restaurantId, Optional<CategoryType> category, Pagination pagination) {
         Pageable pageable = PageRequest.of(pagination.getPage(), pagination.getSize());
-        Page<DishEntity> result;
 
-        if (category.isPresent()) {
-            result = dishRepository.findByRestaurantIdAndCategoryOrderByNameAsc(restaurantId, category.get(), pageable);
-        } else {
-            result = dishRepository.findByRestaurantIdOrderByNameAsc(restaurantId, pageable);
-        }
+        Page<DishEntity> page = category.isPresent()
+                ? dishRepository.findByRestaurantIdAndCategoryAndIsAvailableTrue(restaurantId, category.get(), pageable)
+                : dishRepository.findByRestaurantIdAndIsAvailableTrue(restaurantId, pageable);
 
-        List<Dish> dishes = result.getContent().stream()
-                .map(DishEntityMapper::toModel)
-                .toList();
-
-        return new PagedResult<>(
-                dishes,
-                result.getTotalPages(),
-                result.getTotalElements(),
-                pageable.getPageSize(),
-                result.getNumber(),
-                result.isFirst(),
-                result.isLast(),
-                result.hasNext(),
-                result.hasPrevious()
-        );
+        return PagedResultMapper.map(page, DishEntityMapper::toModel);
     }
 
 

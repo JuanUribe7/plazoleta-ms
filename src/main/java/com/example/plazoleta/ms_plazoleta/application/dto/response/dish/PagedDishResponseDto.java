@@ -3,59 +3,45 @@ package com.example.plazoleta.ms_plazoleta.application.dto.response.dish;
 import java.util.List;
 
 public class PagedDishResponseDto {
+    private final List<DishSimpleResponseDto> content;
+    private final int totalPages;
+    private final long totalElements;
+    private final int size;
+    private final int page;
+    private final boolean isFirst;
+    private final boolean isLast;
+    private final boolean hasNext;
+    private final boolean hasPrevious;
 
-    private List<DishSimpleResponseDto> dishes;
-    private PaginationInfo pagination;
-
-    public PagedDishResponseDto() {} // ← NECESARIO PARA JACKSON
-
-    public PagedDishResponseDto(List<DishSimpleResponseDto> dishes, PaginationInfo pagination) {
-        this.dishes = dishes;
-        this.pagination = pagination;
+    public PagedDishResponseDto(
+            List<DishSimpleResponseDto> content,
+            int totalPages,
+            long totalElements,
+            int size,
+            int page,
+            boolean isFirst,
+            boolean isLast,
+            boolean hasNext,
+            boolean hasPrevious
+    ) {
+        this.content = content;
+        this.totalPages = totalPages;
+        this.totalElements = totalElements;
+        this.size = size;
+        this.page = page;
+        this.isFirst = isFirst;
+        this.isLast = isLast;
+        this.hasNext = hasNext;
+        this.hasPrevious = hasPrevious;
     }
 
-    public List<DishSimpleResponseDto> getDishes() {
-        return dishes;
-    }
-
-    public PaginationInfo getPagination() {
-        return pagination;
-    }
-
-    public static class PaginationInfo {
-
-        private int totalPages;
-        private long totalElements;
-        private int pageSize;
-        private int currentPage;
-        private boolean isFirst;
-        private boolean isLast;
-        private boolean hasNext;
-        private boolean hasPrevious;
-
-        public PaginationInfo() {} // ← NECESARIO
-
-        public PaginationInfo(int totalPages, long totalElements, int pageSize,
-                              int currentPage, boolean isFirst, boolean isLast,
-                              boolean hasNext, boolean hasPrevious) {
-            this.totalPages = totalPages;
-            this.totalElements = totalElements;
-            this.pageSize = pageSize;
-            this.currentPage = currentPage;
-            this.isFirst = isFirst;
-            this.isLast = isLast;
-            this.hasNext = hasNext;
-            this.hasPrevious = hasPrevious;
-        }
-
-        // Getters públicos para todos los campos
-        public int getTotalPages() { return totalPages; }
-        public long getTotalElements() { return totalElements; }
-        public int getPageSize() { return pageSize; }
-        public int getCurrentPage() { return currentPage; }
-        public boolean isFirst() { return isFirst; }
-        public boolean isLast() { return isLast; }
-        public boolean isHasNext() { return hasNext; }
-        public boolean isHasPrevious() { return hasPrevious; }
-    }
+    public List<DishSimpleResponseDto> getContent() { return content; }
+    public int getTotalPages() { return totalPages; }
+    public long getTotalElements() { return totalElements; }
+    public int getSize() { return size; }
+    public int getPage() { return page; }
+    public boolean isFirst() { return isFirst; }
+    public boolean isLast() { return isLast; }
+    public boolean isHasNext() { return hasNext; }
+    public boolean isHasPrevious() { return hasPrevious; }
 }

@@ -1,4 +1,4 @@
-package com.example.plazoleta.ms_plazoleta.domain.ports.in.Dish;
+package com.example.plazoleta.ms_plazoleta.domain.ports.in.dish;
 
 import com.example.plazoleta.ms_plazoleta.application.dto.request.UpdateDishRequestDto;
 import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
