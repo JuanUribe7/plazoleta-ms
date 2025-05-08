@@ -16,7 +16,7 @@ public class DishEntityMapper {
         entity.setPrice(dish.getPrice().doubleValue());
         entity.setDescription(dish.getDescription());
         entity.setUrlImage(dish.getImageUrl());
-        entity.setAvailable(dish.isActive());
+        entity.setActive(dish.isAvailable());
         entity.setCategory(dish.getCategory());
         entity.setRestaurant(restaurant);
         return entity;
@@ -34,7 +34,7 @@ public class DishEntityMapper {
                 entity.getPrice().intValue(),
                 entity.getDescription(),
                 entity.getUrlImage(),
-                entity.isAvailable(),
+                entity.isActive(),
                 entity.getRestaurant().getId(),
                 entity.getCategory()
         );

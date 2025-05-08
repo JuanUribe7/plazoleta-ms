@@ -1,7 +1,8 @@
 package com.example.plazoleta.ms_plazoleta.infrastructure.adapters.feign;
 
-import com.example.plazoleta.ms_plazoleta.domain.ports.out.Feign.UserValidationPort;
+
 import com.example.plazoleta.ms_plazoleta.commons.constants.ExceptionMessages;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.feign.UserValidationPort;
 import feign.FeignException;
 import org.springframework.stereotype.Component;
 

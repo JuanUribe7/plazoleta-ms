@@ -13,7 +13,7 @@ public class Order {
     private final LocalDateTime date;
     private final OrderStatus status;
     private final Long assignedEmployeeId;
-    private final String pin;
+
 
     public Order(
             Long id,
@@ -22,8 +22,8 @@ public class Order {
             List<OrderDish> dishes,
             LocalDateTime date,
             OrderStatus status,
-            Long assignedEmployeeId,
-            String pin
+            Long assignedEmployeeId
+
     ) {
         this.id = id;
         this.clientId = clientId;
@@ -32,14 +32,26 @@ public class Order {
         this.date = date;
         this.status = status;
         this.assignedEmployeeId = assignedEmployeeId;
-        this.pin = pin;
     }
 
-    public Order markAsReady(String generatedPin) {
-        if (!OrderStatus.IN_PREPARATION.equals(this.status)) {
+    public Order markAsReady() {
+        if (!OrderStatus.PREPARING.equals(this.status)) {
             throw new IllegalStateException("Only IN_PREPARATION orders can be marked as READY.");
         }
-        return new Order(id, clientId, restaurantId, dishes, date, OrderStatus.READY, assignedEmployeeId, generatedPin);
+        return new Order(id, clientId, restaurantId, dishes, date, OrderStatus.READY, assignedEmployeeId);
+    }
+    public Order markAsDelivered() {
+        if (!OrderStatus.READY.equals(this.status)) {
+            throw new IllegalStateException("Only READY orders can be marked as READY.");
+        }
+        return new Order(id, clientId, restaurantId, dishes, date, OrderStatus.DELIVERED, assignedEmployeeId);
+    }
+
+    public Order markAsCancelled() {
+        if (!OrderStatus.PENDING.equals(this.status)) {
+            throw new IllegalStateException("Only PENDING orders can be marked as READY.");
+        }
+        return new Order(id, clientId, restaurantId, dishes, date, OrderStatus.CANCELLED, assignedEmployeeId);
     }
 
 
@@ -48,15 +60,15 @@ public class Order {
             throw new IllegalStateException("Only orders in PENDING status can be assigned.");
         }
 
+
         return new Order(
                 orderId,
                 this.clientId,
                 this.restaurantId,
                 this.dishes,
                 this.date,
-                OrderStatus.IN_PREPARATION,
-                employeeId,
-                pin
+                OrderStatus.PREPARING,
+                employeeId
         );
     }
 
@@ -68,7 +80,6 @@ public class Order {
                 dishes,
                 LocalDateTime.now(),
                 OrderStatus.PENDING,
-                null,
                 null
         );
     }
@@ -80,5 +91,6 @@ public class Order {
     public LocalDateTime getDate() { return date; }
     public OrderStatus getStatus() { return status; }
     public Long getAssignedEmployeeId() { return assignedEmployeeId; }
-    public String getPin() { return pin; }
+
+
 }

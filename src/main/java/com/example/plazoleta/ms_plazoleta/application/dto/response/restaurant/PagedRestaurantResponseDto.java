@@ -12,12 +12,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PagedRestaurantResponseDto {
-    private List<RestaurantSimpleResponseDto> restaurants;
+    private List<RestaurantBasicResponseDto> restaurants;
     private PaginationInfo pagination;
 
 
 
-    public List<RestaurantSimpleResponseDto> getRestaurants() {
+    public List<RestaurantBasicResponseDto> getRestaurants() {
         return restaurants;
     }
 

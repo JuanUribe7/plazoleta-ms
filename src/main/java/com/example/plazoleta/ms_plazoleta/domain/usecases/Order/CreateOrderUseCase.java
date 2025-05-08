@@ -1,43 +1,48 @@
-package com.example.plazoleta.ms_plazoleta.domain.usecases.Order;
+package com.example.plazoleta.ms_plazoleta.domain.usecases.order;
 
 import com.example.plazoleta.ms_plazoleta.domain.model.Order;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.Order.CreateOrderServicePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.out.ValidationDishBelongRestaurantPort;
+import com.example.plazoleta.ms_plazoleta.domain.model.OrderDish;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.order.CreateOrderServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.OrderPersistencePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.out.OrderValidationPort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.DishPersistencePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.feign.OrderTraceabilityPort;
+import com.example.plazoleta.ms_plazoleta.domain.utils.validation.relation.DishBelongToRestaurantValidator;
+import com.example.plazoleta.ms_plazoleta.domain.utils.validation.order.OrderDomainValidator;
 
 import java.util.List;
 
 public class CreateOrderUseCase implements CreateOrderServicePort {
 
     private final OrderPersistencePort orderPort;
-    private final OrderValidationPort orderValidationPort;
-    private final ValidationDishBelongRestaurantPort validationDishBelongRestaurantPort;
+    private final DishPersistencePort dishPort;
+    private final OrderTraceabilityPort traceabilityPort;
+
 
     public CreateOrderUseCase(
             OrderPersistencePort orderPort,
-            OrderValidationPort orderValidationPort,
-            ValidationDishBelongRestaurantPort validationDishBelongRestaurantPort
+            DishPersistencePort dishPort,
+            OrderTraceabilityPort traceabilityPort
     ) {
         this.orderPort = orderPort;
-        this.orderValidationPort = orderValidationPort;
-        this.validationDishBelongRestaurantPort = validationDishBelongRestaurantPort;
+        this.dishPort = dishPort;
+        this.traceabilityPort = traceabilityPort;
     }
 
     @Override
     public Order createOrder(Order order) {
-        // Validar que el cliente no tenga otro pedido activo
-        orderValidationPort.validateClientHasNoActiveOrder(order.getClientId());
 
-        // Validar que todos los platos existan y pertenezcan al restaurante
+        OrderDomainValidator.validateClientHasNoActiveOrder(order.getClientId(), orderPort);
+
+
         List<Long> dishIds = order.getDishes()
                 .stream()
-                .map(d -> d.getDishId())
+                .map(OrderDish::getDishId)
                 .toList();
 
-        validationDishBelongRestaurantPort.validateDishesBelongToRestaurant(order.getRestaurantId(), dishIds);
+        DishBelongToRestaurantValidator.validateDishIdsBelongToRestaurant(order.getRestaurantId(), dishIds, dishPort);
 
-        // Guardar el pedido
-        return orderPort.saveOrder(order);
+        Order savedOrder = orderPort.save(order);
+        traceabilityPort.registerTrace(savedOrder);
+        return savedOrder;
     }
 }

@@ -15,8 +15,8 @@ public interface DishRepository extends JpaRepository<DishEntity, Long> {
     Optional<DishEntity> findByName(String name);
     Optional<DishEntity> findById(Long id);
     Optional<DishEntity> findByNameAndRestaurantId(String name, Long restaurantId);
-    Page<DishEntity> findByRestaurantIdAndCategoryAndIsAvailableTrue(Long restaurantId, CategoryType category, Pageable pageable);
-    Page<DishEntity> findByRestaurantIdAndIsAvailableTrue(Long restaurantId, Pageable pageable);
+    Page<DishEntity> findByRestaurantIdAndCategoryAndActiveTrue(Long restaurantId, CategoryType category, Pageable pageable);
+    Page<DishEntity> findByRestaurantIdAndActiveTrue(Long restaurantId, Pageable pageable);
     long countByIdInAndRestaurantId(List<Long> ids, Long restaurantId);
 }
 

@@ -6,6 +6,7 @@ import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.dish.UpdateDishServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.DishPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.RestaurantPersistencePort;
+import com.example.plazoleta.ms_plazoleta.domain.utils.helpers.ExistenceValidator;
 import jakarta.persistence.EntityNotFoundException;
 
 public class UpdateDishUseCase implements UpdateDishServicePort {
@@ -20,8 +21,10 @@ public class UpdateDishUseCase implements UpdateDishServicePort {
 
     @Override
     public Dish updateDish(UpdateDishRequestDto dto, Long ownerId) {
-        Dish dish = dishPersistencePort.findById(dto.getDishId())
-                .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.DISH_NOT_FOUND));
+        Dish dish = ExistenceValidator.getIfPresent(
+                dishPersistencePort.findById(dto.getDishId()),
+                ExceptionMessages.DISH_NOT_FOUND
+        );
         dish.changeDescription(dto.getDescription());
         dish.changePrice(dto.getPrice());
 
@@ -30,8 +33,10 @@ public class UpdateDishUseCase implements UpdateDishServicePort {
 
     @Override
     public void changeDishStatus(Long dishId, Long restaurantId, Long ownerId, boolean active) {
-        Dish dish = dishPersistencePort.findById(dishId)
-                .orElseThrow(() -> new EntityNotFoundException(ExceptionMessages.DISH_NOT_FOUND));
+        Dish dish = ExistenceValidator.getIfPresent(
+                dishPersistencePort.findById(dishId),
+                ExceptionMessages.DISH_NOT_FOUND
+        );
 
         Dish updated = dish.changeStatus(active, restaurantId, ownerId, restaurantPersistencePort);
         dishPersistencePort.updateDish(updated);

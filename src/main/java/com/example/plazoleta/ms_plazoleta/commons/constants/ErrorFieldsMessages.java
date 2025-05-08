@@ -7,7 +7,7 @@ public class ErrorFieldsMessages {
     }
 
     public static final String DISH_CATEGORY_REQUIRED = "Category is required";
-    public static final String DISH_CATEGORY_INVALID = "Invalid category. Valid options: STARTER, DRINK, MAIN_COURSE, DESSERT";
+    public static final String DISH_CATEGORY_INVALID = "Invalid category. Valid options: STARTER, DRINK, MAIN, DESSERT";
     public static final String DISH_PRICE_INVALID = "Invalid price. Price must be greater than 0";
     public static final String FIELD_REQUIRED = "%s cannot be empty";
     public static final String FIELD_INVALID_CHARS = "%s can only contain %s";

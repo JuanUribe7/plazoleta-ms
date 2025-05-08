@@ -1,48 +1,88 @@
 package com.example.plazoleta.ms_plazoleta.domain.model;
 
-
+import com.example.plazoleta.ms_plazoleta.commons.constants.ErrorFieldsMessages;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.DishPersistencePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.RestaurantPersistencePort;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class DishTest {
 
-    @Test
-    void testDefaultConstructorAndSettersGetters() {
-        Dish dish = new Dish();
+    private Dish baseDish;
 
-        dish.setId(1L);
-        dish.setName("Test Dish");
-        dish.setPrice(15000);
-        dish.setDescription("Delicious test dish");
-        dish.setImageUrl("http://example.com/image.jpg");
-        dish.setCategory("Main");
-        dish.setRestaurantId(2L);
-        dish.setOwnerId(3L);
-        dish.setActive(true);
-
-        assertEquals(1L, dish.getId());
-        assertEquals("Test Dish", dish.getName());
-        assertEquals(15000, dish.getPrice());
-        assertEquals("Delicious test dish", dish.getDescription());
-        assertEquals("http://example.com/image.jpg", dish.getImageUrl());
-        assertEquals("Main", dish.getCategory());
-        assertEquals(2L, dish.getRestaurantId());
-        assertEquals(3L, dish.getOwnerId());
-        assertTrue(dish.getActive());
+    @BeforeEach
+    void setUp() {
+        baseDish = new Dish(
+                1L,
+                "Pizza",
+                12000,
+                "Tasty pizza",
+                "http://img.com/pizza.jpg",
+                true,
+                100L,
+                CategoryType.MAIN
+        );
     }
 
     @Test
-    void testAllArgsConstructor() {
-        Dish dish = new Dish(1L, "Test Dish", 15000, "Delicious test dish", "http://example.com/image.jpg", "Main", 2L, 3L, true);
+    void create_shouldCallValidatorsAndSaveDish() {
+        RestaurantPersistencePort restaurantPort = mock(RestaurantPersistencePort.class);
+        DishPersistencePort dishPort = mock(DishPersistencePort.class);
 
-        assertEquals(1L, dish.getId());
-        assertEquals("Test Dish", dish.getName());
-        assertEquals(15000, dish.getPrice());
-        assertEquals("Delicious test dish", dish.getDescription());
-        assertEquals("http://example.com/image.jpg", dish.getImageUrl());
-        assertEquals("Main", dish.getCategory());
-        assertEquals(2L, dish.getRestaurantId());
-        assertEquals(3L, dish.getOwnerId());
-        assertTrue(dish.getActive());
+        when(dishPort.saveDish(baseDish)).thenReturn(baseDish);
+
+        Dish created = baseDish.create(restaurantPort, dishPort, 50L);
+
+        assertEquals(baseDish, created);
+        verify(dishPort).saveDish(baseDish);
+    }
+
+    @Test
+    void update_shouldCallValidatorsAndUpdateDish() {
+        RestaurantPersistencePort restaurantPort = mock(RestaurantPersistencePort.class);
+        DishPersistencePort dishPort = mock(DishPersistencePort.class);
+
+        when(dishPort.updateDish(baseDish)).thenReturn(baseDish);
+
+        Dish updated = baseDish.update(dishPort, restaurantPort, 1L, 50L);
+
+        assertEquals(baseDish, updated);
+        verify(dishPort).updateDish(baseDish);
+    }
+
+    @Test
+    void changeStatus_shouldReturnNewDishWithUpdatedStatus() {
+        RestaurantPersistencePort restaurantPort = mock(RestaurantPersistencePort.class);
+
+        Dish updated = baseDish.changeStatus(false, baseDish.getRestaurantId(), 50L, restaurantPort);
+
+        assertNotSame(baseDish, updated);
+        assertFalse(updated.isActive());
+        assertEquals(baseDish.getId(), updated.getId());
+        assertEquals(baseDish.getName(), updated.getName());
+    }
+
+    @Test
+    void changePrice_shouldUpdateWhenValid() {
+        baseDish.changePrice(15000);
+        assertEquals(15000, baseDish.getPrice());
+    }
+
+    @Test
+    void changePrice_shouldThrowIfNullOrZero() {
+        Exception ex1 = assertThrows(IllegalArgumentException.class, () -> baseDish.changePrice(null));
+        assertEquals(ErrorFieldsMessages.DISH_PRICE_INVALID, ex1.getMessage());
+
+        Exception ex2 = assertThrows(IllegalArgumentException.class, () -> baseDish.changePrice(0));
+        assertEquals(ErrorFieldsMessages.DISH_PRICE_INVALID, ex2.getMessage());
+    }
+
+    @Test
+    void changeDescription_shouldUpdateWhenValid() {
+        baseDish.changeDescription("Updated description");
+        assertEquals("Updated description", baseDish.getDescription());
     }
 }

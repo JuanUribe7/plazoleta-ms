@@ -20,5 +20,7 @@ spring:
 jwt:
   secret-key: UltraClaveSuperSecretaIndescifrable32
 
-mensajeria:
-  url: http://localhost:8087
+
+
+traceability:
+  url: http://localhost:8088/tracks

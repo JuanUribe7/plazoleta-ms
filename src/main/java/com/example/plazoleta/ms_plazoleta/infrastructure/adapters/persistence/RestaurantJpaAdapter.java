@@ -1,16 +1,15 @@
 package com.example.plazoleta.ms_plazoleta.infrastructure.adapters.persistence;
 
-import com.example.plazoleta.ms_plazoleta.domain.model.Pagination;
 import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.RestaurantPersistencePort;
-import com.example.plazoleta.ms_plazoleta.infrastructure.entities.RestaurantEntity;
+
 import com.example.plazoleta.ms_plazoleta.infrastructure.mappers.RestaurantEntityMapper;
 import com.example.plazoleta.ms_plazoleta.infrastructure.repositories.RestaurantRepository;
-import com.example.plazoleta.ms_plazoleta.infrastructure.utils.PageableFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+
 import org.springframework.stereotype.Repository;
 
+
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -21,7 +20,6 @@ public class RestaurantJpaAdapter implements RestaurantPersistencePort {
 
     public RestaurantJpaAdapter(RestaurantRepository restaurantRepository) {
         this.restaurantRepository = restaurantRepository;
-  ;
     }
 
 
@@ -37,18 +35,7 @@ public class RestaurantJpaAdapter implements RestaurantPersistencePort {
                 .findByNit(nit)
                 .map(RestaurantEntityMapper::toModel);
     }
-    @Override
-    public Optional<Restaurant> findByEmployeesId(Long employeeId) {
-        return restaurantRepository
-                .findByEmployeesIdContains(employeeId)
-                .map(RestaurantEntityMapper::toModel);
-    }
 
-    @Override
-    public Page<RestaurantEntity> findAllOrderedByName(Pagination pagination) {
-        Pageable pageable = PageableFactory.from(pagination);
-        return restaurantRepository.findAll(pageable); // sin mapear aún
-    }
 
     @Override
     public Optional<Restaurant> findByName(String name) {
@@ -56,6 +43,13 @@ public class RestaurantJpaAdapter implements RestaurantPersistencePort {
         return restaurantRepository
                 .findByName(name)
                 .map(RestaurantEntityMapper::toModel);
+    }
+
+    @Override
+    public List<Restaurant> findAllByOwnerId(Long ownerId) {
+        return restaurantRepository.findAllByOwnerId(ownerId).stream()
+                .map(RestaurantEntityMapper::toModel)
+                .toList();
     }
 
 

@@ -1,8 +1,9 @@
 package com.example.plazoleta.ms_plazoleta.infrastructure.endpoints.rest;
 
-import com.example.plazoleta.ms_plazoleta.application.dto.request.CreateOrderRequestDto;
+import com.example.plazoleta.ms_plazoleta.application.dto.request.order.CreateOrderRequestDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.response.OrderResponseDto;
-import com.example.plazoleta.ms_plazoleta.application.dto.response.PagedOrderResponseDto;
+import com.example.plazoleta.ms_plazoleta.application.dto.response.PageResponseDto;
+
 import com.example.plazoleta.ms_plazoleta.application.services.OrderService;
 import com.example.plazoleta.ms_plazoleta.domain.model.Order;
 import com.example.plazoleta.ms_plazoleta.infrastructure.security.JwtUtil;
@@ -33,8 +34,21 @@ public class OrderController {
         String token = request.getHeader("Authorization").substring(7);
         Long clientId = jwtUtil.extractUserId(token);
 
-        Order createdOrder = orderService.createOrder(restaurantId,clientId, dto);
+        Order createdOrder = orderService.createOrder(dto, restaurantId, clientId);
         return ResponseEntity.ok(createdOrder);
+    }
+
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PatchMapping("/{orderId}/assign")
+    public ResponseEntity<OrderResponseDto> assignOrder(
+            @PathVariable Long restaurantId,
+            @PathVariable Long orderId,
+            HttpServletRequest request
+    ) {
+        String token = request.getHeader("Authorization").substring(7);
+        Long employeeId = jwtUtil.extractUserId(token);
+
+        return ResponseEntity.ok(orderService.assignOrder(restaurantId, orderId, employeeId));
     }
 
     @PreAuthorize("hasRole('EMPLOYEE')")
@@ -51,33 +65,49 @@ public class OrderController {
     }
 
     @PreAuthorize("hasRole('EMPLOYEE')")
-    @PatchMapping("/{orderId}/assign")
-    public ResponseEntity<OrderResponseDto> assignOrder(
+    @PatchMapping("/{orderId}/deliver")
+    public ResponseEntity<OrderResponseDto> deliverOrder(
             @PathVariable Long restaurantId,
             @PathVariable Long orderId,
+            @RequestParam String pin,
             HttpServletRequest request
     ) {
         String token = request.getHeader("Authorization").substring(7);
         Long employeeId = jwtUtil.extractUserId(token);
 
-        return ResponseEntity.ok(orderService.assignOrder(restaurantId, orderId, employeeId));
+        return ResponseEntity.ok(orderService.deliverOrder(restaurantId, orderId, employeeId, pin));
+    }
+
+
+
+    @PreAuthorize("hasRole('CLIENT')")
+    @PatchMapping("/{orderId}/cancel")
+    public ResponseEntity<OrderResponseDto> cancelOrder(
+            @PathVariable Long restaurantId,
+            @PathVariable Long orderId,
+            HttpServletRequest request
+    ) {
+        String token = request.getHeader("Authorization").substring(7);
+        Long clientId = jwtUtil.extractUserId(token);
+
+        return ResponseEntity.ok(orderService.cancelOrder(restaurantId, orderId, clientId));
     }
 
 
     @PreAuthorize("hasRole('EMPLOYEE')")
-    @GetMapping
-    public ResponseEntity<PagedOrderResponseDto> listOrdersByState(
+    @GetMapping()
+    public ResponseEntity<PageResponseDto<OrderResponseDto>> listOrdersByStatus(
             @PathVariable Long restaurantId,
-            @RequestParam String state,
+            @RequestParam String status,
             @RequestParam int page,
             @RequestParam int size,
             HttpServletRequest request
     ) {
         String token = request.getHeader("Authorization").substring(7);
         Long employeeId = jwtUtil.extractUserId(token);
-
-        return ResponseEntity.ok(orderService.listOrdersByState(restaurantId,employeeId, state, page, size));
+        return ResponseEntity.ok(orderService.listOrdersByStatus(restaurantId, status, employeeId, page, size));
     }
+
 
 
 

@@ -9,6 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
-    Page<OrderEntity> findByRestaurantIdAndStatus(Long restaurantId, Optional<OrderStatus> status, Pageable pageable);
+    Page<OrderEntity> findByStatusAndRestaurantId(OrderStatus status, Long restaurantId, Pageable pageable);
     Optional<OrderEntity> findFirstByClientIdAndStatusIn(Long clientId, java.util.List<OrderStatus> statuses);
 }

@@ -20,9 +20,9 @@ public class OrderEntityMapper {
         entity.setDate(order.getDate());
         entity.setStatus(order.getStatus());
         entity.setAssignedEmployeeId(order.getAssignedEmployeeId());
-        entity.setPin(order.getPin());
 
-        // Mapear platos y asignar la relación inversa
+
+
         List<OrderDishEntity> dishEntities = order.getDishes().stream()
                 .map(dish -> {
                     OrderDishEntity dishEntity = new OrderDishEntity(null, dish.getDishId(), dish.getQuantity());
@@ -48,8 +48,7 @@ public class OrderEntityMapper {
                 dishes,
                 entity.getDate(),
                 entity.getStatus(),
-                entity.getAssignedEmployeeId(),
-                entity.getPin()
+                entity.getAssignedEmployeeId()
         );
     }
 }

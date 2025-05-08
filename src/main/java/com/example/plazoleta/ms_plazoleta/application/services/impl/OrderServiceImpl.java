@@ -1,67 +1,88 @@
 package com.example.plazoleta.ms_plazoleta.application.services.impl;
 
-import com.example.plazoleta.ms_plazoleta.application.dto.request.CreateOrderRequestDto;
+import com.example.plazoleta.ms_plazoleta.application.dto.request.order.CreateOrderRequestDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.response.OrderResponseDto;
-import com.example.plazoleta.ms_plazoleta.application.dto.response.PagedOrderResponseDto;
-import com.example.plazoleta.ms_plazoleta.application.mappers.OrderDtoMapper;
+
+import com.example.plazoleta.ms_plazoleta.application.dto.response.PageResponseDto;
+import com.example.plazoleta.ms_plazoleta.application.mappers.OrderMapper;
 import com.example.plazoleta.ms_plazoleta.application.services.OrderService;
 import com.example.plazoleta.ms_plazoleta.domain.model.Order;
-import com.example.plazoleta.ms_plazoleta.domain.model.OrderStatus;
-import com.example.plazoleta.ms_plazoleta.domain.model.PagedResult;
-import com.example.plazoleta.ms_plazoleta.domain.model.Pagination;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.Order.AssignOrderServicePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.Order.CreateOrderServicePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.Order.ListOrdersByStateServicePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.in.Order.MarkOrderAsReadyServicePort;
-import com.example.plazoleta.ms_plazoleta.domain.utils.validation.order.StatusValidator;
+
+import com.example.plazoleta.ms_plazoleta.domain.model.PaginatedResult;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.order.*;
+
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
+
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class OrderServiceImpl implements OrderService {
 
     private final CreateOrderServicePort createOrderServicePort;
-    private final ListOrdersByStateServicePort listOrdersByStateServicePort;
+    private final ListOrdersByStatusServicePort listOrdersService;
     private final AssignOrderServicePort assignOrderServicePort;
     private final MarkOrderAsReadyServicePort markOrderAsReadyService;
+    private final DeliverOrderServicePort deliverService;
+    private final CancelOrderServicePort cancelService;
 
 
 
-    public Order createOrder(Long restaurantId,Long clientId, CreateOrderRequestDto dto) {
-        Order order = OrderDtoMapper.toModel(restaurantId ,clientId, dto);
+    public Order createOrder(CreateOrderRequestDto dto, Long restaurantId, Long clientId) {
+        Order order = OrderMapper.toModel(dto, restaurantId, clientId);
         return createOrderServicePort.createOrder(order);
     }
-
-    @Override
-    public PagedOrderResponseDto listOrdersByState(
-            Long restaurantId,
-            Long employeeId,
-            String status,
-            int page,
-            int size
-    ) {
-        Optional<OrderStatus> statusOpt = Optional.empty();
-
-        if (status != null && !status.trim().isEmpty()) {
-            statusOpt = Optional.of(StatusValidator.validate(status));
-        }
-        Pagination pagination = new Pagination(page, size);
-        PagedResult<Order> result = listOrdersByStateServicePort.listOrdersByState(restaurantId ,employeeId, statusOpt, pagination);
-        return OrderDtoMapper.toDto(result);
-    }
-
     @Override
     public OrderResponseDto assignOrder(Long restaurantId, Long orderId, Long employeeId) {
         Order updated = assignOrderServicePort.assignToOrder(restaurantId, orderId, employeeId);
-        return OrderDtoMapper.toDto(updated);
+        return OrderMapper.toResponseDto(updated);
     }
 
     @Override
     public OrderResponseDto markOrderAsReady(Long restaurantId, Long orderId, Long employeeId) {
         Order order = markOrderAsReadyService.markAsReady(restaurantId, orderId, employeeId);
-        return OrderDtoMapper.toDto(order);
+        return OrderMapper.toResponseDto(order);
     }
+
+    @Override
+    public PageResponseDto<OrderResponseDto> listOrdersByStatus(Long restaurantId, String status, Long employeeId, int page, int size) {
+        PaginatedResult<Order> result = listOrdersService.findByStatusAndRestaurant(status, restaurantId, employeeId, page, size);
+        List<OrderResponseDto> content = result.getContent().stream()
+                .map(OrderMapper::toResponseDto)
+                .toList();
+
+        return new PageResponseDto<>(
+                content,
+                result.getPage(),
+                result.getSize(),
+                result.getTotalElements(),
+                result.getTotalPages(),
+                result.getPage() == 0,
+                result.getPage() == result.getTotalPages() - 1,
+                result.getPage() < result.getTotalPages() - 1,
+                result.getPage() > 0
+        );
+    }
+
+    @Override
+    public OrderResponseDto deliverOrder(Long restaurantId, Long orderId, Long employeeId, String pin) {
+        Order order = deliverService.deliver(restaurantId, orderId, employeeId, pin);
+        return OrderMapper.toResponseDto(order);
+    }
+
+    @Override
+    public OrderResponseDto cancelOrder(Long restaurantId, Long orderId, Long clientId) {
+        Order order = cancelService.cancel(restaurantId, orderId, clientId);
+        return OrderMapper.toResponseDto(order);
+    }
+
+
+
+
 }

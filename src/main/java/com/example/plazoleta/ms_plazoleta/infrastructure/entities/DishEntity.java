@@ -21,7 +21,8 @@ public class DishEntity {
     private Double price;
     private String description;
     private String urlImage;
-    private boolean isAvailable;
+
+    private boolean active;
 
     @ManyToOne
     @JoinColumn(name = "restaurant_id")

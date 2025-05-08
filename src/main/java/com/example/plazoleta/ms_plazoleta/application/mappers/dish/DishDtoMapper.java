@@ -5,7 +5,7 @@ import com.example.plazoleta.ms_plazoleta.application.dto.response.dish.DishResp
 import com.example.plazoleta.ms_plazoleta.application.dto.response.dish.UpdateDishResponseDto;
 import com.example.plazoleta.ms_plazoleta.domain.model.CategoryType;
 import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
-import com.example.plazoleta.ms_plazoleta.domain.utils.validation.dish.CategoryValidator;
+import com.example.plazoleta.ms_plazoleta.domain.utils.validation.create.dish.CategoryValidator;
 
 
 public class DishDtoMapper {
@@ -35,17 +35,8 @@ public class DishDtoMapper {
                 model.getPrice(),
                 model.getDescription(),
                 model.getImageUrl(),
-                model.getCategory().name(),
-                model.getRestaurantId(),
-                model.isActive()
+                model.getCategory().name()
         );
     }
-    public static UpdateDishResponseDto toUpdResponseDto(Dish model) {
-        return new UpdateDishResponseDto(
-                model.getId(),
-                model.getName(),
-                model.getPrice(),
-                model.getDescription()
-        );
-    }
+
 }

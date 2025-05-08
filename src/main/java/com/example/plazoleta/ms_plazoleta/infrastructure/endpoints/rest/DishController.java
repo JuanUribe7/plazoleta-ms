@@ -3,18 +3,17 @@ package com.example.plazoleta.ms_plazoleta.infrastructure.endpoints.rest;
 
 import com.example.plazoleta.ms_plazoleta.application.dto.request.DishRequestDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.request.UpdateDishRequestDto;
+import com.example.plazoleta.ms_plazoleta.application.dto.response.PageResponseDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.response.dish.DishResponseDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.response.dish.PagedDishResponseDto;
+import com.example.plazoleta.ms_plazoleta.application.dto.response.restaurant.RestaurantBasicResponseDto;
 import com.example.plazoleta.ms_plazoleta.application.services.DishService;
-import com.example.plazoleta.ms_plazoleta.domain.model.CategoryType;
 import com.example.plazoleta.ms_plazoleta.infrastructure.security.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/restaurants/{restaurantId}/dishes")
@@ -56,13 +55,13 @@ public class DishController {
     }
 
     @GetMapping
-    public ResponseEntity<PagedDishResponseDto> listDishes(
+    public ResponseEntity<PageResponseDto<DishResponseDto>> listDishes(
             @PathVariable Long restaurantId,
             @RequestParam int page,
             @RequestParam int size,
             @RequestParam(required = false) String category
     ) {
-        return ResponseEntity.ok(dishService.listDishes(restaurantId, page, size, category));
+        return ResponseEntity.ok(dishService.listDishes(restaurantId,category, page, size));
     }
 
     @PreAuthorize("hasRole('OWNER')")

@@ -2,7 +2,9 @@ package com.example.plazoleta.ms_plazoleta.commons.configurations.beans;
 
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.DishPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.RestaurantPersistencePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.out.Feign.UserValidationPort;
+
+import com.example.plazoleta.ms_plazoleta.domain.ports.out.feign.UserValidationPort;
+import com.example.plazoleta.ms_plazoleta.domain.usecases.dish.CreateDishUseCase;
 import com.example.plazoleta.ms_plazoleta.domain.usecases.restaurant.CreateRestaurantUseCase;
 
 import org.junit.jupiter.api.BeforeEach;

@@ -3,10 +3,9 @@ package com.example.plazoleta.ms_plazoleta.domain.model;
 import com.example.plazoleta.ms_plazoleta.commons.constants.ErrorFieldsMessages;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.DishPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.RestaurantPersistencePort;
-import com.example.plazoleta.ms_plazoleta.domain.utils.validation.dish.DescriptionValidator;
-import com.example.plazoleta.ms_plazoleta.domain.utils.validation.dish.DishStatusValidator;
-import com.example.plazoleta.ms_plazoleta.domain.utils.validation.dish.DishUpdateValidator;
-import com.example.plazoleta.ms_plazoleta.domain.utils.validation.dish.DishValidator;
+import com.example.plazoleta.ms_plazoleta.domain.utils.validation.create.dish.DescriptionValidator;
+import com.example.plazoleta.ms_plazoleta.domain.utils.validation.create.dish.DishFieldValidator;
+import com.example.plazoleta.ms_plazoleta.domain.utils.validation.dish.*;
 
 
 public class Dish {
@@ -15,18 +14,18 @@ public class Dish {
     private  Integer price;
     private  String description;
     private final String imageUrl;
-    private final boolean active;
+    private final boolean Active;
     private final Long restaurantId;
     private final CategoryType category;
 
     public Dish(Long id, String name, Integer price, String description,
-                String imageUrl, boolean active, Long restaurantId, CategoryType category) {
+                String imageUrl, boolean Active, Long restaurantId, CategoryType category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.description = description;
         this.imageUrl = imageUrl;
-        this.active = active;
+        this.Active = Active;
         this.restaurantId = restaurantId;
         this.category = category;
     }
@@ -38,15 +37,15 @@ public class Dish {
     public Integer getPrice() { return price; }
     public String getDescription() { return description; }
     public String getImageUrl() { return imageUrl; }
-    public boolean isActive() { return active; }
+    public boolean isAvailable() { return Active; }
     public Long getRestaurantId() { return restaurantId; }
     public CategoryType getCategory() { return category; }
 
     public Dish create(RestaurantPersistencePort restaurantPort,
                        DishPersistencePort dishPort,
                        Long ownerId) {
-        DishValidator.validateFields(this);
-        DishValidator.validateDishCreation(this, ownerId, restaurantPort, dishPort);
+        DishFieldValidator.validate(this);
+        DishCreationValidator.validate(this, ownerId, restaurantPort, dishPort);
         return dishPort.saveDish(this);
     }
 

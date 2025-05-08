@@ -1,5 +1,7 @@
 package com.example.plazoleta.ms_plazoleta.domain.utils.converters;
 
+import com.example.plazoleta.ms_plazoleta.commons.constants.ErrorFieldsMessages;
+import com.example.plazoleta.ms_plazoleta.commons.exceptions.InvalidFieldException;
 import com.example.plazoleta.ms_plazoleta.domain.model.CategoryType;
 import org.springframework.stereotype.Component;
 import org.springframework.core.convert.converter.Converter;
@@ -13,6 +15,6 @@ public class CategoryTypeConverter implements Converter<String, CategoryType> {
                 return type;
             }
         }
-        throw new IllegalArgumentException("Invalid category. Valid options: STARTER, DRINK, MAIN_COURSE, DESSERT");
+        throw new InvalidFieldException(ErrorFieldsMessages.DISH_CATEGORY_INVALID);
     }
 }

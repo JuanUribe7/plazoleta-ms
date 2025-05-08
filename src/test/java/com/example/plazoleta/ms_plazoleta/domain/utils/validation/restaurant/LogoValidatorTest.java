@@ -1,6 +1,9 @@
 package com.example.plazoleta.ms_plazoleta.domain.utils.validation.restaurant;
 
-import com.example.plazoleta.ms_plazoleta.infrastructure.exceptions.IllegalLogoException;
+
+import com.example.plazoleta.ms_plazoleta.commons.constants.ErrorFieldsMessages;
+import com.example.plazoleta.ms_plazoleta.commons.exceptions.InvalidFieldException;
+import com.example.plazoleta.ms_plazoleta.domain.utils.validation.create.restaurant.LogoValidator;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Constructor;
@@ -11,49 +14,41 @@ import static org.junit.jupiter.api.Assertions.*;
 class LogoValidatorTest {
 
     @Test
-    void constructorShouldThrowException() throws Exception {
-        Constructor<LogoValidator> constructor = LogoValidator.class.getDeclaredConstructor();
-        constructor.setAccessible(true);
-        InvocationTargetException exception = assertThrows(InvocationTargetException.class, constructor::newInstance);
-        assertTrue(exception.getCause() instanceof UnsupportedOperationException);
-        assertEquals("Clase utilitaria, no debe instanciarse.", exception.getCause().getMessage());
+    void shouldThrowIfUrlIsNull() {
+        InvalidFieldException ex = assertThrows(InvalidFieldException.class, () -> LogoValidator.validate(null));
+        assertEquals(String.format(ErrorFieldsMessages.FIELD_REQUIRED, "Logo URL"), ex.getMessage());
     }
 
     @Test
-    void urlShouldNotBeNull() {
-        Exception exception = assertThrows(IllegalLogoException.class, () -> LogoValidator.validate(null));
-        assertEquals("La URL del logo no puede estar vacía", exception.getMessage());
+    void shouldThrowIfUrlIsBlank() {
+        InvalidFieldException ex = assertThrows(InvalidFieldException.class, () -> LogoValidator.validate("  "));
+        assertEquals(String.format(ErrorFieldsMessages.FIELD_REQUIRED, "Logo URL"), ex.getMessage());
     }
 
     @Test
-    void urlShouldNotBeEmpty() {
-        Exception exception = assertThrows(IllegalLogoException.class, () -> LogoValidator.validate("   "));
-        assertEquals("La URL del logo no puede estar vacía", exception.getMessage());
+    void shouldThrowIfUrlIsLocalhost() {
+        InvalidFieldException ex = assertThrows(InvalidFieldException.class,
+                () -> LogoValidator.validate("http://localhost/image.png"));
+        assertEquals(ErrorFieldsMessages.LOGO_LOCAL_URL, ex.getMessage());
     }
 
     @Test
-    void urlShouldBeValidHttpOrHttps() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> LogoValidator.validate("ftp://invalid.url/image.png"));
-        assertEquals("La URL del logo debe ser válida y comenzar con http o https", exception.getMessage());
+    void shouldThrowIfUrlHasInvalidFormat() {
+        InvalidFieldException ex = assertThrows(InvalidFieldException.class,
+                () -> LogoValidator.validate("notaurl"));
+        assertEquals(ErrorFieldsMessages.LOGO_INVALID_FORMAT, ex.getMessage());
     }
 
     @Test
-    void urlShouldNotBeLocalhost() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> LogoValidator.validate("http://localhost/image.png"));
-        assertEquals("La URL del logo no puede ser local", exception.getMessage());
+    void shouldThrowIfUrlHasInvalidExtension() {
+        InvalidFieldException ex = assertThrows(InvalidFieldException.class,
+                () -> LogoValidator.validate("http://example.com/image.txt"));
+        assertEquals(ErrorFieldsMessages.LOGO_INVALID_EXTENSION, ex.getMessage());
     }
 
     @Test
-    void urlShouldHaveValidExtension() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> LogoValidator.validate("http://example.com/image.bmp"));
-        assertEquals("La URL del logo debe terminar en .png, .jpg, .jpeg o .svg", exception.getMessage());
-    }
-
-    @Test
-    void validUrlShouldPass() {
-        assertDoesNotThrow(() -> LogoValidator.validate("https://example.com/logo.png"));
-        assertDoesNotThrow(() -> LogoValidator.validate("http://example.com/image.jpg"));
-        assertDoesNotThrow(() -> LogoValidator.validate("http://example.com/image.jpeg"));
-        assertDoesNotThrow(() -> LogoValidator.validate("https://example.com/icon.svg"));
+    void shouldPassForValidUrl() {
+        assertDoesNotThrow(() -> LogoValidator.validate("https://cdn.example.com/image.png"));
+        assertDoesNotThrow(() -> LogoValidator.validate("http://img.example.org/logo.jpeg"));
     }
 }

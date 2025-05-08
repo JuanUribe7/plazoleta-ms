@@ -1,5 +1,6 @@
 package com.example.plazoleta.ms_plazoleta.domain.utils.validation.restaurant;
 
+import com.example.plazoleta.ms_plazoleta.domain.utils.validation.create.restaurant.PhoneValidator;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Constructor;
