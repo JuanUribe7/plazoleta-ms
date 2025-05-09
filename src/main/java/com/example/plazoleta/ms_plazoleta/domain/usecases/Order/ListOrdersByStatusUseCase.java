@@ -19,7 +19,7 @@ public class ListOrdersByStatusUseCase implements ListOrdersByStatusServicePort 
 
     @Override
     public PaginatedResult<Order> findByStatusAndRestaurant(String status, Long restaurantId, Long employeeId, int page, int size) {
-        EmployeeAuthorizationValidator.validateEmployeeBelongsToRestaurant(employeeId, restaurantId, restaurantPort);
+        EmployeeAuthorizationValidator.validateEmployeeBelongsToRestaurant(restaurantId, employeeId, restaurantPort);
         return queryPort.findAllByStatusAndRestaurant(status, restaurantId, page, size);
     }
 }
