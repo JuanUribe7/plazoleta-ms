@@ -5,8 +5,7 @@ import com.example.plazoleta.ms_plazoleta.application.dto.request.DishRequestDto
 import com.example.plazoleta.ms_plazoleta.application.dto.request.UpdateDishRequestDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.response.PageResponseDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.response.dish.DishResponseDto;
-import com.example.plazoleta.ms_plazoleta.application.dto.response.dish.PagedDishResponseDto;
-import com.example.plazoleta.ms_plazoleta.application.dto.response.restaurant.RestaurantBasicResponseDto;
+
 import com.example.plazoleta.ms_plazoleta.application.services.DishService;
 import com.example.plazoleta.ms_plazoleta.infrastructure.security.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;

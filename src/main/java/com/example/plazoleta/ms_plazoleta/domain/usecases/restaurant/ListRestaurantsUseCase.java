@@ -1,10 +1,8 @@
 package com.example.plazoleta.ms_plazoleta.domain.usecases.restaurant;
 
-import com.example.plazoleta.ms_plazoleta.application.dto.response.PageResponseDto;
-import com.example.plazoleta.ms_plazoleta.application.dto.response.restaurant.RestaurantBasicResponseDto;
-
+import com.example.plazoleta.ms_plazoleta.domain.model.PaginatedResult;
+import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.restaurant.ListRestaurantsServicePort;
-
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.RestaurantQueryPort;
 
 public class ListRestaurantsUseCase implements ListRestaurantsServicePort {
@@ -16,7 +14,7 @@ public class ListRestaurantsUseCase implements ListRestaurantsServicePort {
     }
 
     @Override
-    public PageResponseDto<RestaurantBasicResponseDto> listRestaurants(int page, int size) {
+    public PaginatedResult<Restaurant> listRestaurants(int page, int size) {
         return restaurantQueryPort.findAllSortedByName(page, size);
     }
 }

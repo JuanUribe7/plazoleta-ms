@@ -1,15 +1,13 @@
 package com.example.plazoleta.ms_plazoleta.application.dto.response;
 
-import com.example.plazoleta.ms_plazoleta.application.dto.response.restaurant.RestaurantResponseDto;
+import com.example.plazoleta.ms_plazoleta.application.dto.response.restaurant.CreateRestaurantResponseDto;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class RestaurantResponseDtoTest {
+class CreateRestaurantResponseDtoTest {
 
     @Test
     void testAllArgsConstructorAndGetters() {
-        RestaurantResponseDto dto = new RestaurantResponseDto(1L, "Restaurant Name", "123 Main St", "http://logo.url");
+        CreateRestaurantResponseDto dto = new CreateRestaurantResponseDto(1L, "Restaurant Name", "123 Main St", "http://logo.url");
 
         assertEquals(1L, dto.getId());
         assertEquals("Restaurant Name", dto.getName());
@@ -19,7 +17,7 @@ class RestaurantResponseDtoTest {
 
     @Test
     void testSettersAndGetters() {
-        RestaurantResponseDto dto = new RestaurantResponseDto();
+        CreateRestaurantResponseDto dto = new CreateRestaurantResponseDto();
         dto.setId(2L);
         dto.setName("Another Name");
         dto.setAddress("456 Side St");

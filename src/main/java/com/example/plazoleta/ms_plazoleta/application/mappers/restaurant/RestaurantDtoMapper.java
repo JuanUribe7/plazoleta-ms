@@ -2,7 +2,7 @@ package com.example.plazoleta.ms_plazoleta.application.mappers.restaurant;
 
 
 import com.example.plazoleta.ms_plazoleta.application.dto.request.RestaurantRequestDto;
-import com.example.plazoleta.ms_plazoleta.application.dto.response.restaurant.RestaurantResponseDto;
+import com.example.plazoleta.ms_plazoleta.application.dto.response.restaurant.CreateRestaurantResponseDto;
 import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
 
 import java.util.ArrayList;
@@ -14,18 +14,18 @@ public class RestaurantDtoMapper {
     public static Restaurant toModel(RestaurantRequestDto dto) {
         return new Restaurant(
                 null,
-                dto.getName(),
-                dto.getNit(),
-                dto.getAddress(),
-                dto.getPhone(),
-                dto.getUrlLogo(),
-                dto.getOwnerId(),
-                new ArrayList<>() // sin empleados al crear
+                dto.name(),
+                dto.nit(),
+                dto.address(),
+                dto.phone(),
+                dto.urlLogo(),
+                dto.ownerId(),
+                new ArrayList<>()
         );
     }
 
-    public static RestaurantResponseDto toResponseDto(Restaurant model) {
-        return new RestaurantResponseDto(
+    public static CreateRestaurantResponseDto toResponseDto(Restaurant model) {
+        return new CreateRestaurantResponseDto(
                 model.getId(),
                 model.getName(),
                 model.getAddress(),

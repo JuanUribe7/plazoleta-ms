@@ -27,4 +27,14 @@ public class ExceptionMessages {
     public static final String ORDER_NOT_FOUND = "The order was not found.";
     public static final String ORDER_WRONG_RESTAURANT = "The order does not belong to the restaurant.";
     public static final String EMPLOYEE_NOT_ASSIGNED_TO_RESTAURANT = "The employee is not assigned to this restaurant.";
+
+
+
+    public static final String ONLY_PENDING_CAN_BE_ASSIGNED = "Only orders in PENDING status can be assigned.";
+    public static final String ONLY_READY_CAN_BE_DELIVERED = "Only READY orders can be marked as DELIVERED.";
+    public static final String ONLY_PENDING_CAN_BE_CANCELLED = "Only PENDING orders can be marked as CANCELLED.";
+    public static final String INVALID_ADDRESS = "The address contains invalid characters.";
+
+
+
 }

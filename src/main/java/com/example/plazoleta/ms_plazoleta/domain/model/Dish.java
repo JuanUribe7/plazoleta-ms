@@ -14,18 +14,32 @@ public class Dish {
     private  Integer price;
     private  String description;
     private final String imageUrl;
-    private final boolean Active;
+    private final boolean active;
     private final Long restaurantId;
     private final CategoryType category;
 
+
+
+    public Dish(Dish existingDish, Integer price, String description) {
+        this.id = existingDish.getId();
+        this.name = existingDish.getName();
+        this.price = price != null ? price : existingDish.getPrice();
+        this.description = description != null ? description : existingDish.getDescription();
+        this.imageUrl = existingDish.getImageUrl();
+        this.active = existingDish.isAvailable();
+        this.restaurantId = existingDish.getRestaurantId();
+        this.category = existingDish.getCategory();
+    }
+
+
     public Dish(Long id, String name, Integer price, String description,
-                String imageUrl, boolean Active, Long restaurantId, CategoryType category) {
+                String imageUrl, boolean active, Long restaurantId, CategoryType category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.description = description;
         this.imageUrl = imageUrl;
-        this.Active = Active;
+        this.active = active;
         this.restaurantId = restaurantId;
         this.category = category;
     }
@@ -37,7 +51,7 @@ public class Dish {
     public Integer getPrice() { return price; }
     public String getDescription() { return description; }
     public String getImageUrl() { return imageUrl; }
-    public boolean isAvailable() { return Active; }
+    public boolean isAvailable() { return active; }
     public Long getRestaurantId() { return restaurantId; }
     public CategoryType getCategory() { return category; }
 

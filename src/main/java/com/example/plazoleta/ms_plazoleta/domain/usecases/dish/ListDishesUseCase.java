@@ -1,7 +1,8 @@
 package com.example.plazoleta.ms_plazoleta.domain.usecases.dish;
 
-import com.example.plazoleta.ms_plazoleta.application.dto.response.PageResponseDto;
-import com.example.plazoleta.ms_plazoleta.application.dto.response.dish.DishResponseDto;
+import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
+
+import com.example.plazoleta.ms_plazoleta.domain.model.PaginatedResult;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.dish.ListDishesServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.DishQueryPort;
 
@@ -14,7 +15,7 @@ public class ListDishesUseCase implements ListDishesServicePort {
     }
 
     @Override
-    public PageResponseDto<DishResponseDto> listDishes(Long restaurantId, String category, int page, int size) {
+    public PaginatedResult<Dish> listDishes(Long restaurantId, String category, int page, int size) {
         return dishQueryPort.findActiveByRestaurantAndCategory(restaurantId, category, page, size);
     }
 }

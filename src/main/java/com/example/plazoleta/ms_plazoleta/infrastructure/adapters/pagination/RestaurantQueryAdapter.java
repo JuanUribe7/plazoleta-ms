@@ -1,17 +1,17 @@
 package com.example.plazoleta.ms_plazoleta.infrastructure.adapters.pagination;
 
-import com.example.plazoleta.ms_plazoleta.application.dto.response.PageResponseDto;
-import com.example.plazoleta.ms_plazoleta.application.dto.response.restaurant.RestaurantBasicResponseDto;
+import com.example.plazoleta.ms_plazoleta.domain.model.PaginatedResult;
+import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.RestaurantQueryPort;
 import com.example.plazoleta.ms_plazoleta.infrastructure.entities.RestaurantEntity;
+import com.example.plazoleta.ms_plazoleta.infrastructure.mappers.PageMapper;
+import com.example.plazoleta.ms_plazoleta.infrastructure.mappers.RestaurantEntityMapper;
 import com.example.plazoleta.ms_plazoleta.infrastructure.repositories.RestaurantRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public class RestaurantQueryAdapter implements RestaurantQueryPort {
@@ -23,24 +23,12 @@ public class RestaurantQueryAdapter implements RestaurantQueryPort {
     }
 
     @Override
-    public PageResponseDto<RestaurantBasicResponseDto> findAllSortedByName(int page, int size) {
+    public PaginatedResult<Restaurant> findAllSortedByName(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
         Page<RestaurantEntity> entities = repository.findAll(pageable);
 
-        List<RestaurantBasicResponseDto> content = entities.getContent().stream()
-            .map(entity -> new RestaurantBasicResponseDto(entity.getName(), entity.getUrlLogo()))
-            .toList();
-
-        return new PageResponseDto<>(
-                content,
-                entities.getNumber(),
-                entities.getSize(),
-                entities.getTotalElements(),
-                entities.getTotalPages(),
-                entities.isFirst(),
-                entities.isLast(),
-                entities.hasNext(),
-                entities.hasPrevious()
+        return PageMapper.INSTANCE.toPaginatedResult(
+                entities.map(RestaurantEntityMapper::toModel)
         );
     }
 }

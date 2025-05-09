@@ -1,6 +1,8 @@
 package com.example.plazoleta.ms_plazoleta.domain.model;
 
 
+import com.example.plazoleta.ms_plazoleta.commons.constants.ExceptionMessages;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -36,20 +38,20 @@ public class Order {
 
     public Order markAsReady() {
         if (!OrderStatus.PREPARING.equals(this.status)) {
-            throw new IllegalStateException("Only IN_PREPARATION orders can be marked as READY.");
+            throw new IllegalStateException(ExceptionMessages.ONLY_IN_PREPARATION_CAN_BE_READY);
         }
         return new Order(id, clientId, restaurantId, dishes, date, OrderStatus.READY, assignedEmployeeId);
     }
     public Order markAsDelivered() {
         if (!OrderStatus.READY.equals(this.status)) {
-            throw new IllegalStateException("Only READY orders can be marked as READY.");
+            throw new IllegalStateException(ExceptionMessages.ONLY_READY_CAN_BE_DELIVERED);
         }
         return new Order(id, clientId, restaurantId, dishes, date, OrderStatus.DELIVERED, assignedEmployeeId);
     }
 
     public Order markAsCancelled() {
         if (!OrderStatus.PENDING.equals(this.status)) {
-            throw new IllegalStateException("Only PENDING orders can be marked as READY.");
+            throw new IllegalStateException(ExceptionMessages.ONLY_PENDING_CAN_BE_CANCELLED);
         }
         return new Order(id, clientId, restaurantId, dishes, date, OrderStatus.CANCELLED, assignedEmployeeId);
     }
@@ -57,7 +59,7 @@ public class Order {
 
     public Order assignEmployee(Long employeeId, Long orderId) {
         if (!OrderStatus.PENDING.equals(this.status)) {
-            throw new IllegalStateException("Only orders in PENDING status can be assigned.");
+            throw new IllegalStateException(ExceptionMessages.ONLY_PENDING_CAN_BE_ASSIGNED);
         }
 
 

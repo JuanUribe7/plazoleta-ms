@@ -1,6 +1,7 @@
 package com.example.plazoleta.ms_plazoleta.infrastructure.mappers;
 
 
+import com.example.plazoleta.ms_plazoleta.commons.constants.ExceptionMessages;
 import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
 import com.example.plazoleta.ms_plazoleta.infrastructure.entities.DishEntity;
 import com.example.plazoleta.ms_plazoleta.infrastructure.entities.RestaurantEntity;
@@ -24,7 +25,7 @@ public class DishEntityMapper {
 
 
     public static DishEntity toEntity(Dish model) {
-        throw new UnsupportedOperationException("No usar este método sin categoría ni restaurante resueltos");
+        throw new UnsupportedOperationException(ExceptionMessages.UTILITY_CLASS_INSTANTIATION);
     }
 
     public static Dish toModel(DishEntity entity) {

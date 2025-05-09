@@ -4,11 +4,11 @@ import com.example.plazoleta.ms_plazoleta.commons.constants.ExceptionMessages;
 import com.example.plazoleta.ms_plazoleta.domain.model.Order;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.order.CancelOrderServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.OrderPersistencePort;
-import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.DishPersistencePort;
+
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.RestaurantPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.feign.OrderTraceabilityPort;
 import com.example.plazoleta.ms_plazoleta.domain.utils.helpers.ExistenceValidator;
-import com.example.plazoleta.ms_plazoleta.domain.utils.helpers.OrderValidator;
+
 import com.example.plazoleta.ms_plazoleta.domain.utils.helpers.RelationValidator;
 
 public class CancelOrderUseCase implements CancelOrderServicePort {

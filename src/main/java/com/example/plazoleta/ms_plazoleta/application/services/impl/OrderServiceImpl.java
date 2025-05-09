@@ -13,11 +13,8 @@ import com.example.plazoleta.ms_plazoleta.domain.ports.in.order.*;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.Optional;
 
 
 @Transactional

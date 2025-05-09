@@ -1,10 +1,10 @@
 package com.example.plazoleta.ms_plazoleta.infrastructure.endpoints.rest;
 
+
 import com.example.plazoleta.ms_plazoleta.application.dto.request.RestaurantRequestDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.response.PageResponseDto;
-import com.example.plazoleta.ms_plazoleta.application.dto.response.restaurant.PagedRestaurantResponseDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.response.restaurant.RestaurantBasicResponseDto;
-import com.example.plazoleta.ms_plazoleta.application.dto.response.restaurant.RestaurantResponseDto;
+import com.example.plazoleta.ms_plazoleta.application.dto.response.restaurant.CreateRestaurantResponseDto;
 import com.example.plazoleta.ms_plazoleta.application.services.RestaurantService;
 import com.example.plazoleta.ms_plazoleta.infrastructure.security.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,7 +30,7 @@ public class RestaurantController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<RestaurantResponseDto> createRestaurant(
+    public ResponseEntity<CreateRestaurantResponseDto> createRestaurant(
             @RequestBody RestaurantRequestDto dto,
             HttpServletRequest request
     ) {
@@ -61,6 +61,11 @@ public class RestaurantController {
 
 
 
+    @GetMapping("/{ownerId}/employees")
+    public ResponseEntity<List<Long>> getEmployeeIds(@PathVariable Long ownerId) {
+        return ResponseEntity.ok(restaurantService.getEmployeeIdsByOwner(ownerId));
+    }
+
     @PreAuthorize("hasRole('CLIENT')")
     @GetMapping()
     public ResponseEntity<PageResponseDto<RestaurantBasicResponseDto>> listRestaurants(
@@ -68,10 +73,5 @@ public class RestaurantController {
             @RequestParam(defaultValue = "10") int size
     ) {
         return ResponseEntity.ok(restaurantService.listRestaurants(page, size));
-    }
-
-    @GetMapping("/{ownerId}/employees")
-    public ResponseEntity<List<Long>> getEmployeeIds(@PathVariable Long ownerId) {
-        return ResponseEntity.ok(restaurantService.getEmployeeIdsByOwner(ownerId));
     }
 }

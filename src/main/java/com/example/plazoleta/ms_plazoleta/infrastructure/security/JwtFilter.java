@@ -43,7 +43,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             } catch (Exception e) {
-                System.out.println("Token inválido o error al procesar: " + e.getMessage());
+                System.out.println("error" + e.getMessage());
             }
         }
 

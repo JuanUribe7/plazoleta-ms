@@ -1,8 +1,8 @@
 package com.example.plazoleta.ms_plazoleta.infrastructure.adapters.pagination;
 
-import com.example.plazoleta.ms_plazoleta.application.dto.response.PageResponseDto;
-import com.example.plazoleta.ms_plazoleta.application.dto.response.dish.DishResponseDto;
 import com.example.plazoleta.ms_plazoleta.domain.model.CategoryType;
+import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
+import com.example.plazoleta.ms_plazoleta.domain.model.PaginatedResult;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.DishQueryPort;
 import com.example.plazoleta.ms_plazoleta.infrastructure.entities.DishEntity;
 import com.example.plazoleta.ms_plazoleta.infrastructure.repositories.DishRepository;
@@ -23,33 +23,32 @@ public class DishQueryAdapter implements DishQueryPort {
     }
 
     @Override
-    public PageResponseDto<DishResponseDto> findActiveByRestaurantAndCategory(Long restaurantId, String category, int page, int size) {
+    public PaginatedResult<Dish> findActiveByRestaurantAndCategory(Long restaurantId, String category, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<DishEntity> result = (category == null || category.isBlank())
-            ? dishRepository.findByRestaurantIdAndActiveTrue(restaurantId, pageable)
-            : dishRepository.findByRestaurantIdAndCategoryAndActiveTrue(restaurantId, CategoryType.valueOf(category), pageable);
+                ? dishRepository.findByRestaurantIdAndActiveTrue(restaurantId, pageable)
+                : dishRepository.findByRestaurantIdAndCategoryAndActiveTrue(restaurantId, CategoryType.valueOf(category), pageable);
 
-        List<DishResponseDto> content = result.getContent().stream()
-            .map(d -> new DishResponseDto(
-                d.getId(),
-                d.getName(),
-                d.getPrice().intValue(),
-                d.getDescription(),
-                d.getUrlImage(),
-                d.getCategory().name()
-            ))
-            .toList();
+        List<Dish> content = result.getContent().stream()
+                .map(d -> new Dish(
+                        d.getId(),
+                        d.getName(),
+                        d.getPrice().intValue(),
+                        d.getDescription(),
+                        d.getUrlImage(),
+                        d.isActive(),
+                        d.getRestaurant().getId(),
+                        d.getCategory()
+                ))
+                .toList();
 
-        return new PageResponseDto<>(
-            content,
-            result.getNumber(),
-            result.getSize(),
-            result.getTotalElements(),
-            result.getTotalPages(),
-            result.isFirst(),
-            result.isLast(),
-            result.hasNext(),
-            result.hasPrevious()
+        return new PaginatedResult<>(
+                content,
+                result.getNumber(),
+                result.getSize(),
+                result.getTotalElements(),
+                result.getTotalPages()
         );
     }
 }
+

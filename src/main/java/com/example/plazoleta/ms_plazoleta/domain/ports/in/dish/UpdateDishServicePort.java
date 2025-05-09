@@ -4,6 +4,6 @@ import com.example.plazoleta.ms_plazoleta.application.dto.request.UpdateDishRequ
 import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
 
 public interface UpdateDishServicePort {
-    Dish updateDish(UpdateDishRequestDto dish, Long id);
+    Dish updateDish(Dish dish, Long id);
     void changeDishStatus(Long dishId, Long restaurantId, Long ownerId, boolean active);
 }

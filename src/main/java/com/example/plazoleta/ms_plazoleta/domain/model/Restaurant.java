@@ -1,5 +1,6 @@
 package com.example.plazoleta.ms_plazoleta.domain.model;
 
+import com.example.plazoleta.ms_plazoleta.commons.constants.ExceptionMessages;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.RestaurantPersistencePort;
 
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.feign.UserValidationPort;
@@ -58,7 +59,7 @@ public class Restaurant {
 
     public Restaurant addEmployee(Long employeeId) {
         if (employeeIds.contains(employeeId)) {
-            throw new IllegalArgumentException("Empleado ya asignado");
+            throw new IllegalArgumentException(ExceptionMessages.EMPLOYEE_ALREADY_ASSIGNED);
         }
         employeeIds.add(employeeId);
         return this;

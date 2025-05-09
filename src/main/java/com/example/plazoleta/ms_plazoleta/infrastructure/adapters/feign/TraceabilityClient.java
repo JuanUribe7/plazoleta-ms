@@ -1,7 +1,5 @@
 package com.example.plazoleta.ms_plazoleta.infrastructure.adapters.feign;
 
-import com.example.plazoleta.ms_plazoleta.application.dto.request.TraceRequestDto;
-import com.example.plazoleta.ms_plazoleta.application.dto.request.TrackingRequestDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.request.order.AssignOrderRequestDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.request.order.CancelOrderRequestDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.request.order.DeliverOrderRequestDto;
@@ -9,7 +7,7 @@ import com.example.plazoleta.ms_plazoleta.application.dto.request.order.ReadyOrd
 import com.example.plazoleta.ms_plazoleta.application.dto.request.trace.OrderTraceabilityRequest;
 import com.example.plazoleta.ms_plazoleta.infrastructure.configuration.FeignConfig;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.PatchMapping;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;

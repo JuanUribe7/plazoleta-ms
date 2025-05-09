@@ -2,8 +2,7 @@
 package com.example.plazoleta.ms_plazoleta.infrastructure.endpoints.rest;
 
 import com.example.plazoleta.ms_plazoleta.application.dto.request.RestaurantRequestDto;
-import com.example.plazoleta.ms_plazoleta.application.dto.response.restaurant.PagedRestaurantResponseDto;
-import com.example.plazoleta.ms_plazoleta.application.dto.response.restaurant.RestaurantResponseDto;
+import com.example.plazoleta.ms_plazoleta.application.dto.response.restaurant.CreateRestaurantResponseDto;
 import com.example.plazoleta.ms_plazoleta.application.services.RestaurantService;
 import com.example.plazoleta.ms_plazoleta.infrastructure.security.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -58,7 +57,7 @@ class RestaurantControllerTest {
         RestaurantRequestDto dto = new RestaurantRequestDto();
         dto.setName("New Restaurant");
 
-        RestaurantResponseDto responseDto = new RestaurantResponseDto();
+        CreateRestaurantResponseDto responseDto = new CreateRestaurantResponseDto();
         responseDto.setName("New Restaurant");
 
         when(jwtUtil.extractUserId("valid.token")).thenReturn(1L);

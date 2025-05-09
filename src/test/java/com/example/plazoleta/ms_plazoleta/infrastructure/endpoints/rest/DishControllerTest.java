@@ -84,7 +84,7 @@ class DishControllerTest {
 
 
         UpdateDishResponseDto responseDto = new UpdateDishResponseDto();
-        responseDto.setName("Updated Dish");
+        responseDto("Updated Dish");
 
         when(jwtUtil.extractUserId("valid.token")).thenReturn(1L);
         when(dishService.updateDish(any(UpdateDishRequestDto.class), eq(10L))).thenReturn(responseDto);
