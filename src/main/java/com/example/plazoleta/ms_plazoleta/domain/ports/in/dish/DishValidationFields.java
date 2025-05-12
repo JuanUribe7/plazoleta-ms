@@ -1,0 +1,7 @@
+package com.example.plazoleta.ms_plazoleta.domain.ports.in.dish;
+
+import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
+
+public interface DishValidationFields {
+    void validateDish(Dish dish);
+}

@@ -9,7 +9,7 @@ import com.example.plazoleta.ms_plazoleta.domain.ports.out.OrderQueryPort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.RestaurantPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.utils.helpers.ExistenceValidator;
 import com.example.plazoleta.ms_plazoleta.domain.utils.helpers.RelationValidator;
-import com.example.plazoleta.ms_plazoleta.domain.utils.validation.existenceandrelation.EmployeeAuthorizationValidator;
+
 
 public class ListOrdersByStatusUseCase implements ListOrdersByStatusServicePort {
 
@@ -29,8 +29,8 @@ public class ListOrdersByStatusUseCase implements ListOrdersByStatusServicePort 
         );
 
         RelationValidator.validateCondition(
-                !restaurant.getEmployeeIds().contains(employeeId),
-                ExceptionMessages.EMPLOYEE_ALREADY_ASSIGNED
+                restaurant.getEmployeeIds().contains(employeeId),
+                ExceptionMessages.EMPLOYEE_NOT_ASSIGNED_TO_RESTAURANT
         );
         return queryPort.findAllByStatusAndRestaurant(status, restaurantId, page, size);
     }

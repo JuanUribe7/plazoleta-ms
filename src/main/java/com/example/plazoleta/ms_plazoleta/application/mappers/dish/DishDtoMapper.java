@@ -5,13 +5,11 @@ package com.example.plazoleta.ms_plazoleta.application.mappers.dish;
 import com.example.plazoleta.ms_plazoleta.application.dto.request.DishRequestDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.request.UpdateDishRequestDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.response.dish.DishResponseDto;
-import com.example.plazoleta.ms_plazoleta.application.dto.response.dish.UpdateDishResponseDto;
 import com.example.plazoleta.ms_plazoleta.domain.model.CategoryType;
 import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
 import com.example.plazoleta.ms_plazoleta.domain.utils.validation.create.dish.CategoryValidator;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class DishDtoMapper {
@@ -40,7 +38,7 @@ public class DishDtoMapper {
                 dto.getDescription() != null ? dto.getDescription() : existingDish.getDescription(),
                 existingDish.getUrlImage(),
                 existingDish.isAvailable(),
-                dto.getRestaurantId() != null ? dto.getRestaurantId() : existingDish.getRestaurantId(),
+                existingDish.getRestaurantId(),
                 existingDish.getCategory()
         );
     }

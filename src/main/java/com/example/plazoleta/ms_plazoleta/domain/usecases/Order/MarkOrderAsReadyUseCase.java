@@ -34,7 +34,7 @@ public class MarkOrderAsReadyUseCase implements MarkOrderAsReadyServicePort {
     }
 
     @Override
-    public Order markAsReady(Long restaurantId, Long orderId, Long employeeId) {
+    public void markAsReady(Long restaurantId, Long orderId, Long employeeId) {
 
         Order order = ExistenceValidator.getIfPresent(
                 orderPersistencePort.findById(orderId),
@@ -55,11 +55,8 @@ public class MarkOrderAsReadyUseCase implements MarkOrderAsReadyServicePort {
                 ExceptionMessages.EMPLOYEE_NOT_ASSIGNED_TO_RESTAURANT
         );
 
-
         String phoneNumber = userValidationPort.getPhoneByUserId(order.getClientId());
-
-
         orderTraceabilityPort.markAsReady(order, phoneNumber);
-        return orderPersistencePort.save(order.markAsReady());
+      orderPersistencePort.save(order.markAsReady());
     }
 }

@@ -46,7 +46,7 @@ public class DishServiceImpl implements DishService {
                 ExceptionMessages.DISH_NOT_FOUND
         );
         Dish dish = DishDtoMapper.toModel(dto, existingDish);
-        updateDishService.updateDish(dish, ownerId);
+        updateDishService.updateDish(dish, ownerId, dto.getRestaurantId());
 
     }
 

@@ -2,6 +2,7 @@
 package com.example.plazoleta.ms_plazoleta.commons.exceptions;
 
 
+import feign.FeignException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -20,6 +21,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DomainException.class)
     public ResponseEntity<Map<String, String>> handleDomainException(DomainException ex) {
         return buildResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(FeignException.BadRequest.class)
+    public ResponseEntity<String> handleFeignBadRequest(FeignException.BadRequest ex) {
+        String errorMessage = ex.contentUTF8();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
     }
 
     @ExceptionHandler(UnauthorizedAccessException.class)

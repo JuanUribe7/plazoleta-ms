@@ -1,13 +1,15 @@
 package com.example.plazoleta.ms_plazoleta.domain.usecases.order;
 
+import com.example.plazoleta.ms_plazoleta.commons.constants.ExceptionMessages;
+import com.example.plazoleta.ms_plazoleta.commons.exceptions.AlreadyExistsException;
+import com.example.plazoleta.ms_plazoleta.commons.exceptions.NotFoundException;
 import com.example.plazoleta.ms_plazoleta.domain.model.Order;
 import com.example.plazoleta.ms_plazoleta.domain.model.OrderDish;
+import com.example.plazoleta.ms_plazoleta.domain.model.OrderStatus;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.order.CreateOrderServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.OrderPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.DishPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.feign.OrderTraceabilityPort;
-import com.example.plazoleta.ms_plazoleta.domain.utils.validation.relation.DishBelongToRestaurantValidator;
-import com.example.plazoleta.ms_plazoleta.domain.utils.validation.order.OrderDomainValidator;
 
 import java.util.List;
 
@@ -30,17 +32,26 @@ public class CreateOrderUseCase implements CreateOrderServicePort {
 
     @Override
     public Order createOrder(Order order) {
+        final List<OrderStatus> ACTIVE_STATUSES = List.of(
+                OrderStatus.PENDING,
+                OrderStatus.PREPARING,
+                OrderStatus.READY
+        );
 
-        OrderDomainValidator.validateClientHasNoActiveOrder(order.getClientId(), orderPort);
-
+        if (orderPort.existsByClientIdAndStatuses(order.getClientId(), ACTIVE_STATUSES)) {
+            throw new AlreadyExistsException(ExceptionMessages.CLIENT_ALREADY_HAVE_ORDER);
+        }
 
         List<Long> dishIds = order.getDishes()
                 .stream()
                 .map(OrderDish::getDishId)
                 .toList();
 
-        DishBelongToRestaurantValidator.validateDishIdsBelongToRestaurant(order.getRestaurantId(), dishIds, dishPort);
 
+        long count = dishPort.countByIdInAndRestaurantId(dishIds, order.getRestaurantId());
+        if (count != dishIds.size()) {
+            throw new NotFoundException(ExceptionMessages.DISH_WRONG_RESTAURANT);
+        }
         Order savedOrder = orderPort.save(order);
         traceabilityPort.registerTrace(savedOrder);
         return savedOrder;

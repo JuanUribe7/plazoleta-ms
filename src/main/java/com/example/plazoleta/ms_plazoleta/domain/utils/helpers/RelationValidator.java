@@ -1,6 +1,7 @@
 package com.example.plazoleta.ms_plazoleta.domain.utils.helpers;
 
 import com.example.plazoleta.ms_plazoleta.commons.constants.ExceptionMessages;
+import com.example.plazoleta.ms_plazoleta.commons.exceptions.UnauthorizedAccessException;
 
 public class RelationValidator {
 
@@ -10,7 +11,7 @@ public class RelationValidator {
 
     public static void validateCondition(boolean condition, String errorMessage) {
         if (!condition) {
-            throw new SecurityException(errorMessage);
+            throw new UnauthorizedAccessException(errorMessage);
         }
     }
 }

@@ -54,22 +54,9 @@ public class Dish {
     public Long getRestaurantId() { return restaurantId; }
     public CategoryType getCategory() { return category; }
 
-    public Dish create(RestaurantPersistencePort restaurantPort,
-                       DishPersistencePort dishPort,
-                       Long ownerId) {
-        DishCreationValidator.validate(this, ownerId, restaurantPort, dishPort);
-        return dishPort.saveDish(this);
-    }
 
-    public Dish update(DishPersistencePort dishPort, RestaurantPersistencePort restaurantPort,
-                       Long dishId, Long ownerId) {
-        DishUpdateValidator.validate(this, dishId, ownerId, dishPort, restaurantPort);
-        return dishPort.updateDish(this);
-    }
-
-    public Dish changeStatus(boolean active, Long restaurantId, Long ownerId,
-                             RestaurantPersistencePort restaurantPort) {
-        DishStatusValidator.validate(this, restaurantId, ownerId, restaurantPort);
+    public Dish changeStatus(boolean active
+                             ) {
         return new Dish(
                 this.id, this.name, this.price, this.description, this.urlImage,
                 active, this.restaurantId, this.category
@@ -83,8 +70,7 @@ public class Dish {
     }
 
     public void changeDescription(String newDesc) {
-        ValidationFieldsService validationFieldsService = new ValidationFieldsService();
-        validationFieldsService.validateDescription(this.getDescription());
+
         this.description = newDesc;
     }
 }

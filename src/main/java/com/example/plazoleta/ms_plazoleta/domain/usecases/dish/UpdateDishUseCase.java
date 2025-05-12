@@ -2,33 +2,42 @@ package com.example.plazoleta.ms_plazoleta.domain.usecases.dish;
 
 import com.example.plazoleta.ms_plazoleta.commons.constants.ExceptionMessages;
 import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.dish.DishValidationFields;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.dish.UpdateDishServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.DishPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.RestaurantPersistencePort;
+import com.example.plazoleta.ms_plazoleta.domain.services.ValidationFieldsService;
 import com.example.plazoleta.ms_plazoleta.domain.utils.helpers.ExistenceValidator;
-import com.example.plazoleta.ms_plazoleta.domain.utils.validation.dish.DishStatusValidator;
+import com.example.plazoleta.ms_plazoleta.domain.utils.validation.create.dish.DishAuthorizationValidator;
 
 
 public class UpdateDishUseCase implements UpdateDishServicePort {
 
     private final DishPersistencePort dishPersistencePort;
     private final RestaurantPersistencePort restaurantPersistencePort;
+    private final DishValidationFields validationFieldsService;
 
-    public UpdateDishUseCase(DishPersistencePort dishPersistencePort, RestaurantPersistencePort restaurantPersistencePort) {
+    public UpdateDishUseCase(DishPersistencePort dishPersistencePort,
+                             DishValidationFields validationFieldsService,
+                             RestaurantPersistencePort restaurantPersistencePort) {
         this.dishPersistencePort = dishPersistencePort;
+        this.validationFieldsService = validationFieldsService;
         this.restaurantPersistencePort = restaurantPersistencePort;
     }
 
     @Override
-    public Dish updateDish(Dish dish, Long ownerId) {
-        Dish newDish = ExistenceValidator.getIfPresent(
+    public void updateDish(Dish dish, Long ownerId, Long restaurantId) {
+        ExistenceValidator.getIfPresent(
                 dishPersistencePort.findById(dish.getId()),
                 ExceptionMessages.DISH_NOT_FOUND
         );
-        newDish.changeDescription(dish.getDescription());
-        newDish.changePrice(dish.getPrice());
+        validationFieldsService.validateDish(dish);
+        dish.changeDescription(dish.getDescription());
+        dish.changePrice(dish.getPrice());
 
-        return newDish.update(dishPersistencePort, restaurantPersistencePort, dish.getRestaurantId(), ownerId);
+        DishAuthorizationValidator.validateOwnership(dish.getRestaurantId(), ownerId, restaurantPersistencePort);
+        DishAuthorizationValidator.validateDishBelongsToRestaurant(dish, restaurantId);
+        dishPersistencePort.updateDish(dish);
     }
 
     @Override
@@ -38,13 +47,9 @@ public class UpdateDishUseCase implements UpdateDishServicePort {
                 ExceptionMessages.DISH_NOT_FOUND
         );
 
-        DishStatusValidator.validate(this, restaurantId, ownerId, restaurantPort);
-        return new Dish(
-                this.id, this.name, this.price, this.description, this.urlImage,
-                active, this.restaurantId, this.category
-
-        Dish updated = dish.changeStatus(active, restaurantId, ownerId, restaurantPersistencePort);
-        dishPersistencePort.updateDish(updated);
+        DishAuthorizationValidator.validateOwnership(dish.getRestaurantId(), ownerId, restaurantPersistencePort);
+        DishAuthorizationValidator.validateDishBelongsToRestaurant(dish, dish.getRestaurantId());
+        dishPersistencePort.updateDish(dish.changeStatus(active));
     }
 
 

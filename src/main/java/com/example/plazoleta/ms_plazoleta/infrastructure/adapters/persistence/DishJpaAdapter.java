@@ -14,13 +14,14 @@ import com.example.plazoleta.ms_plazoleta.infrastructure.repositories.Restaurant
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-@Repository
+@Component
 public class DishJpaAdapter implements DishPersistencePort {
 
     private final DishRepository dishRepository;

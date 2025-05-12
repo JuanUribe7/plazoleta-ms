@@ -25,7 +25,6 @@ public class DishUpdateValidator {
             DishAuthorizationValidator.validateOwnership(original.getRestaurantId(), ownerId, restaurantPort);
             DishAuthorizationValidator.validateDishBelongsToRestaurant(dish, original.getRestaurantId());
 
-            DishFieldValidator.validatePrice(dish.getPrice());
-            DescriptionValidator.validate(dish.getDescription());
+
         }
     }

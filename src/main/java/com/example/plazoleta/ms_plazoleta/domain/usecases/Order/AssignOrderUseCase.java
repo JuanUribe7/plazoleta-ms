@@ -7,7 +7,7 @@ import com.example.plazoleta.ms_plazoleta.domain.ports.in.order.AssignOrderServi
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.OrderPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.RestaurantPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.feign.OrderTraceabilityPort;
-import com.example.plazoleta.ms_plazoleta.domain.utils.validation.existenceandrelation.EmployeeAuthorizationValidator;
+
 import com.example.plazoleta.ms_plazoleta.domain.utils.helpers.ExistenceValidator;
 import com.example.plazoleta.ms_plazoleta.domain.utils.helpers.RelationValidator;
 
@@ -26,7 +26,7 @@ public class AssignOrderUseCase implements AssignOrderServicePort {
     }
 
     @Override
-    public Order assignToOrder(Long restaurantId, Long orderId, Long employeeId) {
+    public void assignToOrder(Long restaurantId, Long orderId, Long employeeId) {
         Order order = ExistenceValidator.getIfPresent(
                 orderPersistencePort.findById(orderId),
                 ExceptionMessages.ORDER_NOT_FOUND
@@ -49,6 +49,6 @@ public class AssignOrderUseCase implements AssignOrderServicePort {
 
         Order updated = order.assignEmployee(employeeId, order.getId());
         traceabilityPort.assignOrder(updated);
-        return orderPersistencePort.save(updated);
+        orderPersistencePort.save(updated);
     }
 }

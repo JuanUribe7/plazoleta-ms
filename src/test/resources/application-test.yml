@@ -12,3 +12,6 @@ spring:
   h2:
     console:
       enabled: true
+
+jwt:
+  secret-key: UltraClaveSuperSecretaIndescifrable32

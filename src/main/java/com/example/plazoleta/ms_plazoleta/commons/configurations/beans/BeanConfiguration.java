@@ -1,6 +1,7 @@
 package com.example.plazoleta.ms_plazoleta.commons.configurations.beans;
 
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.dish.CreateDishServicePort;
+import com.example.plazoleta.ms_plazoleta.domain.ports.in.dish.DishValidationFields;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.dish.ListDishesServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.dish.UpdateDishServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.order.*;
@@ -13,6 +14,9 @@ import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.Restauran
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.RestaurantQueryPort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.feign.OrderTraceabilityPort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.feign.UserValidationPort;
+import com.example.plazoleta.ms_plazoleta.domain.services.DishValidationService;
+import com.example.plazoleta.ms_plazoleta.domain.services.RestaurantValidationService;
+import com.example.plazoleta.ms_plazoleta.domain.services.ValidationFieldsService;
 import com.example.plazoleta.ms_plazoleta.domain.usecases.dish.CreateDishUseCase;
 import com.example.plazoleta.ms_plazoleta.domain.usecases.dish.ListDishesUseCase;
 import com.example.plazoleta.ms_plazoleta.domain.usecases.dish.UpdateDishUseCase;
@@ -24,17 +28,28 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class BeanConfiguration {
 
-    // 🍽️ Dishes
+    @Bean
+    public DishValidationFields dishValidationFields() {
+        return new DishValidationService(new ValidationFieldsService());
+    }
+
+    @Bean
+    public RestaurantValidationFields restaurantValidationFields() {
+        return new RestaurantValidationService(new ValidationFieldsService());
+    }
+
     @Bean
     public CreateDishServicePort createDishServicePort(DishPersistencePort dishPersistencePort,
-                                                       RestaurantPersistencePort restaurantPersistencePort) {
-        return new CreateDishUseCase(dishPersistencePort, restaurantPersistencePort);
+                                                       RestaurantPersistencePort restaurantPersistencePort,
+                                                       DishValidationFields validationFieldServices) {
+        return new CreateDishUseCase(dishPersistencePort, restaurantPersistencePort, validationFieldServices);
     }
 
     @Bean
     public UpdateDishServicePort updateDishServicePort(DishPersistencePort dishPersistencePort,
-                                                       RestaurantPersistencePort restaurantPersistencePort) {
-        return new UpdateDishUseCase(dishPersistencePort, restaurantPersistencePort);
+                                                       RestaurantPersistencePort restaurantPersistencePort,
+                                                       DishValidationFields validationFieldServices) {
+        return new UpdateDishUseCase(dishPersistencePort, validationFieldServices, restaurantPersistencePort);
     }
 
     @Bean
@@ -45,8 +60,9 @@ public class BeanConfiguration {
     // 🍴 Restaurants
     @Bean
     public CreateRestaurantServicePort createRestaurantServicePort(RestaurantPersistencePort restaurantPersistencePort,
-                                                                   UserValidationPort userValidationPort) {
-        return new CreateRestaurantUseCase(restaurantPersistencePort, userValidationPort);
+                                                                   UserValidationPort userValidationPort,
+                                                                   RestaurantValidationFields restaurantValidationFields) {
+        return new CreateRestaurantUseCase(restaurantPersistencePort, userValidationPort,restaurantValidationFields);
     }
 
     @Bean
@@ -88,9 +104,8 @@ public class BeanConfiguration {
 
     @Bean
     public CancelOrderServicePort cancelOrderUseCase(OrderPersistencePort orderPort,
-                                                     RestaurantPersistencePort restaurantPort,
                                                      OrderTraceabilityPort traceabilityPort) {
-        return new CancelOrderUseCase(orderPort, restaurantPort, traceabilityPort);
+        return new CancelOrderUseCase(orderPort, traceabilityPort);
     }
 
     @Bean

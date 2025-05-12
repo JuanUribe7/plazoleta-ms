@@ -36,29 +36,28 @@ public class OrderServiceImpl implements OrderService {
         return createOrderServicePort.createOrder(order);
     }
     @Override
-    public OrderResponseDto assignOrder(Long restaurantId, Long orderId, Long employeeId) {
-        Order updated = assignOrderServicePort.assignToOrder(restaurantId, orderId, employeeId);
-        return OrderMapper.toResponseDto(updated);
+    public void assignOrder(Long restaurantId, Long orderId, Long employeeId) {
+        assignOrderServicePort.assignToOrder(restaurantId, orderId, employeeId);
+
     }
 
     @Override
-    public OrderResponseDto markOrderAsReady(Long restaurantId, Long orderId, Long employeeId) {
-        Order order = markOrderAsReadyService.markAsReady(restaurantId, orderId, employeeId);
-        return OrderMapper.toResponseDto(order);
+    public void markOrderAsReady(Long restaurantId, Long orderId, Long employeeId) {
+        markOrderAsReadyService.markAsReady(restaurantId, orderId, employeeId);
     }
 
 
 
     @Override
-    public OrderResponseDto deliverOrder(Long restaurantId, Long orderId, Long employeeId, String pin) {
-        Order order = deliverService.deliver(restaurantId, orderId, employeeId, pin);
-        return OrderMapper.toResponseDto(order);
+    public void deliverOrder(Long restaurantId, Long orderId, Long employeeId, String pin) {
+         deliverService.deliver(restaurantId, orderId, employeeId, pin);
+
     }
 
     @Override
-    public OrderResponseDto cancelOrder(Long restaurantId, Long orderId, Long clientId) {
-        Order order = cancelService.cancel(restaurantId, orderId, clientId);
-        return OrderMapper.toResponseDto(order);
+    public void cancelOrder(Long restaurantId, Long orderId, Long clientId) {
+        cancelService.cancel(restaurantId, orderId, clientId);
+
     }
 
     @Override
