@@ -13,7 +13,6 @@ public class ErrorFieldsMessages {
     public static final String FIELD_INVALID_CHARS = "%s can only contain %s";
     public static final String FIELD_LENGTH_RANGE = "%s must be between %d and %d characters";
     public static final String FIELD_MIN_LENGTH = "%s must be at least %d characters";
-;
 
 
     public static final String DISH_INVALID_PRICE =

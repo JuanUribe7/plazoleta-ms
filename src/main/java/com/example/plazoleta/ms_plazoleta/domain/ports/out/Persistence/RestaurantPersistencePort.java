@@ -18,4 +18,10 @@ public interface RestaurantPersistencePort
 
 
     List<Restaurant> findAllByOwnerId(Long ownerId);
+
+    boolean existsByNit(String nit);
+
+    boolean existsByName(String name);
+
+    boolean existsByUrlLogo(String logo);
 }

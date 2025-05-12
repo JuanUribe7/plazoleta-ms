@@ -5,6 +5,7 @@ import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.restaurant.AssignEmployeeServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.RestaurantPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.utils.helpers.ExistenceValidator;
+import com.example.plazoleta.ms_plazoleta.domain.utils.helpers.RelationValidator;
 
 
 public class AssignEmployeeToRestaurantUseCase implements AssignEmployeeServicePort {
@@ -21,7 +22,17 @@ public class AssignEmployeeToRestaurantUseCase implements AssignEmployeeServiceP
                 restaurantPort.findById(restaurantId),
                 ExceptionMessages.RESTAURANT_NOT_FOUND
         );
-        restaurant.assignEmployee(employeeId, ownerId, restaurantPort);
+        RelationValidator.validateCondition(
+                restaurant.getOwnerId().equals(ownerId),
+                ExceptionMessages.NOT_OWNER_OF_RESTAURANT
+        );
+
+        RelationValidator.validateCondition(
+                !restaurant.getEmployeeIds().contains(employeeId),
+                ExceptionMessages.EMPLOYEE_ALREADY_ASSIGNED
+        );
+        restaurant.addEmployee(employeeId);
+        restaurantPort.saveRestaurant(restaurant);
     }
 
 }

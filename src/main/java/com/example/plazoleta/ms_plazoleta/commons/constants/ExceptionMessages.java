@@ -34,7 +34,8 @@ public class ExceptionMessages {
     public static final String ONLY_READY_CAN_BE_DELIVERED = "Only READY orders can be marked as DELIVERED.";
     public static final String ONLY_PENDING_CAN_BE_CANCELLED = "Only PENDING orders can be marked as CANCELLED.";
     public static final String INVALID_ADDRESS = "The address contains invalid characters.";
-
-
+    public static final String ACCESS_DENIED = "Access denied. You do not have permission to access this resource.";
+    public static final String AUTHENTICATION_REQUIRED = "Authentication required. Please log in to access this resource.";
+    public static final String VALUE_ALREADY_EXISTS = "Value already exists for ";
 
 }

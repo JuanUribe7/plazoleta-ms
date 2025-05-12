@@ -14,6 +14,9 @@ public interface RestaurantRepository extends JpaRepository<RestaurantEntity, Lo
     Optional<RestaurantEntity> findByUrlLogo(String logo);
     Optional<RestaurantEntity> findById(Long id);
     List<RestaurantEntity> findAllByOwnerId(Long ownerId);
+    boolean existsByNit(String nit);
+    boolean existsByName(String name);
+    boolean existsByUrlLogo(String logo);
 
 
 

@@ -1,10 +1,6 @@
 package com.example.plazoleta.ms_plazoleta.domain.model;
 
 import com.example.plazoleta.ms_plazoleta.commons.constants.ExceptionMessages;
-import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.RestaurantPersistencePort;
-
-import com.example.plazoleta.ms_plazoleta.domain.ports.out.feign.UserValidationPort;
-import com.example.plazoleta.ms_plazoleta.domain.utils.validation.create.restaurant.RestaurantCreateValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,20 +27,8 @@ public class Restaurant {
         this.employeeIds = employeeIds != null ? employeeIds : new ArrayList<>();
     }
 
-    public Restaurant assignEmployee(Long employeeId, Long ownerId, RestaurantPersistencePort restaurantPort) {
-        RestaurantCreateValidator.validateAssignment(this, employeeId, ownerId);
-        addEmployee(employeeId);
-        restaurantPort.saveRestaurant(this);
-        return this;
-    }
 
-    public Restaurant create(RestaurantPersistencePort restaurantPort, UserValidationPort userPort) {
-        RestaurantCreateValidator.validateFields(this);
-        RestaurantCreateValidator.validateUniqueness(this, restaurantPort);
-        RestaurantCreateValidator.validateOwnerExists(this.ownerId, userPort);
-        restaurantPort.saveRestaurant(this);
-        return this;
-    }
+
 
     public Long getId() { return id; }
     public String getName() { return name; }

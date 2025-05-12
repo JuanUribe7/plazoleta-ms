@@ -7,8 +7,8 @@ import com.example.plazoleta.ms_plazoleta.application.dto.response.dish.DishResp
 import com.example.plazoleta.ms_plazoleta.application.dto.response.dish.PagedDishResponseDto;
 
 public interface DishService {
-        DishResponseDto createDish(DishRequestDto dto, Long restaurantId, Long ownerId);
-        DishResponseDto updateDish(UpdateDishRequestDto dto, Long dishId);
+        void createDish(DishRequestDto dto, Long restaurantId, Long ownerId);
+        void updateDish(UpdateDishRequestDto dto, Long dishId);
         void changeDishStatus(Long dishId, Long restaurantId, Long ownerId, boolean active);
         PageResponseDto<DishResponseDto> listDishes(Long restaurantId, String category, int page, int size);
 }

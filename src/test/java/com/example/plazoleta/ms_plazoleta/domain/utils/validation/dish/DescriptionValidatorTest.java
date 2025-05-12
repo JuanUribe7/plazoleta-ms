@@ -1,6 +1,5 @@
 package com.example.plazoleta.ms_plazoleta.domain.utils.validation.dish;
 
-import com.example.plazoleta.ms_plazoleta.domain.utils.validation.create.dish.DescriptionValidator;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Constructor;

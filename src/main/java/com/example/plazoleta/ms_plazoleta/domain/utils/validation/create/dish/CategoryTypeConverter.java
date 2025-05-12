@@ -1,4 +1,4 @@
-package com.example.plazoleta.ms_plazoleta.domain.utils.converters;
+package com.example.plazoleta.ms_plazoleta.domain.utils.validation.create.dish;
 
 import com.example.plazoleta.ms_plazoleta.commons.constants.ErrorFieldsMessages;
 import com.example.plazoleta.ms_plazoleta.commons.exceptions.InvalidFieldException;

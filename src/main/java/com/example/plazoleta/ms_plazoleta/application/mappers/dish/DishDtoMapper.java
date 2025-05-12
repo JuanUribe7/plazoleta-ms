@@ -10,6 +10,9 @@ import com.example.plazoleta.ms_plazoleta.domain.model.CategoryType;
 import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
 import com.example.plazoleta.ms_plazoleta.domain.utils.validation.create.dish.CategoryValidator;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 public class DishDtoMapper {
 
@@ -35,7 +38,7 @@ public class DishDtoMapper {
                 existingDish.getName(),
                 dto.getPrice() != null ? dto.getPrice() : existingDish.getPrice(),
                 dto.getDescription() != null ? dto.getDescription() : existingDish.getDescription(),
-                existingDish.getImageUrl(),
+                existingDish.getUrlImage(),
                 existingDish.isAvailable(),
                 dto.getRestaurantId() != null ? dto.getRestaurantId() : existingDish.getRestaurantId(),
                 existingDish.getCategory()
@@ -50,9 +53,16 @@ public class DishDtoMapper {
                 model.getName(),
                 model.getPrice(),
                 model.getDescription(),
-                model.getImageUrl(),
+                model.getUrlImage(),
                 model.getCategory().name()
         );
+
     }
+    public static List<DishResponseDto> toResponseDtoList(List<Dish> dishes) {
+        return dishes.stream()
+                .map(DishDtoMapper::toResponseDto)
+                .toList();
+    }
+
 
 }

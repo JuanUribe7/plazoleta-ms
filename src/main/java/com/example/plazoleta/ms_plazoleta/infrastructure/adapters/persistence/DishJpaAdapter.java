@@ -7,7 +7,8 @@ import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.DishPersi
 import com.example.plazoleta.ms_plazoleta.infrastructure.entities.DishEntity;
 import com.example.plazoleta.ms_plazoleta.infrastructure.entities.RestaurantEntity;
 import com.example.plazoleta.ms_plazoleta.infrastructure.mappers.DishEntityMapper;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import com.example.plazoleta.ms_plazoleta.infrastructure.repositories.DishRepository;
 import com.example.plazoleta.ms_plazoleta.infrastructure.repositories.RestaurantRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -69,6 +70,27 @@ public class DishJpaAdapter implements DishPersistencePort {
     @Override
     public Optional<Dish> findById(Long id) {
         return dishRepository.findById(id).map(DishEntityMapper::toModel);
+    }
+
+    @Override
+    public Page<Dish> findByRestaurantIdAndCategoryAndActiveTrue(Long restaurantId, String category, Pageable pageable) {
+        return dishRepository.findByRestaurantIdAndCategoryAndActiveTrue(restaurantId, CategoryType.valueOf(category), pageable)
+                .map(DishEntityMapper::toModel);
+    }
+
+    @Override
+    public Page<Dish> findByRestaurantIdAndActiveTrue(Long restaurantId, Pageable pageable) {
+        return dishRepository.findByRestaurantIdAndActiveTrue(restaurantId, pageable)
+                .map(DishEntityMapper::toModel);
+    }
+
+    @Override
+    public boolean existsByName(String name) {
+        return dishRepository.existsByName(name);
+    }
+    @Override
+    public boolean existsByUrlImage(String imageUrl) {
+        return dishRepository.existsByUrlImage(imageUrl);
     }
 
 

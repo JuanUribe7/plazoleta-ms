@@ -2,6 +2,7 @@ package com.example.plazoleta.ms_plazoleta.domain.usecases.order;
 
 import com.example.plazoleta.ms_plazoleta.commons.constants.ExceptionMessages;
 import com.example.plazoleta.ms_plazoleta.domain.model.Order;
+import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
 import com.example.plazoleta.ms_plazoleta.domain.ports.in.order.AssignOrderServicePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.OrderPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.RestaurantPersistencePort;
@@ -31,10 +32,14 @@ public class AssignOrderUseCase implements AssignOrderServicePort {
                 ExceptionMessages.ORDER_NOT_FOUND
         );
 
-        EmployeeAuthorizationValidator.validateEmployeeBelongsToRestaurant(
-                restaurantId,
-                employeeId,
-                restaurantPersistencePort
+        Restaurant restaurant = ExistenceValidator.getIfPresent(
+                restaurantPersistencePort.findById(restaurantId),
+                ExceptionMessages.RESTAURANT_NOT_FOUND
+        );
+
+        RelationValidator.validateCondition(
+                restaurant.getEmployeeIds().contains(employeeId),
+                ExceptionMessages.EMPLOYEE_NOT_ASSIGNED_TO_RESTAURANT
         );
 
         RelationValidator.validateCondition(

@@ -3,11 +3,7 @@ package com.example.plazoleta.ms_plazoleta.domain.utils.validation.restaurant;
 
 import com.example.plazoleta.ms_plazoleta.commons.constants.ErrorFieldsMessages;
 import com.example.plazoleta.ms_plazoleta.commons.exceptions.InvalidFieldException;
-import com.example.plazoleta.ms_plazoleta.domain.utils.validation.create.restaurant.LogoValidator;
 import org.junit.jupiter.api.Test;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
 import static org.junit.jupiter.api.Assertions.*;
 

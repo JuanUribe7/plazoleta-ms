@@ -67,4 +67,18 @@ public class RestaurantJpaAdapter implements RestaurantPersistencePort {
                 .findByUrlLogo(logo)
                 .map(RestaurantEntityMapper::toModel);
     }
+
+    @Override
+    public boolean existsByNit(String nit) {
+        return restaurantRepository.existsByNit(nit);
+    }
+
+    @Override
+    public boolean existsByName(String name) {
+        return restaurantRepository.existsByName(name);
+    }
+    @Override
+    public boolean existsByUrlLogo(String logo) {
+        return restaurantRepository.existsByUrlLogo(logo);
+    }
 }

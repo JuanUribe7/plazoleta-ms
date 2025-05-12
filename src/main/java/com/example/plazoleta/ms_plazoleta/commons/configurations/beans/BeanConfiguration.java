@@ -103,10 +103,8 @@ public class BeanConfiguration {
     @Bean
     public ListOrdersByStatusServicePort listOrdersByStatusServicePort(OrderQueryPort orderQueryPort,
                                                                        RestaurantPersistencePort restaurantPersistencePort) {
-                                                                        {
+
         return new ListOrdersByStatusUseCase(orderQueryPort, restaurantPersistencePort);
-    }
 
-
-
-}}
+}
+}

@@ -5,7 +5,6 @@ import com.example.plazoleta.ms_plazoleta.application.dto.request.DishRequestDto
 import com.example.plazoleta.ms_plazoleta.application.dto.request.UpdateDishRequestDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.response.PageResponseDto;
 import com.example.plazoleta.ms_plazoleta.application.dto.response.dish.DishResponseDto;
-import com.example.plazoleta.ms_plazoleta.application.dto.response.dish.PagedDishResponseDto;
 import com.example.plazoleta.ms_plazoleta.application.mappers.dish.DishDtoMapper;
 import com.example.plazoleta.ms_plazoleta.application.services.DishService;
 import com.example.plazoleta.ms_plazoleta.commons.constants.ExceptionMessages;
@@ -34,21 +33,21 @@ public class DishServiceImpl implements DishService {
     private final DishPersistencePort dishPersistencePort;
 
  @Override
-    public DishResponseDto createDish(DishRequestDto dto, Long restaurantId, Long ownerId) {
+    public void createDish(DishRequestDto dto, Long restaurantId, Long ownerId) {
         Dish dish = DishDtoMapper.toModel(dto, restaurantId);
-        Dish savedDish = dishService.execute(dish, ownerId);
-        return DishDtoMapper.toResponseDto(savedDish);
+       dishService.execute(dish, ownerId);
+
     }
 
     @Override
-    public DishResponseDto updateDish(UpdateDishRequestDto dto, Long ownerId) {
+    public void updateDish(UpdateDishRequestDto dto, Long ownerId) {
         Dish existingDish = ExistenceValidator.getIfPresent(
                 dishPersistencePort.findById(dto.getDishId()),
                 ExceptionMessages.DISH_NOT_FOUND
         );
         Dish dish = DishDtoMapper.toModel(dto, existingDish);
-        Dish updatedDish = updateDishService.updateDish(dish, ownerId);
-        return DishDtoMapper.toResponseDto(updatedDish);
+        updateDishService.updateDish(dish, ownerId);
+
     }
 
     public void changeDishStatus(Long dishId, Long restaurantId, Long ownerId, boolean active) {

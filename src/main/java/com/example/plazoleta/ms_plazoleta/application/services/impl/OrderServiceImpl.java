@@ -47,6 +47,20 @@ public class OrderServiceImpl implements OrderService {
         return OrderMapper.toResponseDto(order);
     }
 
+
+
+    @Override
+    public OrderResponseDto deliverOrder(Long restaurantId, Long orderId, Long employeeId, String pin) {
+        Order order = deliverService.deliver(restaurantId, orderId, employeeId, pin);
+        return OrderMapper.toResponseDto(order);
+    }
+
+    @Override
+    public OrderResponseDto cancelOrder(Long restaurantId, Long orderId, Long clientId) {
+        Order order = cancelService.cancel(restaurantId, orderId, clientId);
+        return OrderMapper.toResponseDto(order);
+    }
+
     @Override
     public PageResponseDto<OrderResponseDto> listOrdersByStatus(Long restaurantId, String status, Long employeeId, int page, int size) {
         PaginatedResult<Order> result = listOrdersService.findByStatusAndRestaurant(status, restaurantId, employeeId, page, size);
@@ -65,18 +79,6 @@ public class OrderServiceImpl implements OrderService {
                 result.getPage() < result.getTotalPages() - 1,
                 result.getPage() > 0
         );
-    }
-
-    @Override
-    public OrderResponseDto deliverOrder(Long restaurantId, Long orderId, Long employeeId, String pin) {
-        Order order = deliverService.deliver(restaurantId, orderId, employeeId, pin);
-        return OrderMapper.toResponseDto(order);
-    }
-
-    @Override
-    public OrderResponseDto cancelOrder(Long restaurantId, Long orderId, Long clientId) {
-        Order order = cancelService.cancel(restaurantId, orderId, clientId);
-        return OrderMapper.toResponseDto(order);
     }
 
 

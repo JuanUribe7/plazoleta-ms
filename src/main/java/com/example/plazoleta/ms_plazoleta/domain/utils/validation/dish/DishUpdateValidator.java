@@ -1,15 +1,11 @@
 package com.example.plazoleta.ms_plazoleta.domain.utils.validation.dish;
 
-import com.example.plazoleta.ms_plazoleta.commons.constants.ErrorFieldsMessages;
 import com.example.plazoleta.ms_plazoleta.commons.constants.ExceptionMessages;
 import com.example.plazoleta.ms_plazoleta.domain.model.Dish;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.DishPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.RestaurantPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.utils.helpers.ExistenceValidator;
 import com.example.plazoleta.ms_plazoleta.domain.utils.validation.create.dish.DishAuthorizationValidator;
-import com.example.plazoleta.ms_plazoleta.domain.utils.validation.create.dish.DescriptionValidator;
-import com.example.plazoleta.ms_plazoleta.domain.utils.validation.create.dish.DishFieldValidator;
-import jakarta.persistence.EntityNotFoundException;
 
 public class DishUpdateValidator {
 

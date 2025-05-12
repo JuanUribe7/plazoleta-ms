@@ -6,6 +6,7 @@ import com.example.plazoleta.ms_plazoleta.domain.ports.in.dish.UpdateDishService
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.DishPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.ports.out.Persistence.RestaurantPersistencePort;
 import com.example.plazoleta.ms_plazoleta.domain.utils.helpers.ExistenceValidator;
+import com.example.plazoleta.ms_plazoleta.domain.utils.validation.dish.DishStatusValidator;
 
 
 public class UpdateDishUseCase implements UpdateDishServicePort {
@@ -36,6 +37,11 @@ public class UpdateDishUseCase implements UpdateDishServicePort {
                 dishPersistencePort.findById(dishId),
                 ExceptionMessages.DISH_NOT_FOUND
         );
+
+        DishStatusValidator.validate(this, restaurantId, ownerId, restaurantPort);
+        return new Dish(
+                this.id, this.name, this.price, this.description, this.urlImage,
+                active, this.restaurantId, this.category
 
         Dish updated = dish.changeStatus(active, restaurantId, ownerId, restaurantPersistencePort);
         dishPersistencePort.updateDish(updated);

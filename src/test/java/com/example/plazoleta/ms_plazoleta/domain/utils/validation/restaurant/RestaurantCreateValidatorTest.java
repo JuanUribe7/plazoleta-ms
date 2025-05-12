@@ -1,7 +1,6 @@
 package com.example.plazoleta.ms_plazoleta.domain.utils.validation.restaurant;
 
 import com.example.plazoleta.ms_plazoleta.domain.model.Restaurant;
-import com.example.plazoleta.ms_plazoleta.domain.utils.validation.create.restaurant.RestaurantCreateValidator;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Constructor;
